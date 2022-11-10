@@ -26,7 +26,7 @@
                                 OK
                             </template>
                             <template v-else v-for="condition in component.conditions" :key="condition">
-                                {{condition}}
+                                <v-chip>{{condition}}</v-chip>
                             </template>
                         </v-expansion-panel-text>
                     </v-expansion-panel>
@@ -37,41 +37,26 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
-    data: () => ({
-        components: [
-            {
-                "slug": "hypervisor-00001",
-                "labels": {
-                    "az": "1",
-                    "region": "datacenter-west"
-                }
-            },
-            {
-                "slug": "hypervisor-00002",
-                "labels": {
-                    "az": "2",
-                    "region": "datacenter-west"
-                },
-                "conditions": [
-                    "connectivity_problems"
-                ]
-            },
-            {
-                "slug": "hypervisor-00003",
-                "labels": {
-                    "az": "1",
-                    "region": "datacenter-east"
-                }
-            },
-            {
-                "slug": "hypervisor-00004",
-                "labels": {
-                    "az": "2",
-                    "region": "datacenter-east"
-                }
-            }
-        ]
-    })
+    data() {
+        return {
+            components: []
+        }
+    },
+    mounted() {
+        this.sync()
+        setInterval(this.sync, 1000)
+    },
+    methods: {
+        sync: function(e) {
+            let self = this
+            axios.get(`https://${window.location.host}/api/components`)
+            .then(function(response){
+                self.components = response.data
+            })
+        }
+    }
 }
 </script>

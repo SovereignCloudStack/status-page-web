@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: statuspage
+spec:
+  dnsPolicy: ClusterFirst
+  restartPolicy: Never
+  containers:
+  - image: statuspage
+    name: web
+    resources: {}
+  - image: postgres
+    name: database
+    resources: {}
+    env:
+    - name: POSTGRES_PASSWORD
+      value: debug
+  - image: caddy:latest
+    name: caddy
+    resources: {}
+    command:
+    - sh
+    - -c
+    - |
+        cat > Caddyfile <<EOF
+        :5000
+        handle_path /api/* {
+            reverse_proxy /* localhost:4000
+        }
+        reverse_proxy /* localhost:3000
+        EOF
+        exec caddy run
+  - image: golang
+    name: api
+    resources: {}
+    command:
+    - bash
+    - -c
+    - |
+        set -ex
+        git clone https://github.com/SovereignCloudStack/status-page-api.git -b develop
+        cd status-page-api/
+        go run . --addr :4000

@@ -40,7 +40,7 @@
                         <div class="text-subtitle-1 mb-2">Incidents</div>
                         <v-timeline side="end">
                             <v-timeline-item
-                                v-for="incident in incidents" :key="incident"
+                                v-for="incident in incidents" :key="incident.ID"
                                 :dot-color="incident.phase.slug === 'closed' ? 'green' : 'red'">
                                 <v-card>
                                     <v-card-title :class="['text-h6', incident.phase.slug === 'closed' ? 'bg-green' : 'bg-red']">
@@ -50,12 +50,22 @@
                                         <v-container>
                                             <v-row>
                                                 <v-col>
+                                                    <strong>ID:</strong>
+                                                    <div>
+                                                        {{incident.ID}}
+                                                    </div>
+                                                </v-col>
+                                                <v-col>
                                                     <strong>Beginning:</strong>
-                                                    {{incident.beganAt || "unknown"}}
+                                                    <div>
+                                                        {{incident.beganAt || "unknown"}}
+                                                    </div>
                                                 </v-col>
                                                 <v-col>
                                                     <strong>Phase:</strong>
-                                                    {{incident.phase.slug}}
+                                                    <div>
+                                                        {{incident.phase.slug}}
+                                                    </div>
                                                 </v-col>
                                                 <v-col>
                                                     <strong>Affected components:</strong>
@@ -64,6 +74,21 @@
                                                             {{component.slug}}
                                                         </li>
                                                     </ul>
+                                                </v-col>
+                                                <v-col>
+                                                    <v-expansion-panels>
+                                                        <v-expansion-panel elevation="1">
+                                                            <v-expansion-panel-title>
+                                                                History
+                                                                <template v-slot:actions>
+                                                                    <v-icon icon="mdi-history"></v-icon>
+                                                                </template>
+                                                            </v-expansion-panel-title>
+                                                            <v-expansion-panel-text>
+                                                                <pre>{{JSON.stringify(incident.history, null, 2)}}</pre>
+                                                            </v-expansion-panel-text>
+                                                        </v-expansion-panel>
+                                                    </v-expansion-panels>
                                                 </v-col>
                                             </v-row>
                                         </v-container>

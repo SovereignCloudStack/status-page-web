@@ -4,6 +4,11 @@
     "ghcr.io/mpriscella/features/kind:1": {},
     "ghcr.io/meaningful-ooo/devcontainer-features/homebrew:2": {}
   },
+  "onCreateCommand": ["bash", "dev.bash"],
+  "hostRequirements": {
+    "cpus": 4,
+    "memory": "8gb"
+  },
   "customizations": {
     "codespaces": {
       "repositories": {

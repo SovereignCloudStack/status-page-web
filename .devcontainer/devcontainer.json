@@ -4,11 +4,21 @@
     "ghcr.io/mpriscella/features/kind:1": {},
     "ghcr.io/meaningful-ooo/devcontainer-features/homebrew:2": {}
   },
-  "customizations": {"codespaces": {
-    "repositories": {
-      "SovereignCloudStack/status-page-api": {
-        "permissions": "write-all"
+  "customizations": {
+    "codespaces": {
+      "repositories": {
+        "SovereignCloudStack/status-page-api": {
+          "permissions": "write-all"
+        }
       }
+    },
+    "vscode": {
+      "extensions": [
+        "vscodevim.vim",
+        "golang.go",
+        "tilt-dev.tiltfile",
+        "Vue.volar"
+      ]
     }
-  }}
+  }
 }

@@ -2,6 +2,9 @@
 
 set -ex
 
+git submodule init
+git submodule update
+
 brew install tilt-dev/tap/tilt
 brew install tilt-dev/tap/ctlptl
 

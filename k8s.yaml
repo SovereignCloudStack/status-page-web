@@ -4,10 +4,13 @@ metadata:
   name: statuspage
 spec:
   dnsPolicy: ClusterFirst
-  restartPolicy: Never
+  restartPolicy: Always
   containers:
-  - image: statuspage
+  - image: statuspage-web
     name: web
+    resources: {}
+  - image: statuspage-api
+    name: api
     resources: {}
   - image: postgres
     name: database
@@ -30,14 +33,3 @@ spec:
         reverse_proxy /* localhost:3000
         EOF
         exec caddy run
-  - image: golang
-    name: api
-    resources: {}
-    command:
-    - bash
-    - -c
-    - |
-        set -ex
-        git clone https://github.com/SovereignCloudStack/status-page-api.git -b develop
-        cd status-page-api/
-        go run . --addr :4000

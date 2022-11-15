@@ -38,7 +38,7 @@
                     </v-col>
                     <v-col>
                         <div class="text-subtitle-1 mb-2">Incidents</div>
-                        <v-timeline>
+                        <v-timeline side="end">
                             <v-timeline-item
                                 v-for="incident in incidents" :key="incident"
                                 :dot-color="incident.phase.slug === 'closed' ? 'green' : 'red'">

@@ -1,0 +1,3 @@
+[submodule "status-page-api"]
+	path = status-page-api
+	url = https://github.com/SovereignCloudStack/status-page-api.git

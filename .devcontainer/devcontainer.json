@@ -13,7 +13,9 @@
     "codespaces": {
       "repositories": {
         "SovereignCloudStack/status-page-api": {
-          "permissions": "write-all"
+          "permissions": {
+            "content": "write"
+          }
         }
       }
     },

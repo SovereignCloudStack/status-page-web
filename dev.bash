@@ -1,10 +1,9 @@
 #!/bin/bash
 
-rm -rf status-page-api
-
 set -ex
 
-gh repo clone SovereignCloudStack/status-page-api -- -b develop
+git submodule init
+git submodule update
 
 brew install tilt-dev/tap/tilt
 brew install tilt-dev/tap/ctlptl

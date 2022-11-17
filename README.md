@@ -1,44 +1,9 @@
-# default
+# Status Page Web Component
 
-## Project setup
+Usual install/dev/build should work.
 
+For testing with tilt/K8s, install prerequisites (can be done automatically via `.devcontainer` and `dev.bash`) and do
+
+```bash
+tilt up
 ```
-# yarn
-yarn
-
-# npm
-npm install
-
-# pnpm
-pnpm install
-```
-
-### Compiles and hot-reloads for development
-
-```
-# yarn
-yarn dev
-
-# npm
-npm run dev
-
-# pnpm
-pnpm dev
-```
-
-### Compiles and minifies for production
-
-```
-# yarn
-yarn build
-
-# npm
-npm run build
-
-# pnpm
-pnpm build
-```
-
-### Customize configuration
-
-See [Configuration Reference](https://vitejs.dev/config/).

@@ -1,6 +1,6 @@
 # Status Page Web Component
 
-Usual install/dev/build should work.
+Usual `npm install` and `npm run dev/build` should work as expected.
 
 For testing with tilt/K8s, install prerequisites (can be done automatically via `.devcontainer` and `dev.bash`) and do
 

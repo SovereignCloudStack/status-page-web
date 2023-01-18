@@ -15,21 +15,18 @@
                 <v-row>
                     <v-col>
                         <v-expansion-panels>
-                            <v-expansion-panel v-for="component in components" :key="component.slug">
+                            <v-expansion-panel v-for="component in components" :key="component.id">
                                 <v-expansion-panel-title
-                                    :class="component.conditions !== undefined ? ['bg-red'] : ['bg-green']">
-                                    {{ component.slug }}
+                                    :class="component.affectedBy.length ? ['bg-red'] : ['bg-green']">
+                                    {{ component.displayName }}
                                     <v-chip v-for="(value, key) in component.labels" :key="key">
                                         {{ key }}={{ value }}
                                     </v-chip>
                                 </v-expansion-panel-title>
-                                <v-expansion-panel-text>
-                                    Current condition:
-                                    <template v-if="component.conditions === undefined">
-                                        OK
-                                    </template>
-                                    <template v-else v-for="condition in component.conditions" :key="condition">
-                                        <v-chip>{{ condition }}</v-chip>
+                                <v-expansion-panel-text v-if="component.affectedBy.length">
+                                    Currently affected by:
+                                    <template v-for="incident in component.affectedBy" :key="incident">
+                                        <v-chip>{{ incident.title }}</v-chip>
                                     </template>
                                 </v-expansion-panel-text>
                             </v-expansion-panel>
@@ -63,26 +60,32 @@
                                                 <v-col>
                                                     <strong>ID:</strong>
                                                     <div>
-                                                        {{incident.ID}}
+                                                        {{incident.id}}
                                                     </div>
                                                 </v-col>
                                                 <v-col>
-                                                    <strong>Beginning:</strong>
+                                                    <strong>Began at:</strong>
                                                     <div>
                                                         {{incident.beganAt || "unknown"}}
                                                     </div>
                                                 </v-col>
                                                 <v-col>
+                                                    <strong>Ended at:</strong>
+                                                    <div>
+                                                        {{incident.endedAt || "unknown"}}
+                                                    </div>
+                                                </v-col>
+                                                <v-col>
                                                     <strong>Phase:</strong>
                                                     <div>
-                                                        {{incident.phase.slug}}
+                                                        {{incident.phase}}
                                                     </div>
                                                 </v-col>
                                                 <v-col>
                                                     <strong>Affected components:</strong>
                                                     <ul>
-                                                        <li v-for="component in incident.components" :key="component.slug">
-                                                            {{component.slug}}
+                                                        <li v-for="component in incident.affects" :key="component">
+                                                            {{component}}
                                                         </li>
                                                     </ul>
                                                 </v-col>
@@ -96,7 +99,7 @@
                                                                 </template>
                                                             </v-expansion-panel-title>
                                                             <v-expansion-panel-text>
-                                                                <pre>{{JSON.stringify(incident.history, null, 2)}}</pre>
+                                                                <pre>{{JSON.stringify(incident, null, 2)}}</pre>
                                                             </v-expansion-panel-text>
                                                         </v-expansion-panel>
                                                     </v-expansion-panels>
@@ -143,7 +146,6 @@ export default {
     },
     mounted() {
         this.sync()
-        setInterval(this.sync, 1000)
     },
     computed: {
         startTimeString() {
@@ -155,12 +157,20 @@ export default {
     },
     methods: {
         sync: function() {
+            let baseUrl = `https://${window.location.host}/`
             let self = this
-            axios.get(`https://${window.location.host}/api/components`)
+            axios.get(baseUrl+"/api/components")
             .then(function(response){
                 self.components = response.data
+                self.components.forEach((component, componentI) => {
+                    component.affectedBy.forEach((incidentId, incidentI) => {
+                        axios.get(baseUrl + `/api/incident/${incidentId}`).then((response) => {
+                            self.components[componentI].affectedBy[incidentI] = response.data
+                        })
+                    })
+                })
             })
-            axios.get(`https://${window.location.host}/api/incidents?start=${this.timeRange.start.toISOString()}&end=${this.timeRange.end.toISOString()}`)
+            axios.get(baseUrl + `/api/incidents?start=${this.timeRange.start.toISOString()}&end=${this.timeRange.end.toISOString()}`)
             .then(function(response){
                 self.incidents = response.data
             })

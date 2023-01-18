@@ -12,12 +12,9 @@ spec:
   - image: statuspage-api
     name: api
     resources: {}
-  - image: postgres
-    name: database
-    resources: {}
-    env:
-    - name: POSTGRES_PASSWORD
-      value: debug
+    envFrom:
+    - secretRef:
+        name: api-env
   - image: caddy:latest
     name: caddy
     resources: {}

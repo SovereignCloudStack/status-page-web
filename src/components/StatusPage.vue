@@ -47,22 +47,16 @@
                             </v-timeline-item>
                             <v-timeline-item
                                 v-for="incident in incidents" :key="incident.ID"
-                                :dot-color="incident.phase.slug === 'closed' ? 'green' : 'red'"
+                                :dot-color="incident.phase === lastPhase ? 'green' : 'red'"
                                 :icon="'mdi-fire'"
                                 size="large">
                                 <v-card>
-                                    <v-card-title :class="['text-h6', incident.phase.slug === 'closed' ? 'bg-green' : 'bg-red']">
+                                    <v-card-title :class="['text-h6', incident.phase === lastPhase ? 'bg-green' : 'bg-red']">
                                         {{incident.title}}
                                     </v-card-title>
                                     <v-card-text>
                                         <v-container>
                                             <v-row>
-                                                <v-col>
-                                                    <strong>ID:</strong>
-                                                    <div>
-                                                        {{incident.id}}
-                                                    </div>
-                                                </v-col>
                                                 <v-col>
                                                     <strong>Began at:</strong>
                                                     <div>
@@ -84,27 +78,30 @@
                                                 <v-col>
                                                     <strong>Affected components:</strong>
                                                     <ul>
-                                                        <li v-for="component in incident.affects" :key="component">
-                                                            {{component}}
+                                                        <li v-for="componentId in incident.affects" :key="componentId">
+                                                            {{ getInMemoryComponentName(componentId) }}
                                                         </li>
                                                     </ul>
                                                 </v-col>
+                                            </v-row>
+                                            <v-row>
                                                 <v-col>
-                                                    <v-expansion-panels>
-                                                        <v-expansion-panel elevation="1">
-                                                            <v-expansion-panel-title>
-                                                                History
-                                                                <template v-slot:actions>
-                                                                    <v-icon icon="mdi-history"></v-icon>
-                                                                </template>
-                                                            </v-expansion-panel-title>
-                                                            <v-expansion-panel-text>
-                                                                <pre>{{JSON.stringify(incident, null, 2)}}</pre>
-                                                            </v-expansion-panel-text>
-                                                        </v-expansion-panel>
-                                                    </v-expansion-panels>
+                                                    <strong>Description:</strong>
+                                                    <div>
+                                                        {{ incident.description }}
+                                                    </div>
                                                 </v-col>
                                             </v-row>
+                                            <template v-if="incident.updates">
+                                                <v-row v-for="(update, i) in incident.updates" :key="i">
+                                                    <v-col>
+                                                        <strong>Update {{ i+1 }}</strong> ({{ update.createdAt }}):
+                                                        <div>
+                                                            {{ update.text }}
+                                                        </div>
+                                                    </v-col>
+                                                </v-row>
+                                            </template>
                                         </v-container>
                                     </v-card-text>
                                 </v-card>
@@ -138,6 +135,7 @@ export default {
         return {
             components: [],
             incidents: [],
+            phases: [],
             timeRange: {
                 start: new Date(new Date(now).setDate(now.getDate() - 7)),
                 end: now
@@ -153,12 +151,22 @@ export default {
         },
         endTimeString () {
             return this.timeRange.end.toLocaleDateString()
+        },
+        lastPhase() {
+            if (this.phases.length === 0) {
+                return ""
+            }
+            return this.phases[this.phases.length-1]
         }
     },
     methods: {
         sync: function() {
             let baseUrl = `https://${window.location.host}/`
             let self = this
+            axios.get(baseUrl + `/api/phases`)
+            .then(function(response){
+                self.phases = response.data
+            })
             axios.get(baseUrl+"/api/components")
             .then(function(response){
                 self.components = response.data
@@ -177,9 +185,20 @@ export default {
         },
         loadEarlier: function() {
             this.timeRange.start = new Date(this.timeRange.start.setDate(this.timeRange.start.getDate() - 7))
+            this.sync()
         },
         loadLater: function() {
             this.timeRange.end = new Date(this.timeRange.end.setDate(this.timeRange.end.getDate() + 7))
+            this.sync()
+        },
+        getInMemoryComponentName(componentId) {
+            let result = this.components.filter((component) => {
+                return component.id === componentId
+            })
+            if (result.length === 0) {
+                return "..."
+            }
+            return result[0].displayName
         }
     }
 }

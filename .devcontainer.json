@@ -1,0 +1,39 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/debian
+{
+    "name": "scs/status-page-web",
+    // Create a container form the following Containerfile
+    "build": {
+        "dockerfile": "Containerfile"
+    },
+ 
+    "features": {
+        // Prepare the user inside the container
+        "ghcr.io/devcontainers/features/common-utils:2": {
+            "username": "codeuser",
+            "userUid": "1000",
+            "userGid": "1000",
+            "installZsh": false,
+            "installOhMyZsh": false
+        }
+    },
+ 
+    // Use 'forwardPorts' to make a list of ports inside the container available locally.
+    // "forwardPorts": [],
+ 
+    // Configure tool-specific properties.
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-azuretools.vscode-docker",
+                "angular.ng-template",
+                "golang.go"
+           ]
+        }
+    },
+ 
+    // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+    "remoteUser": "codeuser",
+    //"workspaceMount": "",
+    "containerUser": "codeuser"
+}

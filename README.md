@@ -1,9 +1,7 @@
-# Status Page Web Component
+# Status Page Web UI
 
-Usual `npm install` and `npm run dev/build` should work as expected.
+This is the web UI for the SCS statuspage.
 
-For testing with tilt/K8s, install prerequisites (can be done automatically via `.devcontainer` and `dev.bash`) and do
+Right now, it only contains the HTML prototype used to develop the design, layout and necessary features. It will soon be joined by an actual Angular implementation.
 
-```bash
-tilt up
-```
+Please note that even the HTML prototype is still considered WIP and not necessarily the final design or complete.

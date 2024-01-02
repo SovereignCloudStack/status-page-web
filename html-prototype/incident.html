@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>SCS Statuspage - Incident</title>
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css2?family=Lato">
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <script type="application/javascript" src="statuspage.js"></script>
+</head>
+
+<body onload="init()">
+    <header>
+        <img alt="scs-logo" src="assets/scs-logo.svg">
+    </header>
+    <main>
+        <h1 class="incident-page-title status-limited">Resolved: API 2 - Sporadic erroneous rate limiting</h1>
+        <article class="incident">
+            <h4>Incident started on 17 December 2023 and ended the same day</h4>
+            <p>Incident updates:</p>
+            <div class="incident-update">
+                <h5>Resolved</h5>
+                <span class="incident-update-content"> - We have corrected the faulty rate limiting configuration.</span>
+                <p class="incident-update-time">17.11.2023, 18:04 UTC</p>
+            </div>
+            <div class="incident-update">
+                <h5>Investigating</h5>
+                <span class="incident-update-content"> - Our internal monitoring has confirmed these reports.</span>
+                <p class="incident-update-time">17.11.2023, 16:33 UTC</p>
+            </div>
+            <div class="incident-update">
+                <h5>Notified</h5>
+                <span class="incident-update-content"> - We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.</span>
+                <p class="incident-update-time">17.11.2023, 16:02 UTC</p>
+            </div>
+        </article>
+    </main>
+    <footer>
+        <div id="accessibility-options">
+            <h5>Accessibility options:</h5>
+            <input id="colorBlindMode" type="checkbox" onclick="switchColorMode()"></input><label for="colorBlindMode">Colors for colorblind</label>
+            <input id="increasedTextSizeMode" type="checkbox" onclick="switchTextSize()"></input><label for="increasedTextSizeMode">Increased text size</label>
+        </div>
+        <div id="other-links">
+            <a href="./imprint.html">Imprint</a>
+            <a href="#">Login</a>
+            <a href="./cookies.html">Cookie Policy</a>
+        </div>
+    </footer>
+</body>
+</html>

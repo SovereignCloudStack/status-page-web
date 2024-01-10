@@ -1,5 +1,6 @@
 
 const CB_COLORBLIND = "colorBlindMode";
+const CB_TABLE = "tableMode";
 const CB_INCREASED_TEXT = "increasedTextSizeMode";
 
 let themeColors = {}
@@ -27,6 +28,10 @@ function init() {
     if (document.cookie.match("AccessibilityIncreasedText=true")) {
         document.getElementById(CB_INCREASED_TEXT).checked = true;
         switchTextSize();
+    }
+    if (document.cookie.match("AccessibilityUseTable=true")) {
+        document.getElementById(CB_TABLE).checked = true;
+        switchApiDisplay();
     }
 }
 
@@ -61,5 +66,20 @@ function switchTextSize() {
         let r = document.querySelector(":root");
         r.style.setProperty("--default-text-size", TextSizes.Default);
         document.cookie = "AccessibilityIncreasedText=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+    }
+}
+
+function switchApiDisplay() {
+    let checkbox = document.getElementById(CB_TABLE);
+    let list = document.getElementById("api-list");
+    let table = document.getElementById("api-table");
+    if (checkbox.checked) {
+        list.classList.add("hidden");
+        table.classList.remove("hidden");
+        document.cookie = "AccessibilityUseTable=true";
+    } else {
+        table.classList.add("hidden");
+        list.classList.remove("hidden");
+        document.cookie = "AccessibilityUseTable=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
     }
 }

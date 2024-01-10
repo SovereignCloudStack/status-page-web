@@ -171,6 +171,13 @@ h5 {
     padding: 0;
 }
 
+h6 {
+    font-size: 1.0rem;
+    display: inline;
+    margin: 0;
+    padding: 0;
+}
+
 hr {
     color: var(--line-color);
     border-width: 1px;
@@ -195,6 +202,7 @@ header {
 }
 
 footer {
+    margin-top: 1rem;
     border-top: 1px var(--line-color) solid;
     width: 100%;   
 }
@@ -322,20 +330,15 @@ footer div input {
     padding: .5rem 1rem;
 }
 
-.list-entry-first {
+.api-list-entry:first-of-type {
     border-top-left-radius: var(--list-border-radius);
     border-top-right-radius: var(--list-border-radius);
 }
 
-.list-entry-last {
+.api-list-entry:last-of-type {
     border-bottom: 1px var(--border-color) solid;
     border-bottom-left-radius: var(--list-border-radius);
     border-bottom-right-radius: var(--list-border-radius);
-}
-
-.list-entry-only {
-    border: 1px var(--border-color) solid;
-    border-radius: var(--list-border-radius);
 }
 
 .api-titlebar {
@@ -385,6 +388,44 @@ footer div input {
     justify-content: space-between;
     color: var(--faint-text-color);
     font-size: .75rem;
+}
+
+.api-table-title {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 5px 0 5px 0;
+    align-items: center;
+}
+
+.api-table-title h4 {
+    font-size: 1.25rem;
+}
+
+#api-table article {
+    margin: 1rem;
+}
+
+table {
+    border-collapse: collapse;
+    border: 2px solid var(--line-color);
+}
+
+table.api-table {
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid var(--line-color);
+    padding: 0.5rem;
+}
+
+.api-table .status-bar {
+    margin: 0;
+    height: 1rem;
+    padding: .25rem .75rem;
+    align-self: center;
+    font-size: .9rem;
 }
 
 .tooltip-wrap {
@@ -485,4 +526,8 @@ footer div input {
     padding: .75rem;
     border-radius: var(--bar-border-radius);
     font-weight: bold;
+}
+
+.hidden {
+    display: none;
 }

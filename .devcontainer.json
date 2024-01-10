@@ -27,7 +27,8 @@
             "extensions": [
                 "ms-azuretools.vscode-docker",
                 "angular.ng-template",
-                "golang.go"
+                "golang.go",
+                "imgildev.vscode-mustache-snippets"
            ]
         }
     },

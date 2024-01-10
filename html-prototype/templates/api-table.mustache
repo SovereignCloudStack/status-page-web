@@ -1,0 +1,29 @@
+<article>
+    <div class="api-table-title">
+        <h4>{{ name }}</h4>
+        <span class="status-bar status-{{ status }}">{{ status-text }}</span>
+    </div>
+    <table class="api-table">
+        <thead>
+            <tr>
+                <th>Day</th>
+                <th>Status</th>
+                <th>Incidents</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{# days }}
+                <tr>
+                    <th>{{ date }}</th>
+                    <td><span class="status-bar status-{{ status }}">{{ status-text }}</span></td>
+                    <td>
+                        {{# incidents }}
+                            <a style="display:block;" href="./incident.html">{{ title }}</a>
+                        {{/ incidents }}
+                    </td>
+                </tr>
+            {{/ days }}
+            
+        </tbody>
+    </table>
+</article>

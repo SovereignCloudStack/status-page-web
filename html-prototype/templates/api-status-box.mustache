@@ -1,0 +1,14 @@
+<div class="day-status-box status-{{ status }}">
+    <div class="tooltip-wrap">
+        <div class="tooltip-content">
+            <div class="tooltip-title">
+                <span><h5>{{ date }}</h5></span>
+                <div class="status-bar status-{{ status }}">{{ status-text }}</div>
+            </div>
+            <hr>
+            {{#incidents}}
+                <h6>{{ title }}</h6>
+            {{/incidents}}
+        </div>
+    </div>
+</div>

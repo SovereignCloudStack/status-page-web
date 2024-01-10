@@ -1,0 +1,16 @@
+<article class="api-list-entry">
+    <div class="api-titlebar">
+        <h4>{{ name }}</h4>
+        <div class="status-bar status-{{ status }}">{{ status-text }}</div>
+    </div>
+    <div class="api-daily-status">
+        {{# days }}
+            {{> api-status-box }}
+        {{/ days }}
+    </div>
+    <div class="api-textbar">
+        <span>90 days ago</span>
+        <span>{{ uptime }}% up time</span>
+        <span>today</span>
+    </div>
+</article>

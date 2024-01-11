@@ -14,7 +14,11 @@ END = """]
 APIS = ["API 1", "API 2", "API 3"]
 
 DAY_STATUS = ["fine", "limited", "broken", "maintenance"]
-DAY_STATUS_WEIGHTS = [24, 4, 1, 2]
+DAY_STATUS_WEIGHTS = [
+    [30, 4, 1, 2],
+    [45, 2, 1, 1],
+    [36, 6, 1, 2]
+]
 
 STATUS_TEXTS = {
     "fine": "operational",
@@ -149,7 +153,7 @@ if __name__ == "__main__":
             day_data = []
             for dt in rrule(DAILY, dtstart=start, until=end):
                 day = DayData(dt)
-                day.status = random.choices(DAY_STATUS, DAY_STATUS_WEIGHTS)[0]
+                day.status = random.choices(DAY_STATUS, random.choice(DAY_STATUS_WEIGHTS))[0]
                 day.status_text = STATUS_TEXTS[day.status]
                 if day.status == "limited":
                     days_limited = days_limited + 1
@@ -164,12 +168,12 @@ if __name__ == "__main__":
                 day_data.append(day)
             days_total = len(day_data)
             days_fine = days_total - days_limited - days_broken - days_maintenance
-            uptime = (days_total - (days_limited + days_broken + days_maintenance)) / days_total
+            uptime = days_fine / days_total
             status = day_data[-1].status
             status_text = STATUS_TEXTS[status]
             w(f, f"    status: {status},")
             w(f, f"    status-text: {status_text},")
-            w(f, f"    uptime: {uptime + 0.5:.2f},")
+            w(f, f"    uptime: {int(uptime * 100):2d},")
             w(f, f"    days: [")
             for day in day_data:
                 w(f, "      {")

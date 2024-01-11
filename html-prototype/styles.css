@@ -199,6 +199,7 @@ header {
     justify-content: space-between;
     padding: 5px 0 5px 0;
     background-color: var(--main-bg-color);
+    margin-top: 1rem;
 }
 
 footer {
@@ -396,10 +397,15 @@ footer div input {
     justify-content: space-between;
     padding: 5px 0 5px 0;
     align-items: center;
+    margin-top: 2rem;
 }
 
 .api-table-title h4 {
     font-size: 1.25rem;
+}
+
+.api-table-title .status-bar {
+    font-size: 1rem;
 }
 
 #api-table article {

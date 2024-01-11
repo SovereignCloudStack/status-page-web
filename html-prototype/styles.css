@@ -537,3 +537,7 @@ td, th {
 .hidden {
     display: none;
 }
+
+.disabled {
+    color: var(--faint-text-color);
+}

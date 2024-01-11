@@ -13,7 +13,7 @@
         </thead>
         <tbody>
             {{# days }}
-                <tr>
+                <tr class="marker-{{ status }}">
                     <th>{{ date }}</th>
                     <td><span class="status-bar status-{{ status }}">{{ status-text }}</span></td>
                     <td>
@@ -23,7 +23,6 @@
                     </td>
                 </tr>
             {{/ days }}
-            
         </tbody>
     </table>
 </article>

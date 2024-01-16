@@ -194,11 +194,25 @@ a:hover {
 
 header {
     width: 100%;
+    padding: 5px 0 5px 0;
+    background-color: var(--main-bg-color);
+    margin-top: 1rem;
+}
+
+header div {
+    width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    padding: 5px 0 5px 0;
-    background-color: var(--main-bg-color);
+    margin-bottom: .75rem;
+}
+
+header div:last-of-type {
+    margin-bottom: 0;
+}
+
+header input {
+    margin-left: 1rem;
 }
 
 footer {
@@ -396,10 +410,19 @@ footer div input {
     justify-content: space-between;
     padding: 5px 0 5px 0;
     align-items: center;
+    margin-top: 2rem;
 }
 
 .api-table-title h4 {
     font-size: 1.25rem;
+}
+
+.api-table-title .info {
+    color: var(--faint-text-color);
+}
+
+.api-table-title .status-bar {
+    font-size: 1rem;
 }
 
 #api-table article {
@@ -490,14 +513,20 @@ td, th {
 .incident {
     margin-left: .5rem;
 }
+
+.incident h4 {
+    margin: .75rem 0;
+}
+
 .incident .incident-start-date {
     color: var(--faint-text-color);
     font-size: 0.75rem;
-    margin-top: -1.25rem;
+    margin-top: -.75rem;
 }
 
-.incident-status {
+.incident-api {
     color: var(--main-bg-color);
+    background-color: var(--unknown-color);
     margin-right: .75rem;
     padding: .25rem;
     border-radius: var(--bar-border-radius);
@@ -506,7 +535,7 @@ td, th {
 }
 
 .incident-update {
-
+    margin-left: 1rem;
 }
 
 .incident-update-content {
@@ -530,4 +559,8 @@ td, th {
 
 .hidden {
     display: none;
+}
+
+.disabled {
+    color: var(--faint-text-color);
 }

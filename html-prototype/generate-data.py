@@ -7,14 +7,17 @@ import random
 PRELUDE = """---
 apis: ["""
 
-END = """]
----
+END = """---
 """
 
 APIS = ["API 1", "API 2", "API 3"]
 
 DAY_STATUS = ["fine", "limited", "broken", "maintenance"]
-DAY_STATUS_WEIGHTS = [24, 4, 1, 2]
+DAY_STATUS_WEIGHTS = [
+    [30, 4, 1, 2],
+    [45, 2, 1, 1],
+    [36, 6, 1, 2]
+]
 
 STATUS_TEXTS = {
     "fine": "operational",
@@ -33,8 +36,9 @@ class DayData:
 
 class Incident:
 
-    def __init__(self, id, title, updates, resolved=False):
+    def __init__(self, id, severity, title, updates, resolved=False):
         self.id = id
+        self.severity = severity
         self.title = title
         self.updates = updates
         self.resolved = resolved
@@ -64,7 +68,8 @@ class IncidentUpdate:
 
 INCIDENTS = {
     "maintenance": Incident(
-        0,
+        -1,
+        "maintenance",
         "Scheduled Maintenance",
         [
             IncidentUpdate(
@@ -79,7 +84,8 @@ INCIDENTS = {
         ]
     ),
     "limited": Incident(
-        1,
+        -1,
+        "limited",
         "Sporadic erroneous rate limiting",
         [
             IncidentUpdate(
@@ -98,7 +104,8 @@ INCIDENTS = {
         ]
     ),
     "broken": Incident(
-        2,
+        -1,
+        "broken",
         "Service unreachable",
         [
             IncidentUpdate(
@@ -125,11 +132,17 @@ RESOLVING_UPDATES_MAINTENANCE = [
     )
 ]
 
+id_counter = 0
+incidents_by_day = {}
+
 def w(file, text):
     file.write(text + "\n")
 
 def get_incident(api, day, additional_hours=0):
     incident = copy.deepcopy(INCIDENTS[day.status])
+    global id_counter
+    incident.id = id_counter
+    id_counter += 1
     incident.api = api
     incident.add_date(day.date, additional_hours)
     return incident
@@ -149,7 +162,9 @@ if __name__ == "__main__":
             day_data = []
             for dt in rrule(DAILY, dtstart=start, until=end):
                 day = DayData(dt)
-                day.status = random.choices(DAY_STATUS, DAY_STATUS_WEIGHTS)[0]
+                if day.date not in incidents_by_day:
+                    incidents_by_day[day.date] = []
+                day.status = random.choices(DAY_STATUS, random.choice(DAY_STATUS_WEIGHTS))[0]
                 day.status_text = STATUS_TEXTS[day.status]
                 if day.status == "limited":
                     days_limited = days_limited + 1
@@ -161,15 +176,16 @@ if __name__ == "__main__":
                     day.incidents.append(get_incident(api, day))
                     if random.randrange(10) > 8:
                         day.incidents.append(get_incident(api, day, 7))
+                incidents_by_day[day.date] += day.incidents
                 day_data.append(day)
             days_total = len(day_data)
             days_fine = days_total - days_limited - days_broken - days_maintenance
-            uptime = (days_total - (days_limited + days_broken + days_maintenance)) / days_total
+            uptime = days_fine / days_total
             status = day_data[-1].status
             status_text = STATUS_TEXTS[status]
             w(f, f"    status: {status},")
             w(f, f"    status-text: {status_text},")
-            w(f, f"    uptime: {uptime + 0.5:.2f},")
+            w(f, f"    uptime: {int(uptime * 100):2d},")
             w(f, f"    days: [")
             for day in day_data:
                 w(f, "      {")
@@ -196,5 +212,29 @@ if __name__ == "__main__":
                 w(f,  "      },")
             w(f, "    ]")
             w(f, "  },")
-        
+        w(f, "]")
+        w(f, "incidents-by-day: [")
+        for day, incidents in reversed(incidents_by_day.items()):
+            w(f, "  {")
+            w(f, f"  date: {day:%d.%m.%Y},")
+            w(f, "    incidents: [")
+            for incident in incidents:
+                w(f, "      {")
+                w(f, f"        id: {incident.id},")
+                w(f, f"        severity: {incident.severity},")
+                w(f, f"        title: {incident.title},")
+                w(f, f"        api: {incident.api},")
+                w(f, f"        updates: [")
+                for update in incident.updates:
+                    w(f,  "          {")
+                    w(f, f"            title: {update.title},")
+                    w(f, f"            text: {update.text},")
+                    w(f, f"            datetime: {update.datetime:%d.%m.%Y %H:%M:%S %Z},")
+                    w(f, f"            resolves: {update.resolves}")
+                    w(f,  "          },")    
+                w(f, f"        ],")
+                w(f, "      },")
+            w(f, "    ],")
+            w(f, "  },")
+        w(f, "]")
         w(f, END)

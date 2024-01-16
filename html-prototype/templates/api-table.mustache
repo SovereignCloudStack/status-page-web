@@ -1,6 +1,8 @@
 <article>
     <div class="api-table-title">
         <h4>{{ name }}</h4>
+        <span class="info">Incidents of the last 90 days</span>
+        <span class="info">Uptime is {{ uptime }}%</span>
         <span class="status-bar status-{{ status }}">{{ status-text }}</span>
     </div>
     <table class="api-table">
@@ -13,7 +15,7 @@
         </thead>
         <tbody>
             {{# days }}
-                <tr>
+                <tr class="marker-{{ status }}">
                     <th>{{ date }}</th>
                     <td><span class="status-bar status-{{ status }}">{{ status-text }}</span></td>
                     <td>
@@ -23,7 +25,6 @@
                     </td>
                 </tr>
             {{/ days }}
-            
         </tbody>
     </table>
 </article>

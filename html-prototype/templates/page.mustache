@@ -11,8 +11,17 @@
 
 <body onload="init()">
     <header>
-        <img alt="" title="SCS Project" src="assets/scs-logo.svg">
-        <button type="button" class="subscribe-btn">Subscribe to Updates</button>
+        <div>
+            <img alt="" title="SCS Project" src="assets/scs-logo.svg">
+            <button type="button" class="subscribe-btn">Subscribe to Updates</button>
+        </div>
+        <div>
+            <a href="#accessibility-options">Skip to accessibility options</a>
+            <span>
+                <input id="tableMode" type="checkbox" onclick="switchApiDisplay()"></input><label for="tableMode">Use table display</label>
+                <input id="tableHideFineDays" type="checkbox" onclick="switchTableHideOperationalDays()" disabled></input><label id="tableHideFineDaysLabel" class="disabled" for="tableHideFineDays">Hide operational days (table display only)</label>
+            </span>
+        </div>
     </header>
     <main>
         <div class="status-bar status-fine">
@@ -38,87 +47,13 @@
             {{/ apis }}
         </section>
         <section class="incident-log">
-            <h1>Incident Log</h1>
-            <section>
-                <h2>Ongoing Incidents</h2>
-                <article>
-                    <h3>17.11.2023</h3>
-                    <article class="incident">
-                        <h4><!--<span class="incident-status status-broken">ongoing</span>--><a class="text-broken" href="./incident.html">API 3 - Service unreachable</a></h4>
-                        <p class="incident-start-date">since 16.11.2023</p>
-                        <section class="incident-update">
-                            <h5>Identified</h5>
-                            <span class="incident-update-content"> - We have identified the root cause of the problem and are working on a workaround. A final fix will be scheduled for the next maintenance period.</span>
-                            <p class="incident-update-time">17.11.2023, 15:07 UTC</p>
-                        </section>
-                        <section class="incident-update">
-                            <h5>Investigating</h5>
-                            <span class="incident-update-content"> - We have determined that the service itself is unreachable. The server running it seems fine.</span>
-                            <p class="incident-update-time">16.11.2023, 17:22 UTC</p>
-                        </section>
-                        <section class="incident-update">
-                            <h5>Notified</h5>
-                            <span class="incident-update-content"> - We have received an automated warning about the service.</span>
-                            <p class="incident-update-time">16.11.2023, 14:41 UTC</p>
-                        </section>
-                    </article>
-                </article>
-            </section>
-            <section>
-                <h2>Past Incidents</h2>
-                <article>
-                    <h3>17.11.2023</h3>
-                    <article class="incident">
-                        <h4><!--<span class="incident-status status-fine">resolved</span>--><a class="text-limited" href="./incident.html">API 2 - Sporadic erroneous rate limiting</a></h4>
-                        <div class="incident-update">
-                            <h5>Resolved</h5>
-                            <span class="incident-update-content"> - We have corrected the faulty rate limiting configuration.</span>
-                            <p class="incident-update-time">17.11.2023, 18:04 UTC</p>
-                        </div>
-                        <div class="incident-update">
-                            <h5>Investigating</h5>
-                            <span class="incident-update-content"> - Our internal monitoring has confirmed these reports.</span>
-                            <p class="incident-update-time">17.11.2023, 16:33 UTC</p>
-                        </div>
-                        <div class="incident-update">
-                            <h5>Notified</h5>
-                            <span class="incident-update-content"> - We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.</span>
-                            <p class="incident-update-time">17.11.2023, 16:02 UTC</p>
-                        </div>
-                    </article>
-                </article>
-                <article>
-                    <h3>16.11.2023</h3>
-                    <p>1 incident ongoing</p>
-                </article>
-                <article>
-                    <h3>15.11.2023</h3>
-                    <p>no incidents occured</p>
-                </article>
-                <article>
-                    <h3>14.11.2023</h3>
-                    <article class="incident">
-                        <h4 class="text-maintenance"><!--<span class="incident-status status-fine">resolved</span>--><a class="text-maintenance" href="./incident.html">API 1 - Scheduled Maintenance</a></h4>
-                        <div class="incident-update">
-                            <h5>Done</h5>
-                            <span class="incident-update-content"> - Finished maintenance session. Service is back up.</span>
-                            <p class="incident-update-time">14.11.2023, 11:45 UTC</p>
-                        </div>
-                        <div class="incident-update">
-                            <h5>Started</h5>
-                            <span class="incident-update-content"> - Started the scheduled maintenance session. Return to operational state is expected in roughly two hours.</span>
-                            <p class="incident-update-time">14.11.2023, 10:00 UTC</p>
-                        </div>
-                    </article>
-                </article>
-            </section>
+            {{> incident-log }}
         </section>
     </main>
     <footer>
         <div id="accessibility-options">
             <h5>Accessibility options:</h5>
             <input id="colorBlindMode" type="checkbox" onclick="switchColorMode()"></input><label for="colorBlindMode">Colors for colorblind</label>
-            <input id="tableMode" type="checkbox" onclick="switchApiDisplay()"></input><label for="tableMode">Use table display</label>
             <input id="increasedTextSizeMode" type="checkbox" onclick="switchTextSize()"></input><label for="increasedTextSizeMode">Increased text size</label>
         </div>
         <div id="other-links">

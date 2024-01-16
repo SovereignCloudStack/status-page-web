@@ -4,55 +4,38 @@ apis: [
     name: API 1,
     status: fine,
     status-text: operational,
-    uptime: 1.28,
+    uptime: 82,
     days: [
       {
-        date: 12.10.2023,
-        status: fine,
-        status-text: operational,
-        incidents: [
-        ]
-      },
-      {
-        date: 13.10.2023,
-        status: fine,
-        status-text: operational,
-        incidents: [
-        ]
-      },
-      {
-        date: 14.10.2023,
-        status: fine,
-        status-text: operational,
-        incidents: [
-        ]
-      },
-      {
-        date: 15.10.2023,
-        status: fine,
-        status-text: operational,
-        incidents: [
-        ]
-      },
-      {
-        date: 16.10.2023,
-        status: fine,
-        status-text: operational,
-        incidents: [
-        ]
-      },
-      {
-        date: 17.10.2023,
-        status: fine,
-        status-text: operational,
-        incidents: [
-        ]
-      },
-      {
         date: 18.10.2023,
-        status: fine,
-        status-text: operational,
+        status: limited,
+        status-text: limited,
         incidents: [
+          {
+            id: 0,
+            title: Sporadic erroneous rate limiting,
+            api: API 1,
+            updates: [
+              {
+                title: Resolved,
+                text: We have corrected the faulty rate limiting configuration.,
+                datetime: 18.10.2023 06:16:44 ,
+                resolves: True
+              },
+              {
+                title: Investigating,
+                text: Our internal monitoring has confirmed these reports.,
+                datetime: 18.10.2023 08:30:07 ,
+                resolves: False
+              },
+              {
+                title: Notified,
+                text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+                datetime: 18.10.2023 10:43:30 ,
+                resolves: False
+              },
+            ],
+          },
         ]
       },
       {
@@ -64,28 +47,9 @@ apis: [
       },
       {
         date: 20.10.2023,
-        status: maintenance,
-        status-text: maintenance,
+        status: fine,
+        status-text: operational,
         incidents: [
-          {
-            id: 0,
-            title: Scheduled Maintenance,
-            api: API 1,
-            updates: [
-              {
-                title: Done,
-                text: Finished maintenance session. Service is back up.,
-                datetime: 20.10.2023 06:16:44 ,
-                resolves: True
-              },
-              {
-                title: Started,
-                text: Started the scheduled maintenance session. Return to operational state is expected in roughly two hours.,
-                datetime: 20.10.2023 08:30:07 ,
-                resolves: False
-              },
-            ],
-          },
         ]
       },
       {
@@ -111,9 +75,34 @@ apis: [
       },
       {
         date: 24.10.2023,
-        status: fine,
-        status-text: operational,
+        status: limited,
+        status-text: limited,
         incidents: [
+          {
+            id: 1,
+            title: Sporadic erroneous rate limiting,
+            api: API 1,
+            updates: [
+              {
+                title: Resolved,
+                text: We have corrected the faulty rate limiting configuration.,
+                datetime: 24.10.2023 06:16:44 ,
+                resolves: True
+              },
+              {
+                title: Investigating,
+                text: Our internal monitoring has confirmed these reports.,
+                datetime: 24.10.2023 08:30:07 ,
+                resolves: False
+              },
+              {
+                title: Notified,
+                text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+                datetime: 24.10.2023 10:43:30 ,
+                resolves: False
+              },
+            ],
+          },
         ]
       },
       {
@@ -125,28 +114,9 @@ apis: [
       },
       {
         date: 26.10.2023,
-        status: maintenance,
-        status-text: maintenance,
+        status: fine,
+        status-text: operational,
         incidents: [
-          {
-            id: 0,
-            title: Scheduled Maintenance,
-            api: API 1,
-            updates: [
-              {
-                title: Done,
-                text: Finished maintenance session. Service is back up.,
-                datetime: 26.10.2023 06:16:44 ,
-                resolves: True
-              },
-              {
-                title: Started,
-                text: Started the scheduled maintenance session. Return to operational state is expected in roughly two hours.,
-                datetime: 26.10.2023 08:30:07 ,
-                resolves: False
-              },
-            ],
-          },
         ]
       },
       {
@@ -165,67 +135,48 @@ apis: [
       },
       {
         date: 29.10.2023,
-        status: maintenance,
-        status-text: maintenance,
-        incidents: [
-          {
-            id: 0,
-            title: Scheduled Maintenance,
-            api: API 1,
-            updates: [
-              {
-                title: Done,
-                text: Finished maintenance session. Service is back up.,
-                datetime: 29.10.2023 06:16:44 ,
-                resolves: True
-              },
-              {
-                title: Started,
-                text: Started the scheduled maintenance session. Return to operational state is expected in roughly two hours.,
-                datetime: 29.10.2023 08:30:07 ,
-                resolves: False
-              },
-            ],
-          },
-        ]
-      },
-      {
-        date: 30.10.2023,
         status: fine,
         status-text: operational,
         incidents: [
         ]
       },
       {
-        date: 31.10.2023,
-        status: limited,
-        status-text: limited,
+        date: 30.10.2023,
+        status: broken,
+        status-text: broken,
         incidents: [
           {
-            id: 1,
-            title: Sporadic erroneous rate limiting,
+            id: 2,
+            title: Service unreachable,
             api: API 1,
             updates: [
               {
-                title: Resolved,
-                text: We have corrected the faulty rate limiting configuration.,
-                datetime: 31.10.2023 06:16:44 ,
+                title: Identified,
+                text: We have identified the root cause of the problem and are working on a workaround. A final fix will be scheduled for the next maintenance period.,
+                datetime: 30.10.2023 06:16:44 ,
                 resolves: True
               },
               {
                 title: Investigating,
-                text: Our internal monitoring has confirmed these reports.,
-                datetime: 31.10.2023 08:30:07 ,
+                text: We have determined that the service itself is unreachable. The server running it seems fine.,
+                datetime: 30.10.2023 08:30:07 ,
                 resolves: False
               },
               {
                 title: Notified,
-                text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
-                datetime: 31.10.2023 10:43:30 ,
+                text: We have received an automated warning about the service.,
+                datetime: 30.10.2023 10:43:30 ,
                 resolves: False
               },
             ],
           },
+        ]
+      },
+      {
+        date: 31.10.2023,
+        status: fine,
+        status-text: operational,
+        incidents: [
         ]
       },
       {
@@ -237,41 +188,41 @@ apis: [
       },
       {
         date: 02.11.2023,
-        status: fine,
-        status-text: operational,
-        incidents: [
-        ]
-      },
-      {
-        date: 03.11.2023,
-        status: limited,
-        status-text: limited,
+        status: broken,
+        status-text: broken,
         incidents: [
           {
-            id: 1,
-            title: Sporadic erroneous rate limiting,
+            id: 3,
+            title: Service unreachable,
             api: API 1,
             updates: [
               {
-                title: Resolved,
-                text: We have corrected the faulty rate limiting configuration.,
-                datetime: 03.11.2023 06:16:44 ,
+                title: Identified,
+                text: We have identified the root cause of the problem and are working on a workaround. A final fix will be scheduled for the next maintenance period.,
+                datetime: 02.11.2023 06:16:44 ,
                 resolves: True
               },
               {
                 title: Investigating,
-                text: Our internal monitoring has confirmed these reports.,
-                datetime: 03.11.2023 08:30:07 ,
+                text: We have determined that the service itself is unreachable. The server running it seems fine.,
+                datetime: 02.11.2023 08:30:07 ,
                 resolves: False
               },
               {
                 title: Notified,
-                text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
-                datetime: 03.11.2023 10:43:30 ,
+                text: We have received an automated warning about the service.,
+                datetime: 02.11.2023 10:43:30 ,
                 resolves: False
               },
             ],
           },
+        ]
+      },
+      {
+        date: 03.11.2023,
+        status: fine,
+        status-text: operational,
+        incidents: [
         ]
       },
       {
@@ -297,54 +248,35 @@ apis: [
       },
       {
         date: 07.11.2023,
-        status: fine,
-        status-text: operational,
-        incidents: [
-        ]
-      },
-      {
-        date: 08.11.2023,
         status: maintenance,
         status-text: maintenance,
         incidents: [
           {
-            id: 0,
+            id: 4,
             title: Scheduled Maintenance,
             api: API 1,
             updates: [
               {
                 title: Done,
                 text: Finished maintenance session. Service is back up.,
-                datetime: 08.11.2023 06:16:44 ,
+                datetime: 07.11.2023 06:16:44 ,
                 resolves: True
               },
               {
                 title: Started,
                 text: Started the scheduled maintenance session. Return to operational state is expected in roughly two hours.,
-                datetime: 08.11.2023 08:30:07 ,
+                datetime: 07.11.2023 08:30:07 ,
                 resolves: False
               },
             ],
           },
-          {
-            id: 0,
-            title: Scheduled Maintenance,
-            api: API 1,
-            updates: [
-              {
-                title: Done,
-                text: Finished maintenance session. Service is back up.,
-                datetime: 08.11.2023 13:16:44 ,
-                resolves: True
-              },
-              {
-                title: Started,
-                text: Started the scheduled maintenance session. Return to operational state is expected in roughly two hours.,
-                datetime: 08.11.2023 15:30:07 ,
-                resolves: False
-              },
-            ],
-          },
+        ]
+      },
+      {
+        date: 08.11.2023,
+        status: fine,
+        status-text: operational,
+        incidents: [
         ]
       },
       {
@@ -370,66 +302,16 @@ apis: [
       },
       {
         date: 12.11.2023,
-        status: limited,
-        status-text: limited,
+        status: fine,
+        status-text: operational,
         incidents: [
-          {
-            id: 1,
-            title: Sporadic erroneous rate limiting,
-            api: API 1,
-            updates: [
-              {
-                title: Resolved,
-                text: We have corrected the faulty rate limiting configuration.,
-                datetime: 12.11.2023 06:16:44 ,
-                resolves: True
-              },
-              {
-                title: Investigating,
-                text: Our internal monitoring has confirmed these reports.,
-                datetime: 12.11.2023 08:30:07 ,
-                resolves: False
-              },
-              {
-                title: Notified,
-                text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
-                datetime: 12.11.2023 10:43:30 ,
-                resolves: False
-              },
-            ],
-          },
         ]
       },
       {
         date: 13.11.2023,
-        status: limited,
-        status-text: limited,
+        status: fine,
+        status-text: operational,
         incidents: [
-          {
-            id: 1,
-            title: Sporadic erroneous rate limiting,
-            api: API 1,
-            updates: [
-              {
-                title: Resolved,
-                text: We have corrected the faulty rate limiting configuration.,
-                datetime: 13.11.2023 06:16:44 ,
-                resolves: True
-              },
-              {
-                title: Investigating,
-                text: Our internal monitoring has confirmed these reports.,
-                datetime: 13.11.2023 08:30:07 ,
-                resolves: False
-              },
-              {
-                title: Notified,
-                text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
-                datetime: 13.11.2023 10:43:30 ,
-                resolves: False
-              },
-            ],
-          },
         ]
       },
       {
@@ -441,9 +323,34 @@ apis: [
       },
       {
         date: 15.11.2023,
-        status: fine,
-        status-text: operational,
+        status: limited,
+        status-text: limited,
         incidents: [
+          {
+            id: 5,
+            title: Sporadic erroneous rate limiting,
+            api: API 1,
+            updates: [
+              {
+                title: Resolved,
+                text: We have corrected the faulty rate limiting configuration.,
+                datetime: 15.11.2023 06:16:44 ,
+                resolves: True
+              },
+              {
+                title: Investigating,
+                text: Our internal monitoring has confirmed these reports.,
+                datetime: 15.11.2023 08:30:07 ,
+                resolves: False
+              },
+              {
+                title: Notified,
+                text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+                datetime: 15.11.2023 10:43:30 ,
+                resolves: False
+              },
+            ],
+          },
         ]
       },
       {
@@ -462,30 +369,37 @@ apis: [
       },
       {
         date: 18.11.2023,
+        status: fine,
+        status-text: operational,
+        incidents: [
+        ]
+      },
+      {
+        date: 19.11.2023,
         status: limited,
         status-text: limited,
         incidents: [
           {
-            id: 1,
+            id: 6,
             title: Sporadic erroneous rate limiting,
             api: API 1,
             updates: [
               {
                 title: Resolved,
                 text: We have corrected the faulty rate limiting configuration.,
-                datetime: 18.11.2023 06:16:44 ,
+                datetime: 19.11.2023 06:16:44 ,
                 resolves: True
               },
               {
                 title: Investigating,
                 text: Our internal monitoring has confirmed these reports.,
-                datetime: 18.11.2023 08:30:07 ,
+                datetime: 19.11.2023 08:30:07 ,
                 resolves: False
               },
               {
                 title: Notified,
                 text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
-                datetime: 18.11.2023 10:43:30 ,
+                datetime: 19.11.2023 10:43:30 ,
                 resolves: False
               },
             ],
@@ -493,17 +407,60 @@ apis: [
         ]
       },
       {
-        date: 19.11.2023,
-        status: fine,
-        status-text: operational,
-        incidents: [
-        ]
-      },
-      {
         date: 20.11.2023,
-        status: fine,
-        status-text: operational,
+        status: limited,
+        status-text: limited,
         incidents: [
+          {
+            id: 7,
+            title: Sporadic erroneous rate limiting,
+            api: API 1,
+            updates: [
+              {
+                title: Resolved,
+                text: We have corrected the faulty rate limiting configuration.,
+                datetime: 20.11.2023 06:16:44 ,
+                resolves: True
+              },
+              {
+                title: Investigating,
+                text: Our internal monitoring has confirmed these reports.,
+                datetime: 20.11.2023 08:30:07 ,
+                resolves: False
+              },
+              {
+                title: Notified,
+                text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+                datetime: 20.11.2023 10:43:30 ,
+                resolves: False
+              },
+            ],
+          },
+          {
+            id: 8,
+            title: Sporadic erroneous rate limiting,
+            api: API 1,
+            updates: [
+              {
+                title: Resolved,
+                text: We have corrected the faulty rate limiting configuration.,
+                datetime: 20.11.2023 13:16:44 ,
+                resolves: True
+              },
+              {
+                title: Investigating,
+                text: Our internal monitoring has confirmed these reports.,
+                datetime: 20.11.2023 15:30:07 ,
+                resolves: False
+              },
+              {
+                title: Notified,
+                text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+                datetime: 20.11.2023 17:43:30 ,
+                resolves: False
+              },
+            ],
+          },
         ]
       },
       {
@@ -550,41 +507,41 @@ apis: [
       },
       {
         date: 27.11.2023,
-        status: fine,
-        status-text: operational,
-        incidents: [
-        ]
-      },
-      {
-        date: 28.11.2023,
         status: limited,
         status-text: limited,
         incidents: [
           {
-            id: 1,
+            id: 9,
             title: Sporadic erroneous rate limiting,
             api: API 1,
             updates: [
               {
                 title: Resolved,
                 text: We have corrected the faulty rate limiting configuration.,
-                datetime: 28.11.2023 06:16:44 ,
+                datetime: 27.11.2023 06:16:44 ,
                 resolves: True
               },
               {
                 title: Investigating,
                 text: Our internal monitoring has confirmed these reports.,
-                datetime: 28.11.2023 08:30:07 ,
+                datetime: 27.11.2023 08:30:07 ,
                 resolves: False
               },
               {
                 title: Notified,
                 text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
-                datetime: 28.11.2023 10:43:30 ,
+                datetime: 27.11.2023 10:43:30 ,
                 resolves: False
               },
             ],
           },
+        ]
+      },
+      {
+        date: 28.11.2023,
+        status: fine,
+        status-text: operational,
+        incidents: [
         ]
       },
       {
@@ -603,66 +560,16 @@ apis: [
       },
       {
         date: 01.12.2023,
-        status: limited,
-        status-text: limited,
+        status: fine,
+        status-text: operational,
         incidents: [
-          {
-            id: 1,
-            title: Sporadic erroneous rate limiting,
-            api: API 1,
-            updates: [
-              {
-                title: Resolved,
-                text: We have corrected the faulty rate limiting configuration.,
-                datetime: 01.12.2023 06:16:44 ,
-                resolves: True
-              },
-              {
-                title: Investigating,
-                text: Our internal monitoring has confirmed these reports.,
-                datetime: 01.12.2023 08:30:07 ,
-                resolves: False
-              },
-              {
-                title: Notified,
-                text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
-                datetime: 01.12.2023 10:43:30 ,
-                resolves: False
-              },
-            ],
-          },
         ]
       },
       {
         date: 02.12.2023,
-        status: limited,
-        status-text: limited,
+        status: fine,
+        status-text: operational,
         incidents: [
-          {
-            id: 1,
-            title: Sporadic erroneous rate limiting,
-            api: API 1,
-            updates: [
-              {
-                title: Resolved,
-                text: We have corrected the faulty rate limiting configuration.,
-                datetime: 02.12.2023 06:16:44 ,
-                resolves: True
-              },
-              {
-                title: Investigating,
-                text: Our internal monitoring has confirmed these reports.,
-                datetime: 02.12.2023 08:30:07 ,
-                resolves: False
-              },
-              {
-                title: Notified,
-                text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
-                datetime: 02.12.2023 10:43:30 ,
-                resolves: False
-              },
-            ],
-          },
         ]
       },
       {
@@ -674,9 +581,34 @@ apis: [
       },
       {
         date: 04.12.2023,
-        status: fine,
-        status-text: operational,
+        status: limited,
+        status-text: limited,
         incidents: [
+          {
+            id: 10,
+            title: Sporadic erroneous rate limiting,
+            api: API 1,
+            updates: [
+              {
+                title: Resolved,
+                text: We have corrected the faulty rate limiting configuration.,
+                datetime: 04.12.2023 06:16:44 ,
+                resolves: True
+              },
+              {
+                title: Investigating,
+                text: Our internal monitoring has confirmed these reports.,
+                datetime: 04.12.2023 08:30:07 ,
+                resolves: False
+              },
+              {
+                title: Notified,
+                text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+                datetime: 04.12.2023 10:43:30 ,
+                resolves: False
+              },
+            ],
+          },
         ]
       },
       {
@@ -695,34 +627,9 @@ apis: [
       },
       {
         date: 07.12.2023,
-        status: limited,
-        status-text: limited,
+        status: fine,
+        status-text: operational,
         incidents: [
-          {
-            id: 1,
-            title: Sporadic erroneous rate limiting,
-            api: API 1,
-            updates: [
-              {
-                title: Resolved,
-                text: We have corrected the faulty rate limiting configuration.,
-                datetime: 07.12.2023 06:16:44 ,
-                resolves: True
-              },
-              {
-                title: Investigating,
-                text: Our internal monitoring has confirmed these reports.,
-                datetime: 07.12.2023 08:30:07 ,
-                resolves: False
-              },
-              {
-                title: Notified,
-                text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
-                datetime: 07.12.2023 10:43:30 ,
-                resolves: False
-              },
-            ],
-          },
         ]
       },
       {
@@ -748,9 +655,34 @@ apis: [
       },
       {
         date: 11.12.2023,
-        status: fine,
-        status-text: operational,
+        status: broken,
+        status-text: broken,
         incidents: [
+          {
+            id: 11,
+            title: Service unreachable,
+            api: API 1,
+            updates: [
+              {
+                title: Identified,
+                text: We have identified the root cause of the problem and are working on a workaround. A final fix will be scheduled for the next maintenance period.,
+                datetime: 11.12.2023 06:16:44 ,
+                resolves: True
+              },
+              {
+                title: Investigating,
+                text: We have determined that the service itself is unreachable. The server running it seems fine.,
+                datetime: 11.12.2023 08:30:07 ,
+                resolves: False
+              },
+              {
+                title: Notified,
+                text: We have received an automated warning about the service.,
+                datetime: 11.12.2023 10:43:30 ,
+                resolves: False
+              },
+            ],
+          },
         ]
       },
       {
@@ -762,9 +694,28 @@ apis: [
       },
       {
         date: 13.12.2023,
-        status: fine,
-        status-text: operational,
+        status: maintenance,
+        status-text: maintenance,
         incidents: [
+          {
+            id: 12,
+            title: Scheduled Maintenance,
+            api: API 1,
+            updates: [
+              {
+                title: Done,
+                text: Finished maintenance session. Service is back up.,
+                datetime: 13.12.2023 06:16:44 ,
+                resolves: True
+              },
+              {
+                title: Started,
+                text: Started the scheduled maintenance session. Return to operational state is expected in roughly two hours.,
+                datetime: 13.12.2023 08:30:07 ,
+                resolves: False
+              },
+            ],
+          },
         ]
       },
       {
@@ -776,28 +727,9 @@ apis: [
       },
       {
         date: 15.12.2023,
-        status: maintenance,
-        status-text: maintenance,
+        status: fine,
+        status-text: operational,
         incidents: [
-          {
-            id: 0,
-            title: Scheduled Maintenance,
-            api: API 1,
-            updates: [
-              {
-                title: Done,
-                text: Finished maintenance session. Service is back up.,
-                datetime: 15.12.2023 06:16:44 ,
-                resolves: True
-              },
-              {
-                title: Started,
-                text: Started the scheduled maintenance session. Return to operational state is expected in roughly two hours.,
-                datetime: 15.12.2023 08:30:07 ,
-                resolves: False
-              },
-            ],
-          },
         ]
       },
       {
@@ -823,34 +755,9 @@ apis: [
       },
       {
         date: 19.12.2023,
-        status: limited,
-        status-text: limited,
+        status: fine,
+        status-text: operational,
         incidents: [
-          {
-            id: 1,
-            title: Sporadic erroneous rate limiting,
-            api: API 1,
-            updates: [
-              {
-                title: Resolved,
-                text: We have corrected the faulty rate limiting configuration.,
-                datetime: 19.12.2023 06:16:44 ,
-                resolves: True
-              },
-              {
-                title: Investigating,
-                text: Our internal monitoring has confirmed these reports.,
-                datetime: 19.12.2023 08:30:07 ,
-                resolves: False
-              },
-              {
-                title: Notified,
-                text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
-                datetime: 19.12.2023 10:43:30 ,
-                resolves: False
-              },
-            ],
-          },
         ]
       },
       {
@@ -925,9 +832,34 @@ apis: [
       },
       {
         date: 30.12.2023,
-        status: fine,
-        status-text: operational,
+        status: broken,
+        status-text: broken,
         incidents: [
+          {
+            id: 13,
+            title: Service unreachable,
+            api: API 1,
+            updates: [
+              {
+                title: Identified,
+                text: We have identified the root cause of the problem and are working on a workaround. A final fix will be scheduled for the next maintenance period.,
+                datetime: 30.12.2023 06:16:44 ,
+                resolves: True
+              },
+              {
+                title: Investigating,
+                text: We have determined that the service itself is unreachable. The server running it seems fine.,
+                datetime: 30.12.2023 08:30:07 ,
+                resolves: False
+              },
+              {
+                title: Notified,
+                text: We have received an automated warning about the service.,
+                datetime: 30.12.2023 10:43:30 ,
+                resolves: False
+              },
+            ],
+          },
         ]
       },
       {
@@ -939,66 +871,16 @@ apis: [
       },
       {
         date: 01.01.2024,
-        status: broken,
-        status-text: broken,
+        status: fine,
+        status-text: operational,
         incidents: [
-          {
-            id: 2,
-            title: Service unreachable,
-            api: API 1,
-            updates: [
-              {
-                title: Identified,
-                text: We have identified the root cause of the problem and are working on a workaround. A final fix will be scheduled for the next maintenance period.,
-                datetime: 01.01.2024 06:16:44 ,
-                resolves: True
-              },
-              {
-                title: Investigating,
-                text: We have determined that the service itself is unreachable. The server running it seems fine.,
-                datetime: 01.01.2024 08:30:07 ,
-                resolves: False
-              },
-              {
-                title: Notified,
-                text: We have received an automated warning about the service.,
-                datetime: 01.01.2024 10:43:30 ,
-                resolves: False
-              },
-            ],
-          },
         ]
       },
       {
         date: 02.01.2024,
-        status: limited,
-        status-text: limited,
+        status: fine,
+        status-text: operational,
         incidents: [
-          {
-            id: 1,
-            title: Sporadic erroneous rate limiting,
-            api: API 1,
-            updates: [
-              {
-                title: Resolved,
-                text: We have corrected the faulty rate limiting configuration.,
-                datetime: 02.01.2024 06:16:44 ,
-                resolves: True
-              },
-              {
-                title: Investigating,
-                text: Our internal monitoring has confirmed these reports.,
-                datetime: 02.01.2024 08:30:07 ,
-                resolves: False
-              },
-              {
-                title: Notified,
-                text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
-                datetime: 02.01.2024 10:43:30 ,
-                resolves: False
-              },
-            ],
-          },
         ]
       },
       {
@@ -1010,41 +892,41 @@ apis: [
       },
       {
         date: 04.01.2024,
+        status: fine,
+        status-text: operational,
+        incidents: [
+        ]
+      },
+      {
+        date: 05.01.2024,
         status: limited,
         status-text: limited,
         incidents: [
           {
-            id: 1,
+            id: 14,
             title: Sporadic erroneous rate limiting,
             api: API 1,
             updates: [
               {
                 title: Resolved,
                 text: We have corrected the faulty rate limiting configuration.,
-                datetime: 04.01.2024 06:16:44 ,
+                datetime: 05.01.2024 06:16:44 ,
                 resolves: True
               },
               {
                 title: Investigating,
                 text: Our internal monitoring has confirmed these reports.,
-                datetime: 04.01.2024 08:30:07 ,
+                datetime: 05.01.2024 08:30:07 ,
                 resolves: False
               },
               {
                 title: Notified,
                 text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
-                datetime: 04.01.2024 10:43:30 ,
+                datetime: 05.01.2024 10:43:30 ,
                 resolves: False
               },
             ],
           },
-        ]
-      },
-      {
-        date: 05.01.2024,
-        status: fine,
-        status-text: operational,
-        incidents: [
         ]
       },
       {
@@ -1056,28 +938,9 @@ apis: [
       },
       {
         date: 07.01.2024,
-        status: maintenance,
-        status-text: maintenance,
+        status: fine,
+        status-text: operational,
         incidents: [
-          {
-            id: 0,
-            title: Scheduled Maintenance,
-            api: API 1,
-            updates: [
-              {
-                title: Done,
-                text: Finished maintenance session. Service is back up.,
-                datetime: 07.01.2024 06:16:44 ,
-                resolves: True
-              },
-              {
-                title: Started,
-                text: Started the scheduled maintenance session. Return to operational state is expected in roughly two hours.,
-                datetime: 07.01.2024 08:30:07 ,
-                resolves: False
-              },
-            ],
-          },
         ]
       },
       {
@@ -1093,7 +956,7 @@ apis: [
         status-text: limited,
         incidents: [
           {
-            id: 1,
+            id: 15,
             title: Sporadic erroneous rate limiting,
             api: API 1,
             updates: [
@@ -1126,61 +989,46 @@ apis: [
         incidents: [
         ]
       },
-    ]
-  },
-  {
-    name: API 2,
-    status: broken,
-    status-text: broken,
-    uptime: 1.20,
-    days: [
       {
-        date: 12.10.2023,
+        date: 11.01.2024,
         status: fine,
         status-text: operational,
         incidents: [
         ]
       },
       {
-        date: 13.10.2023,
+        date: 12.01.2024,
         status: fine,
         status-text: operational,
         incidents: [
         ]
       },
       {
-        date: 14.10.2023,
-        status: fine,
-        status-text: operational,
-        incidents: [
-        ]
-      },
-      {
-        date: 15.10.2023,
+        date: 13.01.2024,
         status: limited,
         status-text: limited,
         incidents: [
           {
-            id: 1,
+            id: 16,
             title: Sporadic erroneous rate limiting,
-            api: API 2,
+            api: API 1,
             updates: [
               {
                 title: Resolved,
                 text: We have corrected the faulty rate limiting configuration.,
-                datetime: 15.10.2023 06:16:44 ,
+                datetime: 13.01.2024 06:16:44 ,
                 resolves: True
               },
               {
                 title: Investigating,
                 text: Our internal monitoring has confirmed these reports.,
-                datetime: 15.10.2023 08:30:07 ,
+                datetime: 13.01.2024 08:30:07 ,
                 resolves: False
               },
               {
                 title: Notified,
                 text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
-                datetime: 15.10.2023 10:43:30 ,
+                datetime: 13.01.2024 10:43:30 ,
                 resolves: False
               },
             ],
@@ -1188,43 +1036,64 @@ apis: [
         ]
       },
       {
-        date: 16.10.2023,
+        date: 14.01.2024,
         status: fine,
         status-text: operational,
         incidents: [
         ]
       },
       {
-        date: 17.10.2023,
-        status: maintenance,
-        status-text: maintenance,
+        date: 15.01.2024,
+        status: fine,
+        status-text: operational,
+        incidents: [
+        ]
+      },
+      {
+        date: 16.01.2024,
+        status: fine,
+        status-text: operational,
+        incidents: [
+        ]
+      },
+    ]
+  },
+  {
+    name: API 2,
+    status: limited,
+    status-text: limited,
+    uptime: 83,
+    days: [
+      {
+        date: 18.10.2023,
+        status: broken,
+        status-text: broken,
         incidents: [
           {
-            id: 0,
-            title: Scheduled Maintenance,
+            id: 17,
+            title: Service unreachable,
             api: API 2,
             updates: [
               {
-                title: Done,
-                text: Finished maintenance session. Service is back up.,
-                datetime: 17.10.2023 06:16:44 ,
+                title: Identified,
+                text: We have identified the root cause of the problem and are working on a workaround. A final fix will be scheduled for the next maintenance period.,
+                datetime: 18.10.2023 06:16:44 ,
                 resolves: True
               },
               {
-                title: Started,
-                text: Started the scheduled maintenance session. Return to operational state is expected in roughly two hours.,
-                datetime: 17.10.2023 08:30:07 ,
+                title: Investigating,
+                text: We have determined that the service itself is unreachable. The server running it seems fine.,
+                datetime: 18.10.2023 08:30:07 ,
+                resolves: False
+              },
+              {
+                title: Notified,
+                text: We have received an automated warning about the service.,
+                datetime: 18.10.2023 10:43:30 ,
                 resolves: False
               },
             ],
           },
-        ]
-      },
-      {
-        date: 18.10.2023,
-        status: fine,
-        status-text: operational,
-        incidents: [
         ]
       },
       {
@@ -1250,47 +1119,9 @@ apis: [
       },
       {
         date: 22.10.2023,
-        status: maintenance,
-        status-text: maintenance,
+        status: fine,
+        status-text: operational,
         incidents: [
-          {
-            id: 0,
-            title: Scheduled Maintenance,
-            api: API 2,
-            updates: [
-              {
-                title: Done,
-                text: Finished maintenance session. Service is back up.,
-                datetime: 22.10.2023 06:16:44 ,
-                resolves: True
-              },
-              {
-                title: Started,
-                text: Started the scheduled maintenance session. Return to operational state is expected in roughly two hours.,
-                datetime: 22.10.2023 08:30:07 ,
-                resolves: False
-              },
-            ],
-          },
-          {
-            id: 0,
-            title: Scheduled Maintenance,
-            api: API 2,
-            updates: [
-              {
-                title: Done,
-                text: Finished maintenance session. Service is back up.,
-                datetime: 22.10.2023 13:16:44 ,
-                resolves: True
-              },
-              {
-                title: Started,
-                text: Started the scheduled maintenance session. Return to operational state is expected in roughly two hours.,
-                datetime: 22.10.2023 15:30:07 ,
-                resolves: False
-              },
-            ],
-          },
         ]
       },
       {
@@ -1320,7 +1151,7 @@ apis: [
         status-text: limited,
         incidents: [
           {
-            id: 1,
+            id: 18,
             title: Sporadic erroneous rate limiting,
             api: API 2,
             updates: [
@@ -1397,9 +1228,34 @@ apis: [
       },
       {
         date: 03.11.2023,
-        status: fine,
-        status-text: operational,
+        status: limited,
+        status-text: limited,
         incidents: [
+          {
+            id: 19,
+            title: Sporadic erroneous rate limiting,
+            api: API 2,
+            updates: [
+              {
+                title: Resolved,
+                text: We have corrected the faulty rate limiting configuration.,
+                datetime: 03.11.2023 06:16:44 ,
+                resolves: True
+              },
+              {
+                title: Investigating,
+                text: Our internal monitoring has confirmed these reports.,
+                datetime: 03.11.2023 08:30:07 ,
+                resolves: False
+              },
+              {
+                title: Notified,
+                text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+                datetime: 03.11.2023 10:43:30 ,
+                resolves: False
+              },
+            ],
+          },
         ]
       },
       {
@@ -1411,9 +1267,34 @@ apis: [
       },
       {
         date: 05.11.2023,
-        status: fine,
-        status-text: operational,
+        status: limited,
+        status-text: limited,
         incidents: [
+          {
+            id: 20,
+            title: Sporadic erroneous rate limiting,
+            api: API 2,
+            updates: [
+              {
+                title: Resolved,
+                text: We have corrected the faulty rate limiting configuration.,
+                datetime: 05.11.2023 06:16:44 ,
+                resolves: True
+              },
+              {
+                title: Investigating,
+                text: Our internal monitoring has confirmed these reports.,
+                datetime: 05.11.2023 08:30:07 ,
+                resolves: False
+              },
+              {
+                title: Notified,
+                text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+                datetime: 05.11.2023 10:43:30 ,
+                resolves: False
+              },
+            ],
+          },
         ]
       },
       {
@@ -1425,29 +1306,29 @@ apis: [
       },
       {
         date: 07.11.2023,
-        status: limited,
-        status-text: limited,
+        status: broken,
+        status-text: broken,
         incidents: [
           {
-            id: 1,
-            title: Sporadic erroneous rate limiting,
+            id: 21,
+            title: Service unreachable,
             api: API 2,
             updates: [
               {
-                title: Resolved,
-                text: We have corrected the faulty rate limiting configuration.,
+                title: Identified,
+                text: We have identified the root cause of the problem and are working on a workaround. A final fix will be scheduled for the next maintenance period.,
                 datetime: 07.11.2023 06:16:44 ,
                 resolves: True
               },
               {
                 title: Investigating,
-                text: Our internal monitoring has confirmed these reports.,
+                text: We have determined that the service itself is unreachable. The server running it seems fine.,
                 datetime: 07.11.2023 08:30:07 ,
                 resolves: False
               },
               {
                 title: Notified,
-                text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+                text: We have received an automated warning about the service.,
                 datetime: 07.11.2023 10:43:30 ,
                 resolves: False
               },
@@ -1457,66 +1338,16 @@ apis: [
       },
       {
         date: 08.11.2023,
-        status: limited,
-        status-text: limited,
+        status: fine,
+        status-text: operational,
         incidents: [
-          {
-            id: 1,
-            title: Sporadic erroneous rate limiting,
-            api: API 2,
-            updates: [
-              {
-                title: Resolved,
-                text: We have corrected the faulty rate limiting configuration.,
-                datetime: 08.11.2023 06:16:44 ,
-                resolves: True
-              },
-              {
-                title: Investigating,
-                text: Our internal monitoring has confirmed these reports.,
-                datetime: 08.11.2023 08:30:07 ,
-                resolves: False
-              },
-              {
-                title: Notified,
-                text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
-                datetime: 08.11.2023 10:43:30 ,
-                resolves: False
-              },
-            ],
-          },
         ]
       },
       {
         date: 09.11.2023,
-        status: broken,
-        status-text: broken,
+        status: fine,
+        status-text: operational,
         incidents: [
-          {
-            id: 2,
-            title: Service unreachable,
-            api: API 2,
-            updates: [
-              {
-                title: Identified,
-                text: We have identified the root cause of the problem and are working on a workaround. A final fix will be scheduled for the next maintenance period.,
-                datetime: 09.11.2023 06:16:44 ,
-                resolves: True
-              },
-              {
-                title: Investigating,
-                text: We have determined that the service itself is unreachable. The server running it seems fine.,
-                datetime: 09.11.2023 08:30:07 ,
-                resolves: False
-              },
-              {
-                title: Notified,
-                text: We have received an automated warning about the service.,
-                datetime: 09.11.2023 10:43:30 ,
-                resolves: False
-              },
-            ],
-          },
         ]
       },
       {
@@ -1528,28 +1359,9 @@ apis: [
       },
       {
         date: 11.11.2023,
-        status: maintenance,
-        status-text: maintenance,
+        status: fine,
+        status-text: operational,
         incidents: [
-          {
-            id: 0,
-            title: Scheduled Maintenance,
-            api: API 2,
-            updates: [
-              {
-                title: Done,
-                text: Finished maintenance session. Service is back up.,
-                datetime: 11.11.2023 06:16:44 ,
-                resolves: True
-              },
-              {
-                title: Started,
-                text: Started the scheduled maintenance session. Return to operational state is expected in roughly two hours.,
-                datetime: 11.11.2023 08:30:07 ,
-                resolves: False
-              },
-            ],
-          },
         ]
       },
       {
@@ -1589,60 +1401,16 @@ apis: [
       },
       {
         date: 17.11.2023,
-        status: limited,
-        status-text: limited,
+        status: fine,
+        status-text: operational,
         incidents: [
-          {
-            id: 1,
-            title: Sporadic erroneous rate limiting,
-            api: API 2,
-            updates: [
-              {
-                title: Resolved,
-                text: We have corrected the faulty rate limiting configuration.,
-                datetime: 17.11.2023 06:16:44 ,
-                resolves: True
-              },
-              {
-                title: Investigating,
-                text: Our internal monitoring has confirmed these reports.,
-                datetime: 17.11.2023 08:30:07 ,
-                resolves: False
-              },
-              {
-                title: Notified,
-                text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
-                datetime: 17.11.2023 10:43:30 ,
-                resolves: False
-              },
-            ],
-          },
         ]
       },
       {
         date: 18.11.2023,
-        status: maintenance,
-        status-text: maintenance,
+        status: fine,
+        status-text: operational,
         incidents: [
-          {
-            id: 0,
-            title: Scheduled Maintenance,
-            api: API 2,
-            updates: [
-              {
-                title: Done,
-                text: Finished maintenance session. Service is back up.,
-                datetime: 18.11.2023 06:16:44 ,
-                resolves: True
-              },
-              {
-                title: Started,
-                text: Started the scheduled maintenance session. Return to operational state is expected in roughly two hours.,
-                datetime: 18.11.2023 08:30:07 ,
-                resolves: False
-              },
-            ],
-          },
         ]
       },
       {
@@ -1661,34 +1429,9 @@ apis: [
       },
       {
         date: 21.11.2023,
-        status: limited,
-        status-text: limited,
+        status: fine,
+        status-text: operational,
         incidents: [
-          {
-            id: 1,
-            title: Sporadic erroneous rate limiting,
-            api: API 2,
-            updates: [
-              {
-                title: Resolved,
-                text: We have corrected the faulty rate limiting configuration.,
-                datetime: 21.11.2023 06:16:44 ,
-                resolves: True
-              },
-              {
-                title: Investigating,
-                text: Our internal monitoring has confirmed these reports.,
-                datetime: 21.11.2023 08:30:07 ,
-                resolves: False
-              },
-              {
-                title: Notified,
-                text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
-                datetime: 21.11.2023 10:43:30 ,
-                resolves: False
-              },
-            ],
-          },
         ]
       },
       {
@@ -1721,73 +1464,16 @@ apis: [
       },
       {
         date: 26.11.2023,
-        status: maintenance,
-        status-text: maintenance,
+        status: fine,
+        status-text: operational,
         incidents: [
-          {
-            id: 0,
-            title: Scheduled Maintenance,
-            api: API 2,
-            updates: [
-              {
-                title: Done,
-                text: Finished maintenance session. Service is back up.,
-                datetime: 26.11.2023 06:16:44 ,
-                resolves: True
-              },
-              {
-                title: Started,
-                text: Started the scheduled maintenance session. Return to operational state is expected in roughly two hours.,
-                datetime: 26.11.2023 08:30:07 ,
-                resolves: False
-              },
-            ],
-          },
-          {
-            id: 0,
-            title: Scheduled Maintenance,
-            api: API 2,
-            updates: [
-              {
-                title: Done,
-                text: Finished maintenance session. Service is back up.,
-                datetime: 26.11.2023 13:16:44 ,
-                resolves: True
-              },
-              {
-                title: Started,
-                text: Started the scheduled maintenance session. Return to operational state is expected in roughly two hours.,
-                datetime: 26.11.2023 15:30:07 ,
-                resolves: False
-              },
-            ],
-          },
         ]
       },
       {
         date: 27.11.2023,
-        status: maintenance,
-        status-text: maintenance,
+        status: fine,
+        status-text: operational,
         incidents: [
-          {
-            id: 0,
-            title: Scheduled Maintenance,
-            api: API 2,
-            updates: [
-              {
-                title: Done,
-                text: Finished maintenance session. Service is back up.,
-                datetime: 27.11.2023 06:16:44 ,
-                resolves: True
-              },
-              {
-                title: Started,
-                text: Started the scheduled maintenance session. Return to operational state is expected in roughly two hours.,
-                datetime: 27.11.2023 08:30:07 ,
-                resolves: False
-              },
-            ],
-          },
         ]
       },
       {
@@ -1813,34 +1499,9 @@ apis: [
       },
       {
         date: 01.12.2023,
-        status: limited,
-        status-text: limited,
+        status: fine,
+        status-text: operational,
         incidents: [
-          {
-            id: 1,
-            title: Sporadic erroneous rate limiting,
-            api: API 2,
-            updates: [
-              {
-                title: Resolved,
-                text: We have corrected the faulty rate limiting configuration.,
-                datetime: 01.12.2023 06:16:44 ,
-                resolves: True
-              },
-              {
-                title: Investigating,
-                text: Our internal monitoring has confirmed these reports.,
-                datetime: 01.12.2023 08:30:07 ,
-                resolves: False
-              },
-              {
-                title: Notified,
-                text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
-                datetime: 01.12.2023 10:43:30 ,
-                resolves: False
-              },
-            ],
-          },
         ]
       },
       {
@@ -1852,29 +1513,29 @@ apis: [
       },
       {
         date: 03.12.2023,
-        status: broken,
-        status-text: broken,
+        status: limited,
+        status-text: limited,
         incidents: [
           {
-            id: 2,
-            title: Service unreachable,
+            id: 22,
+            title: Sporadic erroneous rate limiting,
             api: API 2,
             updates: [
               {
-                title: Identified,
-                text: We have identified the root cause of the problem and are working on a workaround. A final fix will be scheduled for the next maintenance period.,
+                title: Resolved,
+                text: We have corrected the faulty rate limiting configuration.,
                 datetime: 03.12.2023 06:16:44 ,
                 resolves: True
               },
               {
                 title: Investigating,
-                text: We have determined that the service itself is unreachable. The server running it seems fine.,
+                text: Our internal monitoring has confirmed these reports.,
                 datetime: 03.12.2023 08:30:07 ,
                 resolves: False
               },
               {
                 title: Notified,
-                text: We have received an automated warning about the service.,
+                text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
                 datetime: 03.12.2023 10:43:30 ,
                 resolves: False
               },
@@ -1891,9 +1552,34 @@ apis: [
       },
       {
         date: 05.12.2023,
-        status: fine,
-        status-text: operational,
+        status: limited,
+        status-text: limited,
         incidents: [
+          {
+            id: 23,
+            title: Sporadic erroneous rate limiting,
+            api: API 2,
+            updates: [
+              {
+                title: Resolved,
+                text: We have corrected the faulty rate limiting configuration.,
+                datetime: 05.12.2023 06:16:44 ,
+                resolves: True
+              },
+              {
+                title: Investigating,
+                text: Our internal monitoring has confirmed these reports.,
+                datetime: 05.12.2023 08:30:07 ,
+                resolves: False
+              },
+              {
+                title: Notified,
+                text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+                datetime: 05.12.2023 10:43:30 ,
+                resolves: False
+              },
+            ],
+          },
         ]
       },
       {
@@ -1912,91 +1598,16 @@ apis: [
       },
       {
         date: 08.12.2023,
-        status: limited,
-        status-text: limited,
+        status: fine,
+        status-text: operational,
         incidents: [
-          {
-            id: 1,
-            title: Sporadic erroneous rate limiting,
-            api: API 2,
-            updates: [
-              {
-                title: Resolved,
-                text: We have corrected the faulty rate limiting configuration.,
-                datetime: 08.12.2023 06:16:44 ,
-                resolves: True
-              },
-              {
-                title: Investigating,
-                text: Our internal monitoring has confirmed these reports.,
-                datetime: 08.12.2023 08:30:07 ,
-                resolves: False
-              },
-              {
-                title: Notified,
-                text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
-                datetime: 08.12.2023 10:43:30 ,
-                resolves: False
-              },
-            ],
-          },
-          {
-            id: 1,
-            title: Sporadic erroneous rate limiting,
-            api: API 2,
-            updates: [
-              {
-                title: Resolved,
-                text: We have corrected the faulty rate limiting configuration.,
-                datetime: 08.12.2023 13:16:44 ,
-                resolves: True
-              },
-              {
-                title: Investigating,
-                text: Our internal monitoring has confirmed these reports.,
-                datetime: 08.12.2023 15:30:07 ,
-                resolves: False
-              },
-              {
-                title: Notified,
-                text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
-                datetime: 08.12.2023 17:43:30 ,
-                resolves: False
-              },
-            ],
-          },
         ]
       },
       {
         date: 09.12.2023,
-        status: limited,
-        status-text: limited,
+        status: fine,
+        status-text: operational,
         incidents: [
-          {
-            id: 1,
-            title: Sporadic erroneous rate limiting,
-            api: API 2,
-            updates: [
-              {
-                title: Resolved,
-                text: We have corrected the faulty rate limiting configuration.,
-                datetime: 09.12.2023 06:16:44 ,
-                resolves: True
-              },
-              {
-                title: Investigating,
-                text: Our internal monitoring has confirmed these reports.,
-                datetime: 09.12.2023 08:30:07 ,
-                resolves: False
-              },
-              {
-                title: Notified,
-                text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
-                datetime: 09.12.2023 10:43:30 ,
-                resolves: False
-              },
-            ],
-          },
         ]
       },
       {
@@ -2029,9 +1640,34 @@ apis: [
       },
       {
         date: 14.12.2023,
-        status: fine,
-        status-text: operational,
+        status: limited,
+        status-text: limited,
         incidents: [
+          {
+            id: 24,
+            title: Sporadic erroneous rate limiting,
+            api: API 2,
+            updates: [
+              {
+                title: Resolved,
+                text: We have corrected the faulty rate limiting configuration.,
+                datetime: 14.12.2023 06:16:44 ,
+                resolves: True
+              },
+              {
+                title: Investigating,
+                text: Our internal monitoring has confirmed these reports.,
+                datetime: 14.12.2023 08:30:07 ,
+                resolves: False
+              },
+              {
+                title: Notified,
+                text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+                datetime: 14.12.2023 10:43:30 ,
+                resolves: False
+              },
+            ],
+          },
         ]
       },
       {
@@ -2050,74 +1686,36 @@ apis: [
       },
       {
         date: 17.12.2023,
-        status: maintenance,
-        status-text: maintenance,
+        status: fine,
+        status-text: operational,
         incidents: [
-          {
-            id: 0,
-            title: Scheduled Maintenance,
-            api: API 2,
-            updates: [
-              {
-                title: Done,
-                text: Finished maintenance session. Service is back up.,
-                datetime: 17.12.2023 06:16:44 ,
-                resolves: True
-              },
-              {
-                title: Started,
-                text: Started the scheduled maintenance session. Return to operational state is expected in roughly two hours.,
-                datetime: 17.12.2023 08:30:07 ,
-                resolves: False
-              },
-            ],
-          },
-          {
-            id: 0,
-            title: Scheduled Maintenance,
-            api: API 2,
-            updates: [
-              {
-                title: Done,
-                text: Finished maintenance session. Service is back up.,
-                datetime: 17.12.2023 13:16:44 ,
-                resolves: True
-              },
-              {
-                title: Started,
-                text: Started the scheduled maintenance session. Return to operational state is expected in roughly two hours.,
-                datetime: 17.12.2023 15:30:07 ,
-                resolves: False
-              },
-            ],
-          },
         ]
       },
       {
         date: 18.12.2023,
-        status: broken,
-        status-text: broken,
+        status: limited,
+        status-text: limited,
         incidents: [
           {
-            id: 2,
-            title: Service unreachable,
+            id: 25,
+            title: Sporadic erroneous rate limiting,
             api: API 2,
             updates: [
               {
-                title: Identified,
-                text: We have identified the root cause of the problem and are working on a workaround. A final fix will be scheduled for the next maintenance period.,
+                title: Resolved,
+                text: We have corrected the faulty rate limiting configuration.,
                 datetime: 18.12.2023 06:16:44 ,
                 resolves: True
               },
               {
                 title: Investigating,
-                text: We have determined that the service itself is unreachable. The server running it seems fine.,
+                text: Our internal monitoring has confirmed these reports.,
                 datetime: 18.12.2023 08:30:07 ,
                 resolves: False
               },
               {
                 title: Notified,
-                text: We have received an automated warning about the service.,
+                text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
                 datetime: 18.12.2023 10:43:30 ,
                 resolves: False
               },
@@ -2127,34 +1725,9 @@ apis: [
       },
       {
         date: 19.12.2023,
-        status: limited,
-        status-text: limited,
+        status: fine,
+        status-text: operational,
         incidents: [
-          {
-            id: 1,
-            title: Sporadic erroneous rate limiting,
-            api: API 2,
-            updates: [
-              {
-                title: Resolved,
-                text: We have corrected the faulty rate limiting configuration.,
-                datetime: 19.12.2023 06:16:44 ,
-                resolves: True
-              },
-              {
-                title: Investigating,
-                text: Our internal monitoring has confirmed these reports.,
-                datetime: 19.12.2023 08:30:07 ,
-                resolves: False
-              },
-              {
-                title: Notified,
-                text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
-                datetime: 19.12.2023 10:43:30 ,
-                resolves: False
-              },
-            ],
-          },
         ]
       },
       {
@@ -2173,66 +1746,16 @@ apis: [
       },
       {
         date: 22.12.2023,
-        status: limited,
-        status-text: limited,
+        status: fine,
+        status-text: operational,
         incidents: [
-          {
-            id: 1,
-            title: Sporadic erroneous rate limiting,
-            api: API 2,
-            updates: [
-              {
-                title: Resolved,
-                text: We have corrected the faulty rate limiting configuration.,
-                datetime: 22.12.2023 06:16:44 ,
-                resolves: True
-              },
-              {
-                title: Investigating,
-                text: Our internal monitoring has confirmed these reports.,
-                datetime: 22.12.2023 08:30:07 ,
-                resolves: False
-              },
-              {
-                title: Notified,
-                text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
-                datetime: 22.12.2023 10:43:30 ,
-                resolves: False
-              },
-            ],
-          },
         ]
       },
       {
         date: 23.12.2023,
-        status: limited,
-        status-text: limited,
+        status: fine,
+        status-text: operational,
         incidents: [
-          {
-            id: 1,
-            title: Sporadic erroneous rate limiting,
-            api: API 2,
-            updates: [
-              {
-                title: Resolved,
-                text: We have corrected the faulty rate limiting configuration.,
-                datetime: 23.12.2023 06:16:44 ,
-                resolves: True
-              },
-              {
-                title: Investigating,
-                text: Our internal monitoring has confirmed these reports.,
-                datetime: 23.12.2023 08:30:07 ,
-                resolves: False
-              },
-              {
-                title: Notified,
-                text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
-                datetime: 23.12.2023 10:43:30 ,
-                resolves: False
-              },
-            ],
-          },
         ]
       },
       {
@@ -2251,41 +1774,41 @@ apis: [
       },
       {
         date: 26.12.2023,
-        status: fine,
-        status-text: operational,
-        incidents: [
-        ]
-      },
-      {
-        date: 27.12.2023,
         status: limited,
         status-text: limited,
         incidents: [
           {
-            id: 1,
+            id: 26,
             title: Sporadic erroneous rate limiting,
             api: API 2,
             updates: [
               {
                 title: Resolved,
                 text: We have corrected the faulty rate limiting configuration.,
-                datetime: 27.12.2023 06:16:44 ,
+                datetime: 26.12.2023 06:16:44 ,
                 resolves: True
               },
               {
                 title: Investigating,
                 text: Our internal monitoring has confirmed these reports.,
-                datetime: 27.12.2023 08:30:07 ,
+                datetime: 26.12.2023 08:30:07 ,
                 resolves: False
               },
               {
                 title: Notified,
                 text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
-                datetime: 27.12.2023 10:43:30 ,
+                datetime: 26.12.2023 10:43:30 ,
                 resolves: False
               },
             ],
           },
+        ]
+      },
+      {
+        date: 27.12.2023,
+        status: fine,
+        status-text: operational,
+        incidents: [
         ]
       },
       {
@@ -2311,60 +1834,16 @@ apis: [
       },
       {
         date: 31.12.2023,
-        status: limited,
-        status-text: limited,
+        status: fine,
+        status-text: operational,
         incidents: [
-          {
-            id: 1,
-            title: Sporadic erroneous rate limiting,
-            api: API 2,
-            updates: [
-              {
-                title: Resolved,
-                text: We have corrected the faulty rate limiting configuration.,
-                datetime: 31.12.2023 06:16:44 ,
-                resolves: True
-              },
-              {
-                title: Investigating,
-                text: Our internal monitoring has confirmed these reports.,
-                datetime: 31.12.2023 08:30:07 ,
-                resolves: False
-              },
-              {
-                title: Notified,
-                text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
-                datetime: 31.12.2023 10:43:30 ,
-                resolves: False
-              },
-            ],
-          },
         ]
       },
       {
         date: 01.01.2024,
-        status: maintenance,
-        status-text: maintenance,
+        status: fine,
+        status-text: operational,
         incidents: [
-          {
-            id: 0,
-            title: Scheduled Maintenance,
-            api: API 2,
-            updates: [
-              {
-                title: Done,
-                text: Finished maintenance session. Service is back up.,
-                datetime: 01.01.2024 06:16:44 ,
-                resolves: True
-              },
-              {
-                title: Started,
-                text: Started the scheduled maintenance session. Return to operational state is expected in roughly two hours.,
-                datetime: 01.01.2024 08:30:07 ,
-                resolves: False
-              },
-            ],
-          },
         ]
       },
       {
@@ -2376,9 +1855,34 @@ apis: [
       },
       {
         date: 03.01.2024,
-        status: fine,
-        status-text: operational,
+        status: limited,
+        status-text: limited,
         incidents: [
+          {
+            id: 27,
+            title: Sporadic erroneous rate limiting,
+            api: API 2,
+            updates: [
+              {
+                title: Resolved,
+                text: We have corrected the faulty rate limiting configuration.,
+                datetime: 03.01.2024 06:16:44 ,
+                resolves: True
+              },
+              {
+                title: Investigating,
+                text: Our internal monitoring has confirmed these reports.,
+                datetime: 03.01.2024 08:30:07 ,
+                resolves: False
+              },
+              {
+                title: Notified,
+                text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+                datetime: 03.01.2024 10:43:30 ,
+                resolves: False
+              },
+            ],
+          },
         ]
       },
       {
@@ -2390,41 +1894,41 @@ apis: [
       },
       {
         date: 05.01.2024,
-        status: fine,
-        status-text: operational,
-        incidents: [
-        ]
-      },
-      {
-        date: 06.01.2024,
         status: limited,
         status-text: limited,
         incidents: [
           {
-            id: 1,
+            id: 28,
             title: Sporadic erroneous rate limiting,
             api: API 2,
             updates: [
               {
                 title: Resolved,
                 text: We have corrected the faulty rate limiting configuration.,
-                datetime: 06.01.2024 06:16:44 ,
+                datetime: 05.01.2024 06:16:44 ,
                 resolves: True
               },
               {
                 title: Investigating,
                 text: Our internal monitoring has confirmed these reports.,
-                datetime: 06.01.2024 08:30:07 ,
+                datetime: 05.01.2024 08:30:07 ,
                 resolves: False
               },
               {
                 title: Notified,
                 text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
-                datetime: 06.01.2024 10:43:30 ,
+                datetime: 05.01.2024 10:43:30 ,
                 resolves: False
               },
             ],
           },
+        ]
+      },
+      {
+        date: 06.01.2024,
+        status: fine,
+        status-text: operational,
+        incidents: [
         ]
       },
       {
@@ -2436,9 +1940,34 @@ apis: [
       },
       {
         date: 08.01.2024,
-        status: fine,
-        status-text: operational,
+        status: limited,
+        status-text: limited,
         incidents: [
+          {
+            id: 29,
+            title: Sporadic erroneous rate limiting,
+            api: API 2,
+            updates: [
+              {
+                title: Resolved,
+                text: We have corrected the faulty rate limiting configuration.,
+                datetime: 08.01.2024 06:16:44 ,
+                resolves: True
+              },
+              {
+                title: Investigating,
+                text: Our internal monitoring has confirmed these reports.,
+                datetime: 08.01.2024 08:30:07 ,
+                resolves: False
+              },
+              {
+                title: Notified,
+                text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+                datetime: 08.01.2024 10:43:30 ,
+                resolves: False
+              },
+            ],
+          },
         ]
       },
       {
@@ -2450,30 +1979,97 @@ apis: [
       },
       {
         date: 10.01.2024,
-        status: broken,
-        status-text: broken,
+        status: fine,
+        status-text: operational,
+        incidents: [
+        ]
+      },
+      {
+        date: 11.01.2024,
+        status: fine,
+        status-text: operational,
+        incidents: [
+        ]
+      },
+      {
+        date: 12.01.2024,
+        status: limited,
+        status-text: limited,
         incidents: [
           {
-            id: 2,
-            title: Service unreachable,
+            id: 30,
+            title: Sporadic erroneous rate limiting,
             api: API 2,
             updates: [
               {
-                title: Identified,
-                text: We have identified the root cause of the problem and are working on a workaround. A final fix will be scheduled for the next maintenance period.,
-                datetime: 10.01.2024 06:16:44 ,
+                title: Resolved,
+                text: We have corrected the faulty rate limiting configuration.,
+                datetime: 12.01.2024 06:16:44 ,
                 resolves: True
               },
               {
                 title: Investigating,
-                text: We have determined that the service itself is unreachable. The server running it seems fine.,
-                datetime: 10.01.2024 08:30:07 ,
+                text: Our internal monitoring has confirmed these reports.,
+                datetime: 12.01.2024 08:30:07 ,
                 resolves: False
               },
               {
                 title: Notified,
-                text: We have received an automated warning about the service.,
-                datetime: 10.01.2024 10:43:30 ,
+                text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+                datetime: 12.01.2024 10:43:30 ,
+                resolves: False
+              },
+            ],
+          },
+        ]
+      },
+      {
+        date: 13.01.2024,
+        status: fine,
+        status-text: operational,
+        incidents: [
+        ]
+      },
+      {
+        date: 14.01.2024,
+        status: fine,
+        status-text: operational,
+        incidents: [
+        ]
+      },
+      {
+        date: 15.01.2024,
+        status: fine,
+        status-text: operational,
+        incidents: [
+        ]
+      },
+      {
+        date: 16.01.2024,
+        status: limited,
+        status-text: limited,
+        incidents: [
+          {
+            id: 31,
+            title: Sporadic erroneous rate limiting,
+            api: API 2,
+            updates: [
+              {
+                title: Resolved,
+                text: We have corrected the faulty rate limiting configuration.,
+                datetime: 16.01.2024 06:16:44 ,
+                resolves: True
+              },
+              {
+                title: Investigating,
+                text: Our internal monitoring has confirmed these reports.,
+                datetime: 16.01.2024 08:30:07 ,
+                resolves: False
+              },
+              {
+                title: Notified,
+                text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+                datetime: 16.01.2024 10:43:30 ,
                 resolves: False
               },
             ],
@@ -2486,80 +2082,13 @@ apis: [
     name: API 3,
     status: fine,
     status-text: operational,
-    uptime: 1.28,
+    uptime: 83,
     days: [
       {
-        date: 12.10.2023,
-        status: fine,
-        status-text: operational,
-        incidents: [
-        ]
-      },
-      {
-        date: 13.10.2023,
-        status: fine,
-        status-text: operational,
-        incidents: [
-        ]
-      },
-      {
-        date: 14.10.2023,
-        status: fine,
-        status-text: operational,
-        incidents: [
-        ]
-      },
-      {
-        date: 15.10.2023,
-        status: fine,
-        status-text: operational,
-        incidents: [
-        ]
-      },
-      {
-        date: 16.10.2023,
-        status: fine,
-        status-text: operational,
-        incidents: [
-        ]
-      },
-      {
-        date: 17.10.2023,
-        status: fine,
-        status-text: operational,
-        incidents: [
-        ]
-      },
-      {
         date: 18.10.2023,
-        status: limited,
-        status-text: limited,
+        status: fine,
+        status-text: operational,
         incidents: [
-          {
-            id: 1,
-            title: Sporadic erroneous rate limiting,
-            api: API 3,
-            updates: [
-              {
-                title: Resolved,
-                text: We have corrected the faulty rate limiting configuration.,
-                datetime: 18.10.2023 06:16:44 ,
-                resolves: True
-              },
-              {
-                title: Investigating,
-                text: Our internal monitoring has confirmed these reports.,
-                datetime: 18.10.2023 08:30:07 ,
-                resolves: False
-              },
-              {
-                title: Notified,
-                text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
-                datetime: 18.10.2023 10:43:30 ,
-                resolves: False
-              },
-            ],
-          },
         ]
       },
       {
@@ -2571,34 +2100,9 @@ apis: [
       },
       {
         date: 20.10.2023,
-        status: broken,
-        status-text: broken,
+        status: fine,
+        status-text: operational,
         incidents: [
-          {
-            id: 2,
-            title: Service unreachable,
-            api: API 3,
-            updates: [
-              {
-                title: Identified,
-                text: We have identified the root cause of the problem and are working on a workaround. A final fix will be scheduled for the next maintenance period.,
-                datetime: 20.10.2023 06:16:44 ,
-                resolves: True
-              },
-              {
-                title: Investigating,
-                text: We have determined that the service itself is unreachable. The server running it seems fine.,
-                datetime: 20.10.2023 08:30:07 ,
-                resolves: False
-              },
-              {
-                title: Notified,
-                text: We have received an automated warning about the service.,
-                datetime: 20.10.2023 10:43:30 ,
-                resolves: False
-              },
-            ],
-          },
         ]
       },
       {
@@ -2645,50 +2149,37 @@ apis: [
       },
       {
         date: 27.10.2023,
-        status: maintenance,
-        status-text: maintenance,
+        status: fine,
+        status-text: operational,
         incidents: [
-          {
-            id: 0,
-            title: Scheduled Maintenance,
-            api: API 3,
-            updates: [
-              {
-                title: Done,
-                text: Finished maintenance session. Service is back up.,
-                datetime: 27.10.2023 06:16:44 ,
-                resolves: True
-              },
-              {
-                title: Started,
-                text: Started the scheduled maintenance session. Return to operational state is expected in roughly two hours.,
-                datetime: 27.10.2023 08:30:07 ,
-                resolves: False
-              },
-            ],
-          },
         ]
       },
       {
         date: 28.10.2023,
-        status: maintenance,
-        status-text: maintenance,
+        status: limited,
+        status-text: limited,
         incidents: [
           {
-            id: 0,
-            title: Scheduled Maintenance,
+            id: 32,
+            title: Sporadic erroneous rate limiting,
             api: API 3,
             updates: [
               {
-                title: Done,
-                text: Finished maintenance session. Service is back up.,
+                title: Resolved,
+                text: We have corrected the faulty rate limiting configuration.,
                 datetime: 28.10.2023 06:16:44 ,
                 resolves: True
               },
               {
-                title: Started,
-                text: Started the scheduled maintenance session. Return to operational state is expected in roughly two hours.,
+                title: Investigating,
+                text: Our internal monitoring has confirmed these reports.,
                 datetime: 28.10.2023 08:30:07 ,
+                resolves: False
+              },
+              {
+                title: Notified,
+                text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+                datetime: 28.10.2023 10:43:30 ,
                 resolves: False
               },
             ],
@@ -2732,98 +2223,23 @@ apis: [
       },
       {
         date: 03.11.2023,
-        status: broken,
-        status-text: broken,
+        status: fine,
+        status-text: operational,
         incidents: [
-          {
-            id: 2,
-            title: Service unreachable,
-            api: API 3,
-            updates: [
-              {
-                title: Identified,
-                text: We have identified the root cause of the problem and are working on a workaround. A final fix will be scheduled for the next maintenance period.,
-                datetime: 03.11.2023 06:16:44 ,
-                resolves: True
-              },
-              {
-                title: Investigating,
-                text: We have determined that the service itself is unreachable. The server running it seems fine.,
-                datetime: 03.11.2023 08:30:07 ,
-                resolves: False
-              },
-              {
-                title: Notified,
-                text: We have received an automated warning about the service.,
-                datetime: 03.11.2023 10:43:30 ,
-                resolves: False
-              },
-            ],
-          },
         ]
       },
       {
         date: 04.11.2023,
-        status: limited,
-        status-text: limited,
+        status: fine,
+        status-text: operational,
         incidents: [
-          {
-            id: 1,
-            title: Sporadic erroneous rate limiting,
-            api: API 3,
-            updates: [
-              {
-                title: Resolved,
-                text: We have corrected the faulty rate limiting configuration.,
-                datetime: 04.11.2023 06:16:44 ,
-                resolves: True
-              },
-              {
-                title: Investigating,
-                text: Our internal monitoring has confirmed these reports.,
-                datetime: 04.11.2023 08:30:07 ,
-                resolves: False
-              },
-              {
-                title: Notified,
-                text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
-                datetime: 04.11.2023 10:43:30 ,
-                resolves: False
-              },
-            ],
-          },
         ]
       },
       {
         date: 05.11.2023,
-        status: limited,
-        status-text: limited,
+        status: fine,
+        status-text: operational,
         incidents: [
-          {
-            id: 1,
-            title: Sporadic erroneous rate limiting,
-            api: API 3,
-            updates: [
-              {
-                title: Resolved,
-                text: We have corrected the faulty rate limiting configuration.,
-                datetime: 05.11.2023 06:16:44 ,
-                resolves: True
-              },
-              {
-                title: Investigating,
-                text: Our internal monitoring has confirmed these reports.,
-                datetime: 05.11.2023 08:30:07 ,
-                resolves: False
-              },
-              {
-                title: Notified,
-                text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
-                datetime: 05.11.2023 10:43:30 ,
-                resolves: False
-              },
-            ],
-          },
         ]
       },
       {
@@ -2870,35 +2286,41 @@ apis: [
       },
       {
         date: 12.11.2023,
-        status: fine,
-        status-text: operational,
-        incidents: [
-        ]
-      },
-      {
-        date: 13.11.2023,
-        status: maintenance,
-        status-text: maintenance,
+        status: broken,
+        status-text: broken,
         incidents: [
           {
-            id: 0,
-            title: Scheduled Maintenance,
+            id: 33,
+            title: Service unreachable,
             api: API 3,
             updates: [
               {
-                title: Done,
-                text: Finished maintenance session. Service is back up.,
-                datetime: 13.11.2023 06:16:44 ,
+                title: Identified,
+                text: We have identified the root cause of the problem and are working on a workaround. A final fix will be scheduled for the next maintenance period.,
+                datetime: 12.11.2023 06:16:44 ,
                 resolves: True
               },
               {
-                title: Started,
-                text: Started the scheduled maintenance session. Return to operational state is expected in roughly two hours.,
-                datetime: 13.11.2023 08:30:07 ,
+                title: Investigating,
+                text: We have determined that the service itself is unreachable. The server running it seems fine.,
+                datetime: 12.11.2023 08:30:07 ,
+                resolves: False
+              },
+              {
+                title: Notified,
+                text: We have received an automated warning about the service.,
+                datetime: 12.11.2023 10:43:30 ,
                 resolves: False
               },
             ],
           },
+        ]
+      },
+      {
+        date: 13.11.2023,
+        status: fine,
+        status-text: operational,
+        incidents: [
         ]
       },
       {
@@ -2910,9 +2332,28 @@ apis: [
       },
       {
         date: 15.11.2023,
-        status: fine,
-        status-text: operational,
+        status: maintenance,
+        status-text: maintenance,
         incidents: [
+          {
+            id: 34,
+            title: Scheduled Maintenance,
+            api: API 3,
+            updates: [
+              {
+                title: Done,
+                text: Finished maintenance session. Service is back up.,
+                datetime: 15.11.2023 06:16:44 ,
+                resolves: True
+              },
+              {
+                title: Started,
+                text: Started the scheduled maintenance session. Return to operational state is expected in roughly two hours.,
+                datetime: 15.11.2023 08:30:07 ,
+                resolves: False
+              },
+            ],
+          },
         ]
       },
       {
@@ -2931,107 +2372,38 @@ apis: [
       },
       {
         date: 18.11.2023,
-        status: limited,
-        status-text: limited,
+        status: fine,
+        status-text: operational,
         incidents: [
-          {
-            id: 1,
-            title: Sporadic erroneous rate limiting,
-            api: API 3,
-            updates: [
-              {
-                title: Resolved,
-                text: We have corrected the faulty rate limiting configuration.,
-                datetime: 18.11.2023 06:16:44 ,
-                resolves: True
-              },
-              {
-                title: Investigating,
-                text: Our internal monitoring has confirmed these reports.,
-                datetime: 18.11.2023 08:30:07 ,
-                resolves: False
-              },
-              {
-                title: Notified,
-                text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
-                datetime: 18.11.2023 10:43:30 ,
-                resolves: False
-              },
-            ],
-          },
         ]
       },
       {
         date: 19.11.2023,
-        status: maintenance,
-        status-text: maintenance,
+        status: fine,
+        status-text: operational,
         incidents: [
-          {
-            id: 0,
-            title: Scheduled Maintenance,
-            api: API 3,
-            updates: [
-              {
-                title: Done,
-                text: Finished maintenance session. Service is back up.,
-                datetime: 19.11.2023 06:16:44 ,
-                resolves: True
-              },
-              {
-                title: Started,
-                text: Started the scheduled maintenance session. Return to operational state is expected in roughly two hours.,
-                datetime: 19.11.2023 08:30:07 ,
-                resolves: False
-              },
-            ],
-          },
-          {
-            id: 0,
-            title: Scheduled Maintenance,
-            api: API 3,
-            updates: [
-              {
-                title: Done,
-                text: Finished maintenance session. Service is back up.,
-                datetime: 19.11.2023 13:16:44 ,
-                resolves: True
-              },
-              {
-                title: Started,
-                text: Started the scheduled maintenance session. Return to operational state is expected in roughly two hours.,
-                datetime: 19.11.2023 15:30:07 ,
-                resolves: False
-              },
-            ],
-          },
         ]
       },
       {
         date: 20.11.2023,
-        status: limited,
-        status-text: limited,
+        status: maintenance,
+        status-text: maintenance,
         incidents: [
           {
-            id: 1,
-            title: Sporadic erroneous rate limiting,
+            id: 35,
+            title: Scheduled Maintenance,
             api: API 3,
             updates: [
               {
-                title: Resolved,
-                text: We have corrected the faulty rate limiting configuration.,
+                title: Done,
+                text: Finished maintenance session. Service is back up.,
                 datetime: 20.11.2023 06:16:44 ,
                 resolves: True
               },
               {
-                title: Investigating,
-                text: Our internal monitoring has confirmed these reports.,
+                title: Started,
+                text: Started the scheduled maintenance session. Return to operational state is expected in roughly two hours.,
                 datetime: 20.11.2023 08:30:07 ,
-                resolves: False
-              },
-              {
-                title: Notified,
-                text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
-                datetime: 20.11.2023 10:43:30 ,
                 resolves: False
               },
             ],
@@ -3068,41 +2440,41 @@ apis: [
       },
       {
         date: 25.11.2023,
+        status: fine,
+        status-text: operational,
+        incidents: [
+        ]
+      },
+      {
+        date: 26.11.2023,
         status: limited,
         status-text: limited,
         incidents: [
           {
-            id: 1,
+            id: 36,
             title: Sporadic erroneous rate limiting,
             api: API 3,
             updates: [
               {
                 title: Resolved,
                 text: We have corrected the faulty rate limiting configuration.,
-                datetime: 25.11.2023 06:16:44 ,
+                datetime: 26.11.2023 06:16:44 ,
                 resolves: True
               },
               {
                 title: Investigating,
                 text: Our internal monitoring has confirmed these reports.,
-                datetime: 25.11.2023 08:30:07 ,
+                datetime: 26.11.2023 08:30:07 ,
                 resolves: False
               },
               {
                 title: Notified,
                 text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
-                datetime: 25.11.2023 10:43:30 ,
+                datetime: 26.11.2023 10:43:30 ,
                 resolves: False
               },
             ],
           },
-        ]
-      },
-      {
-        date: 26.11.2023,
-        status: fine,
-        status-text: operational,
-        incidents: [
         ]
       },
       {
@@ -3114,67 +2486,73 @@ apis: [
       },
       {
         date: 28.11.2023,
-        status: maintenance,
-        status-text: maintenance,
-        incidents: [
-          {
-            id: 0,
-            title: Scheduled Maintenance,
-            api: API 3,
-            updates: [
-              {
-                title: Done,
-                text: Finished maintenance session. Service is back up.,
-                datetime: 28.11.2023 06:16:44 ,
-                resolves: True
-              },
-              {
-                title: Started,
-                text: Started the scheduled maintenance session. Return to operational state is expected in roughly two hours.,
-                datetime: 28.11.2023 08:30:07 ,
-                resolves: False
-              },
-            ],
-          },
-        ]
-      },
-      {
-        date: 29.11.2023,
         status: fine,
         status-text: operational,
         incidents: [
         ]
       },
       {
-        date: 30.11.2023,
+        date: 29.11.2023,
         status: limited,
         status-text: limited,
         incidents: [
           {
-            id: 1,
+            id: 37,
             title: Sporadic erroneous rate limiting,
             api: API 3,
             updates: [
               {
                 title: Resolved,
                 text: We have corrected the faulty rate limiting configuration.,
-                datetime: 30.11.2023 06:16:44 ,
+                datetime: 29.11.2023 06:16:44 ,
                 resolves: True
               },
               {
                 title: Investigating,
                 text: Our internal monitoring has confirmed these reports.,
-                datetime: 30.11.2023 08:30:07 ,
+                datetime: 29.11.2023 08:30:07 ,
                 resolves: False
               },
               {
                 title: Notified,
                 text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
-                datetime: 30.11.2023 10:43:30 ,
+                datetime: 29.11.2023 10:43:30 ,
                 resolves: False
               },
             ],
           },
+          {
+            id: 38,
+            title: Sporadic erroneous rate limiting,
+            api: API 3,
+            updates: [
+              {
+                title: Resolved,
+                text: We have corrected the faulty rate limiting configuration.,
+                datetime: 29.11.2023 13:16:44 ,
+                resolves: True
+              },
+              {
+                title: Investigating,
+                text: Our internal monitoring has confirmed these reports.,
+                datetime: 29.11.2023 15:30:07 ,
+                resolves: False
+              },
+              {
+                title: Notified,
+                text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+                datetime: 29.11.2023 17:43:30 ,
+                resolves: False
+              },
+            ],
+          },
+        ]
+      },
+      {
+        date: 30.11.2023,
+        status: fine,
+        status-text: operational,
+        incidents: [
         ]
       },
       {
@@ -3193,9 +2571,34 @@ apis: [
       },
       {
         date: 03.12.2023,
-        status: fine,
-        status-text: operational,
+        status: limited,
+        status-text: limited,
         incidents: [
+          {
+            id: 39,
+            title: Sporadic erroneous rate limiting,
+            api: API 3,
+            updates: [
+              {
+                title: Resolved,
+                text: We have corrected the faulty rate limiting configuration.,
+                datetime: 03.12.2023 06:16:44 ,
+                resolves: True
+              },
+              {
+                title: Investigating,
+                text: Our internal monitoring has confirmed these reports.,
+                datetime: 03.12.2023 08:30:07 ,
+                resolves: False
+              },
+              {
+                title: Notified,
+                text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+                datetime: 03.12.2023 10:43:30 ,
+                resolves: False
+              },
+            ],
+          },
         ]
       },
       {
@@ -3204,7 +2607,7 @@ apis: [
         status-text: maintenance,
         incidents: [
           {
-            id: 0,
+            id: 40,
             title: Scheduled Maintenance,
             api: API 3,
             updates: [
@@ -3223,7 +2626,7 @@ apis: [
             ],
           },
           {
-            id: 0,
+            id: 41,
             title: Scheduled Maintenance,
             api: API 3,
             updates: [
@@ -3322,112 +2725,68 @@ apis: [
       },
       {
         date: 16.12.2023,
-        status: limited,
-        status-text: limited,
+        status: fine,
+        status-text: operational,
         incidents: [
-          {
-            id: 1,
-            title: Sporadic erroneous rate limiting,
-            api: API 3,
-            updates: [
-              {
-                title: Resolved,
-                text: We have corrected the faulty rate limiting configuration.,
-                datetime: 16.12.2023 06:16:44 ,
-                resolves: True
-              },
-              {
-                title: Investigating,
-                text: Our internal monitoring has confirmed these reports.,
-                datetime: 16.12.2023 08:30:07 ,
-                resolves: False
-              },
-              {
-                title: Notified,
-                text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
-                datetime: 16.12.2023 10:43:30 ,
-                resolves: False
-              },
-            ],
-          },
         ]
       },
       {
         date: 17.12.2023,
-        status: maintenance,
-        status-text: maintenance,
+        status: fine,
+        status-text: operational,
         incidents: [
-          {
-            id: 0,
-            title: Scheduled Maintenance,
-            api: API 3,
-            updates: [
-              {
-                title: Done,
-                text: Finished maintenance session. Service is back up.,
-                datetime: 17.12.2023 06:16:44 ,
-                resolves: True
-              },
-              {
-                title: Started,
-                text: Started the scheduled maintenance session. Return to operational state is expected in roughly two hours.,
-                datetime: 17.12.2023 08:30:07 ,
-                resolves: False
-              },
-            ],
-          },
-          {
-            id: 0,
-            title: Scheduled Maintenance,
-            api: API 3,
-            updates: [
-              {
-                title: Done,
-                text: Finished maintenance session. Service is back up.,
-                datetime: 17.12.2023 13:16:44 ,
-                resolves: True
-              },
-              {
-                title: Started,
-                text: Started the scheduled maintenance session. Return to operational state is expected in roughly two hours.,
-                datetime: 17.12.2023 15:30:07 ,
-                resolves: False
-              },
-            ],
-          },
         ]
       },
       {
         date: 18.12.2023,
+        status: fine,
+        status-text: operational,
+        incidents: [
+        ]
+      },
+      {
+        date: 19.12.2023,
         status: maintenance,
         status-text: maintenance,
         incidents: [
           {
-            id: 0,
+            id: 42,
             title: Scheduled Maintenance,
             api: API 3,
             updates: [
               {
                 title: Done,
                 text: Finished maintenance session. Service is back up.,
-                datetime: 18.12.2023 06:16:44 ,
+                datetime: 19.12.2023 06:16:44 ,
                 resolves: True
               },
               {
                 title: Started,
                 text: Started the scheduled maintenance session. Return to operational state is expected in roughly two hours.,
-                datetime: 18.12.2023 08:30:07 ,
+                datetime: 19.12.2023 08:30:07 ,
                 resolves: False
               },
             ],
           },
-        ]
-      },
-      {
-        date: 19.12.2023,
-        status: fine,
-        status-text: operational,
-        incidents: [
+          {
+            id: 43,
+            title: Scheduled Maintenance,
+            api: API 3,
+            updates: [
+              {
+                title: Done,
+                text: Finished maintenance session. Service is back up.,
+                datetime: 19.12.2023 13:16:44 ,
+                resolves: True
+              },
+              {
+                title: Started,
+                text: Started the scheduled maintenance session. Return to operational state is expected in roughly two hours.,
+                datetime: 19.12.2023 15:30:07 ,
+                resolves: False
+              },
+            ],
+          },
         ]
       },
       {
@@ -3474,9 +2833,34 @@ apis: [
       },
       {
         date: 26.12.2023,
-        status: fine,
-        status-text: operational,
+        status: limited,
+        status-text: limited,
         incidents: [
+          {
+            id: 44,
+            title: Sporadic erroneous rate limiting,
+            api: API 3,
+            updates: [
+              {
+                title: Resolved,
+                text: We have corrected the faulty rate limiting configuration.,
+                datetime: 26.12.2023 06:16:44 ,
+                resolves: True
+              },
+              {
+                title: Investigating,
+                text: Our internal monitoring has confirmed these reports.,
+                datetime: 26.12.2023 08:30:07 ,
+                resolves: False
+              },
+              {
+                title: Notified,
+                text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+                datetime: 26.12.2023 10:43:30 ,
+                resolves: False
+              },
+            ],
+          },
         ]
       },
       {
@@ -3488,9 +2872,28 @@ apis: [
       },
       {
         date: 28.12.2023,
-        status: fine,
-        status-text: operational,
+        status: maintenance,
+        status-text: maintenance,
         incidents: [
+          {
+            id: 45,
+            title: Scheduled Maintenance,
+            api: API 3,
+            updates: [
+              {
+                title: Done,
+                text: Finished maintenance session. Service is back up.,
+                datetime: 28.12.2023 06:16:44 ,
+                resolves: True
+              },
+              {
+                title: Started,
+                text: Started the scheduled maintenance session. Return to operational state is expected in roughly two hours.,
+                datetime: 28.12.2023 08:30:07 ,
+                resolves: False
+              },
+            ],
+          },
         ]
       },
       {
@@ -3551,9 +2954,34 @@ apis: [
       },
       {
         date: 06.01.2024,
-        status: fine,
-        status-text: operational,
+        status: limited,
+        status-text: limited,
         incidents: [
+          {
+            id: 46,
+            title: Sporadic erroneous rate limiting,
+            api: API 3,
+            updates: [
+              {
+                title: Resolved,
+                text: We have corrected the faulty rate limiting configuration.,
+                datetime: 06.01.2024 06:16:44 ,
+                resolves: True
+              },
+              {
+                title: Investigating,
+                text: Our internal monitoring has confirmed these reports.,
+                datetime: 06.01.2024 08:30:07 ,
+                resolves: False
+              },
+              {
+                title: Notified,
+                text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+                datetime: 06.01.2024 10:43:30 ,
+                resolves: False
+              },
+            ],
+          },
         ]
       },
       {
@@ -3562,7 +2990,7 @@ apis: [
         status-text: limited,
         incidents: [
           {
-            id: 1,
+            id: 47,
             title: Sporadic erroneous rate limiting,
             api: API 3,
             updates: [
@@ -3586,64 +3014,45 @@ apis: [
               },
             ],
           },
+        ]
+      },
+      {
+        date: 08.01.2024,
+        status: fine,
+        status-text: operational,
+        incidents: [
+        ]
+      },
+      {
+        date: 09.01.2024,
+        status: limited,
+        status-text: limited,
+        incidents: [
           {
-            id: 1,
+            id: 48,
             title: Sporadic erroneous rate limiting,
             api: API 3,
             updates: [
               {
                 title: Resolved,
                 text: We have corrected the faulty rate limiting configuration.,
-                datetime: 07.01.2024 13:16:44 ,
+                datetime: 09.01.2024 06:16:44 ,
                 resolves: True
               },
               {
                 title: Investigating,
                 text: Our internal monitoring has confirmed these reports.,
-                datetime: 07.01.2024 15:30:07 ,
+                datetime: 09.01.2024 08:30:07 ,
                 resolves: False
               },
               {
                 title: Notified,
                 text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
-                datetime: 07.01.2024 17:43:30 ,
+                datetime: 09.01.2024 10:43:30 ,
                 resolves: False
               },
             ],
           },
-        ]
-      },
-      {
-        date: 08.01.2024,
-        status: maintenance,
-        status-text: maintenance,
-        incidents: [
-          {
-            id: 0,
-            title: Scheduled Maintenance,
-            api: API 3,
-            updates: [
-              {
-                title: Done,
-                text: Finished maintenance session. Service is back up.,
-                datetime: 08.01.2024 06:16:44 ,
-                resolves: True
-              },
-              {
-                title: Started,
-                text: Started the scheduled maintenance session. Return to operational state is expected in roughly two hours.,
-                datetime: 08.01.2024 08:30:07 ,
-                resolves: False
-              },
-            ],
-          },
-        ]
-      },
-      {
-        date: 09.01.2024,
-        status: fine,
-        status-text: operational,
-        incidents: [
         ]
       },
       {
@@ -3653,7 +3062,1777 @@ apis: [
         incidents: [
         ]
       },
+      {
+        date: 11.01.2024,
+        status: fine,
+        status-text: operational,
+        incidents: [
+        ]
+      },
+      {
+        date: 12.01.2024,
+        status: fine,
+        status-text: operational,
+        incidents: [
+        ]
+      },
+      {
+        date: 13.01.2024,
+        status: fine,
+        status-text: operational,
+        incidents: [
+        ]
+      },
+      {
+        date: 14.01.2024,
+        status: limited,
+        status-text: limited,
+        incidents: [
+          {
+            id: 49,
+            title: Sporadic erroneous rate limiting,
+            api: API 3,
+            updates: [
+              {
+                title: Resolved,
+                text: We have corrected the faulty rate limiting configuration.,
+                datetime: 14.01.2024 06:16:44 ,
+                resolves: True
+              },
+              {
+                title: Investigating,
+                text: Our internal monitoring has confirmed these reports.,
+                datetime: 14.01.2024 08:30:07 ,
+                resolves: False
+              },
+              {
+                title: Notified,
+                text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+                datetime: 14.01.2024 10:43:30 ,
+                resolves: False
+              },
+            ],
+          },
+        ]
+      },
+      {
+        date: 15.01.2024,
+        status: fine,
+        status-text: operational,
+        incidents: [
+        ]
+      },
+      {
+        date: 16.01.2024,
+        status: fine,
+        status-text: operational,
+        incidents: [
+        ]
+      },
     ]
+  },
+]
+incidents-by-day: [
+  {
+  date: 16.01.2024,
+    incidents: [
+      {
+        id: 31,
+        severity: limited,
+        title: Sporadic erroneous rate limiting,
+        api: API 2,
+        updates: [
+          {
+            title: Resolved,
+            text: We have corrected the faulty rate limiting configuration.,
+            datetime: 16.01.2024 06:16:44 ,
+            resolves: True
+          },
+          {
+            title: Investigating,
+            text: Our internal monitoring has confirmed these reports.,
+            datetime: 16.01.2024 08:30:07 ,
+            resolves: False
+          },
+          {
+            title: Notified,
+            text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+            datetime: 16.01.2024 10:43:30 ,
+            resolves: False
+          },
+        ],
+      },
+    ],
+  },
+  {
+  date: 15.01.2024,
+    incidents: [
+    ],
+  },
+  {
+  date: 14.01.2024,
+    incidents: [
+      {
+        id: 49,
+        severity: limited,
+        title: Sporadic erroneous rate limiting,
+        api: API 3,
+        updates: [
+          {
+            title: Resolved,
+            text: We have corrected the faulty rate limiting configuration.,
+            datetime: 14.01.2024 06:16:44 ,
+            resolves: True
+          },
+          {
+            title: Investigating,
+            text: Our internal monitoring has confirmed these reports.,
+            datetime: 14.01.2024 08:30:07 ,
+            resolves: False
+          },
+          {
+            title: Notified,
+            text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+            datetime: 14.01.2024 10:43:30 ,
+            resolves: False
+          },
+        ],
+      },
+    ],
+  },
+  {
+  date: 13.01.2024,
+    incidents: [
+      {
+        id: 16,
+        severity: limited,
+        title: Sporadic erroneous rate limiting,
+        api: API 1,
+        updates: [
+          {
+            title: Resolved,
+            text: We have corrected the faulty rate limiting configuration.,
+            datetime: 13.01.2024 06:16:44 ,
+            resolves: True
+          },
+          {
+            title: Investigating,
+            text: Our internal monitoring has confirmed these reports.,
+            datetime: 13.01.2024 08:30:07 ,
+            resolves: False
+          },
+          {
+            title: Notified,
+            text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+            datetime: 13.01.2024 10:43:30 ,
+            resolves: False
+          },
+        ],
+      },
+    ],
+  },
+  {
+  date: 12.01.2024,
+    incidents: [
+      {
+        id: 30,
+        severity: limited,
+        title: Sporadic erroneous rate limiting,
+        api: API 2,
+        updates: [
+          {
+            title: Resolved,
+            text: We have corrected the faulty rate limiting configuration.,
+            datetime: 12.01.2024 06:16:44 ,
+            resolves: True
+          },
+          {
+            title: Investigating,
+            text: Our internal monitoring has confirmed these reports.,
+            datetime: 12.01.2024 08:30:07 ,
+            resolves: False
+          },
+          {
+            title: Notified,
+            text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+            datetime: 12.01.2024 10:43:30 ,
+            resolves: False
+          },
+        ],
+      },
+    ],
+  },
+  {
+  date: 11.01.2024,
+    incidents: [
+    ],
+  },
+  {
+  date: 10.01.2024,
+    incidents: [
+    ],
+  },
+  {
+  date: 09.01.2024,
+    incidents: [
+      {
+        id: 15,
+        severity: limited,
+        title: Sporadic erroneous rate limiting,
+        api: API 1,
+        updates: [
+          {
+            title: Resolved,
+            text: We have corrected the faulty rate limiting configuration.,
+            datetime: 09.01.2024 06:16:44 ,
+            resolves: True
+          },
+          {
+            title: Investigating,
+            text: Our internal monitoring has confirmed these reports.,
+            datetime: 09.01.2024 08:30:07 ,
+            resolves: False
+          },
+          {
+            title: Notified,
+            text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+            datetime: 09.01.2024 10:43:30 ,
+            resolves: False
+          },
+        ],
+      },
+      {
+        id: 48,
+        severity: limited,
+        title: Sporadic erroneous rate limiting,
+        api: API 3,
+        updates: [
+          {
+            title: Resolved,
+            text: We have corrected the faulty rate limiting configuration.,
+            datetime: 09.01.2024 06:16:44 ,
+            resolves: True
+          },
+          {
+            title: Investigating,
+            text: Our internal monitoring has confirmed these reports.,
+            datetime: 09.01.2024 08:30:07 ,
+            resolves: False
+          },
+          {
+            title: Notified,
+            text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+            datetime: 09.01.2024 10:43:30 ,
+            resolves: False
+          },
+        ],
+      },
+    ],
+  },
+  {
+  date: 08.01.2024,
+    incidents: [
+      {
+        id: 29,
+        severity: limited,
+        title: Sporadic erroneous rate limiting,
+        api: API 2,
+        updates: [
+          {
+            title: Resolved,
+            text: We have corrected the faulty rate limiting configuration.,
+            datetime: 08.01.2024 06:16:44 ,
+            resolves: True
+          },
+          {
+            title: Investigating,
+            text: Our internal monitoring has confirmed these reports.,
+            datetime: 08.01.2024 08:30:07 ,
+            resolves: False
+          },
+          {
+            title: Notified,
+            text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+            datetime: 08.01.2024 10:43:30 ,
+            resolves: False
+          },
+        ],
+      },
+    ],
+  },
+  {
+  date: 07.01.2024,
+    incidents: [
+      {
+        id: 47,
+        severity: limited,
+        title: Sporadic erroneous rate limiting,
+        api: API 3,
+        updates: [
+          {
+            title: Resolved,
+            text: We have corrected the faulty rate limiting configuration.,
+            datetime: 07.01.2024 06:16:44 ,
+            resolves: True
+          },
+          {
+            title: Investigating,
+            text: Our internal monitoring has confirmed these reports.,
+            datetime: 07.01.2024 08:30:07 ,
+            resolves: False
+          },
+          {
+            title: Notified,
+            text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+            datetime: 07.01.2024 10:43:30 ,
+            resolves: False
+          },
+        ],
+      },
+    ],
+  },
+  {
+  date: 06.01.2024,
+    incidents: [
+      {
+        id: 46,
+        severity: limited,
+        title: Sporadic erroneous rate limiting,
+        api: API 3,
+        updates: [
+          {
+            title: Resolved,
+            text: We have corrected the faulty rate limiting configuration.,
+            datetime: 06.01.2024 06:16:44 ,
+            resolves: True
+          },
+          {
+            title: Investigating,
+            text: Our internal monitoring has confirmed these reports.,
+            datetime: 06.01.2024 08:30:07 ,
+            resolves: False
+          },
+          {
+            title: Notified,
+            text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+            datetime: 06.01.2024 10:43:30 ,
+            resolves: False
+          },
+        ],
+      },
+    ],
+  },
+  {
+  date: 05.01.2024,
+    incidents: [
+      {
+        id: 14,
+        severity: limited,
+        title: Sporadic erroneous rate limiting,
+        api: API 1,
+        updates: [
+          {
+            title: Resolved,
+            text: We have corrected the faulty rate limiting configuration.,
+            datetime: 05.01.2024 06:16:44 ,
+            resolves: True
+          },
+          {
+            title: Investigating,
+            text: Our internal monitoring has confirmed these reports.,
+            datetime: 05.01.2024 08:30:07 ,
+            resolves: False
+          },
+          {
+            title: Notified,
+            text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+            datetime: 05.01.2024 10:43:30 ,
+            resolves: False
+          },
+        ],
+      },
+      {
+        id: 28,
+        severity: limited,
+        title: Sporadic erroneous rate limiting,
+        api: API 2,
+        updates: [
+          {
+            title: Resolved,
+            text: We have corrected the faulty rate limiting configuration.,
+            datetime: 05.01.2024 06:16:44 ,
+            resolves: True
+          },
+          {
+            title: Investigating,
+            text: Our internal monitoring has confirmed these reports.,
+            datetime: 05.01.2024 08:30:07 ,
+            resolves: False
+          },
+          {
+            title: Notified,
+            text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+            datetime: 05.01.2024 10:43:30 ,
+            resolves: False
+          },
+        ],
+      },
+    ],
+  },
+  {
+  date: 04.01.2024,
+    incidents: [
+    ],
+  },
+  {
+  date: 03.01.2024,
+    incidents: [
+      {
+        id: 27,
+        severity: limited,
+        title: Sporadic erroneous rate limiting,
+        api: API 2,
+        updates: [
+          {
+            title: Resolved,
+            text: We have corrected the faulty rate limiting configuration.,
+            datetime: 03.01.2024 06:16:44 ,
+            resolves: True
+          },
+          {
+            title: Investigating,
+            text: Our internal monitoring has confirmed these reports.,
+            datetime: 03.01.2024 08:30:07 ,
+            resolves: False
+          },
+          {
+            title: Notified,
+            text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+            datetime: 03.01.2024 10:43:30 ,
+            resolves: False
+          },
+        ],
+      },
+    ],
+  },
+  {
+  date: 02.01.2024,
+    incidents: [
+    ],
+  },
+  {
+  date: 01.01.2024,
+    incidents: [
+    ],
+  },
+  {
+  date: 31.12.2023,
+    incidents: [
+    ],
+  },
+  {
+  date: 30.12.2023,
+    incidents: [
+      {
+        id: 13,
+        severity: broken,
+        title: Service unreachable,
+        api: API 1,
+        updates: [
+          {
+            title: Identified,
+            text: We have identified the root cause of the problem and are working on a workaround. A final fix will be scheduled for the next maintenance period.,
+            datetime: 30.12.2023 06:16:44 ,
+            resolves: True
+          },
+          {
+            title: Investigating,
+            text: We have determined that the service itself is unreachable. The server running it seems fine.,
+            datetime: 30.12.2023 08:30:07 ,
+            resolves: False
+          },
+          {
+            title: Notified,
+            text: We have received an automated warning about the service.,
+            datetime: 30.12.2023 10:43:30 ,
+            resolves: False
+          },
+        ],
+      },
+    ],
+  },
+  {
+  date: 29.12.2023,
+    incidents: [
+    ],
+  },
+  {
+  date: 28.12.2023,
+    incidents: [
+      {
+        id: 45,
+        severity: maintenance,
+        title: Scheduled Maintenance,
+        api: API 3,
+        updates: [
+          {
+            title: Done,
+            text: Finished maintenance session. Service is back up.,
+            datetime: 28.12.2023 06:16:44 ,
+            resolves: True
+          },
+          {
+            title: Started,
+            text: Started the scheduled maintenance session. Return to operational state is expected in roughly two hours.,
+            datetime: 28.12.2023 08:30:07 ,
+            resolves: False
+          },
+        ],
+      },
+    ],
+  },
+  {
+  date: 27.12.2023,
+    incidents: [
+    ],
+  },
+  {
+  date: 26.12.2023,
+    incidents: [
+      {
+        id: 26,
+        severity: limited,
+        title: Sporadic erroneous rate limiting,
+        api: API 2,
+        updates: [
+          {
+            title: Resolved,
+            text: We have corrected the faulty rate limiting configuration.,
+            datetime: 26.12.2023 06:16:44 ,
+            resolves: True
+          },
+          {
+            title: Investigating,
+            text: Our internal monitoring has confirmed these reports.,
+            datetime: 26.12.2023 08:30:07 ,
+            resolves: False
+          },
+          {
+            title: Notified,
+            text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+            datetime: 26.12.2023 10:43:30 ,
+            resolves: False
+          },
+        ],
+      },
+      {
+        id: 44,
+        severity: limited,
+        title: Sporadic erroneous rate limiting,
+        api: API 3,
+        updates: [
+          {
+            title: Resolved,
+            text: We have corrected the faulty rate limiting configuration.,
+            datetime: 26.12.2023 06:16:44 ,
+            resolves: True
+          },
+          {
+            title: Investigating,
+            text: Our internal monitoring has confirmed these reports.,
+            datetime: 26.12.2023 08:30:07 ,
+            resolves: False
+          },
+          {
+            title: Notified,
+            text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+            datetime: 26.12.2023 10:43:30 ,
+            resolves: False
+          },
+        ],
+      },
+    ],
+  },
+  {
+  date: 25.12.2023,
+    incidents: [
+    ],
+  },
+  {
+  date: 24.12.2023,
+    incidents: [
+    ],
+  },
+  {
+  date: 23.12.2023,
+    incidents: [
+    ],
+  },
+  {
+  date: 22.12.2023,
+    incidents: [
+    ],
+  },
+  {
+  date: 21.12.2023,
+    incidents: [
+    ],
+  },
+  {
+  date: 20.12.2023,
+    incidents: [
+    ],
+  },
+  {
+  date: 19.12.2023,
+    incidents: [
+      {
+        id: 42,
+        severity: maintenance,
+        title: Scheduled Maintenance,
+        api: API 3,
+        updates: [
+          {
+            title: Done,
+            text: Finished maintenance session. Service is back up.,
+            datetime: 19.12.2023 06:16:44 ,
+            resolves: True
+          },
+          {
+            title: Started,
+            text: Started the scheduled maintenance session. Return to operational state is expected in roughly two hours.,
+            datetime: 19.12.2023 08:30:07 ,
+            resolves: False
+          },
+        ],
+      },
+      {
+        id: 43,
+        severity: maintenance,
+        title: Scheduled Maintenance,
+        api: API 3,
+        updates: [
+          {
+            title: Done,
+            text: Finished maintenance session. Service is back up.,
+            datetime: 19.12.2023 13:16:44 ,
+            resolves: True
+          },
+          {
+            title: Started,
+            text: Started the scheduled maintenance session. Return to operational state is expected in roughly two hours.,
+            datetime: 19.12.2023 15:30:07 ,
+            resolves: False
+          },
+        ],
+      },
+    ],
+  },
+  {
+  date: 18.12.2023,
+    incidents: [
+      {
+        id: 25,
+        severity: limited,
+        title: Sporadic erroneous rate limiting,
+        api: API 2,
+        updates: [
+          {
+            title: Resolved,
+            text: We have corrected the faulty rate limiting configuration.,
+            datetime: 18.12.2023 06:16:44 ,
+            resolves: True
+          },
+          {
+            title: Investigating,
+            text: Our internal monitoring has confirmed these reports.,
+            datetime: 18.12.2023 08:30:07 ,
+            resolves: False
+          },
+          {
+            title: Notified,
+            text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+            datetime: 18.12.2023 10:43:30 ,
+            resolves: False
+          },
+        ],
+      },
+    ],
+  },
+  {
+  date: 17.12.2023,
+    incidents: [
+    ],
+  },
+  {
+  date: 16.12.2023,
+    incidents: [
+    ],
+  },
+  {
+  date: 15.12.2023,
+    incidents: [
+    ],
+  },
+  {
+  date: 14.12.2023,
+    incidents: [
+      {
+        id: 24,
+        severity: limited,
+        title: Sporadic erroneous rate limiting,
+        api: API 2,
+        updates: [
+          {
+            title: Resolved,
+            text: We have corrected the faulty rate limiting configuration.,
+            datetime: 14.12.2023 06:16:44 ,
+            resolves: True
+          },
+          {
+            title: Investigating,
+            text: Our internal monitoring has confirmed these reports.,
+            datetime: 14.12.2023 08:30:07 ,
+            resolves: False
+          },
+          {
+            title: Notified,
+            text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+            datetime: 14.12.2023 10:43:30 ,
+            resolves: False
+          },
+        ],
+      },
+    ],
+  },
+  {
+  date: 13.12.2023,
+    incidents: [
+      {
+        id: 12,
+        severity: maintenance,
+        title: Scheduled Maintenance,
+        api: API 1,
+        updates: [
+          {
+            title: Done,
+            text: Finished maintenance session. Service is back up.,
+            datetime: 13.12.2023 06:16:44 ,
+            resolves: True
+          },
+          {
+            title: Started,
+            text: Started the scheduled maintenance session. Return to operational state is expected in roughly two hours.,
+            datetime: 13.12.2023 08:30:07 ,
+            resolves: False
+          },
+        ],
+      },
+    ],
+  },
+  {
+  date: 12.12.2023,
+    incidents: [
+    ],
+  },
+  {
+  date: 11.12.2023,
+    incidents: [
+      {
+        id: 11,
+        severity: broken,
+        title: Service unreachable,
+        api: API 1,
+        updates: [
+          {
+            title: Identified,
+            text: We have identified the root cause of the problem and are working on a workaround. A final fix will be scheduled for the next maintenance period.,
+            datetime: 11.12.2023 06:16:44 ,
+            resolves: True
+          },
+          {
+            title: Investigating,
+            text: We have determined that the service itself is unreachable. The server running it seems fine.,
+            datetime: 11.12.2023 08:30:07 ,
+            resolves: False
+          },
+          {
+            title: Notified,
+            text: We have received an automated warning about the service.,
+            datetime: 11.12.2023 10:43:30 ,
+            resolves: False
+          },
+        ],
+      },
+    ],
+  },
+  {
+  date: 10.12.2023,
+    incidents: [
+    ],
+  },
+  {
+  date: 09.12.2023,
+    incidents: [
+    ],
+  },
+  {
+  date: 08.12.2023,
+    incidents: [
+    ],
+  },
+  {
+  date: 07.12.2023,
+    incidents: [
+    ],
+  },
+  {
+  date: 06.12.2023,
+    incidents: [
+    ],
+  },
+  {
+  date: 05.12.2023,
+    incidents: [
+      {
+        id: 23,
+        severity: limited,
+        title: Sporadic erroneous rate limiting,
+        api: API 2,
+        updates: [
+          {
+            title: Resolved,
+            text: We have corrected the faulty rate limiting configuration.,
+            datetime: 05.12.2023 06:16:44 ,
+            resolves: True
+          },
+          {
+            title: Investigating,
+            text: Our internal monitoring has confirmed these reports.,
+            datetime: 05.12.2023 08:30:07 ,
+            resolves: False
+          },
+          {
+            title: Notified,
+            text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+            datetime: 05.12.2023 10:43:30 ,
+            resolves: False
+          },
+        ],
+      },
+    ],
+  },
+  {
+  date: 04.12.2023,
+    incidents: [
+      {
+        id: 10,
+        severity: limited,
+        title: Sporadic erroneous rate limiting,
+        api: API 1,
+        updates: [
+          {
+            title: Resolved,
+            text: We have corrected the faulty rate limiting configuration.,
+            datetime: 04.12.2023 06:16:44 ,
+            resolves: True
+          },
+          {
+            title: Investigating,
+            text: Our internal monitoring has confirmed these reports.,
+            datetime: 04.12.2023 08:30:07 ,
+            resolves: False
+          },
+          {
+            title: Notified,
+            text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+            datetime: 04.12.2023 10:43:30 ,
+            resolves: False
+          },
+        ],
+      },
+      {
+        id: 40,
+        severity: maintenance,
+        title: Scheduled Maintenance,
+        api: API 3,
+        updates: [
+          {
+            title: Done,
+            text: Finished maintenance session. Service is back up.,
+            datetime: 04.12.2023 06:16:44 ,
+            resolves: True
+          },
+          {
+            title: Started,
+            text: Started the scheduled maintenance session. Return to operational state is expected in roughly two hours.,
+            datetime: 04.12.2023 08:30:07 ,
+            resolves: False
+          },
+        ],
+      },
+      {
+        id: 41,
+        severity: maintenance,
+        title: Scheduled Maintenance,
+        api: API 3,
+        updates: [
+          {
+            title: Done,
+            text: Finished maintenance session. Service is back up.,
+            datetime: 04.12.2023 13:16:44 ,
+            resolves: True
+          },
+          {
+            title: Started,
+            text: Started the scheduled maintenance session. Return to operational state is expected in roughly two hours.,
+            datetime: 04.12.2023 15:30:07 ,
+            resolves: False
+          },
+        ],
+      },
+    ],
+  },
+  {
+  date: 03.12.2023,
+    incidents: [
+      {
+        id: 22,
+        severity: limited,
+        title: Sporadic erroneous rate limiting,
+        api: API 2,
+        updates: [
+          {
+            title: Resolved,
+            text: We have corrected the faulty rate limiting configuration.,
+            datetime: 03.12.2023 06:16:44 ,
+            resolves: True
+          },
+          {
+            title: Investigating,
+            text: Our internal monitoring has confirmed these reports.,
+            datetime: 03.12.2023 08:30:07 ,
+            resolves: False
+          },
+          {
+            title: Notified,
+            text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+            datetime: 03.12.2023 10:43:30 ,
+            resolves: False
+          },
+        ],
+      },
+      {
+        id: 39,
+        severity: limited,
+        title: Sporadic erroneous rate limiting,
+        api: API 3,
+        updates: [
+          {
+            title: Resolved,
+            text: We have corrected the faulty rate limiting configuration.,
+            datetime: 03.12.2023 06:16:44 ,
+            resolves: True
+          },
+          {
+            title: Investigating,
+            text: Our internal monitoring has confirmed these reports.,
+            datetime: 03.12.2023 08:30:07 ,
+            resolves: False
+          },
+          {
+            title: Notified,
+            text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+            datetime: 03.12.2023 10:43:30 ,
+            resolves: False
+          },
+        ],
+      },
+    ],
+  },
+  {
+  date: 02.12.2023,
+    incidents: [
+    ],
+  },
+  {
+  date: 01.12.2023,
+    incidents: [
+    ],
+  },
+  {
+  date: 30.11.2023,
+    incidents: [
+    ],
+  },
+  {
+  date: 29.11.2023,
+    incidents: [
+      {
+        id: 37,
+        severity: limited,
+        title: Sporadic erroneous rate limiting,
+        api: API 3,
+        updates: [
+          {
+            title: Resolved,
+            text: We have corrected the faulty rate limiting configuration.,
+            datetime: 29.11.2023 06:16:44 ,
+            resolves: True
+          },
+          {
+            title: Investigating,
+            text: Our internal monitoring has confirmed these reports.,
+            datetime: 29.11.2023 08:30:07 ,
+            resolves: False
+          },
+          {
+            title: Notified,
+            text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+            datetime: 29.11.2023 10:43:30 ,
+            resolves: False
+          },
+        ],
+      },
+      {
+        id: 38,
+        severity: limited,
+        title: Sporadic erroneous rate limiting,
+        api: API 3,
+        updates: [
+          {
+            title: Resolved,
+            text: We have corrected the faulty rate limiting configuration.,
+            datetime: 29.11.2023 13:16:44 ,
+            resolves: True
+          },
+          {
+            title: Investigating,
+            text: Our internal monitoring has confirmed these reports.,
+            datetime: 29.11.2023 15:30:07 ,
+            resolves: False
+          },
+          {
+            title: Notified,
+            text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+            datetime: 29.11.2023 17:43:30 ,
+            resolves: False
+          },
+        ],
+      },
+    ],
+  },
+  {
+  date: 28.11.2023,
+    incidents: [
+    ],
+  },
+  {
+  date: 27.11.2023,
+    incidents: [
+      {
+        id: 9,
+        severity: limited,
+        title: Sporadic erroneous rate limiting,
+        api: API 1,
+        updates: [
+          {
+            title: Resolved,
+            text: We have corrected the faulty rate limiting configuration.,
+            datetime: 27.11.2023 06:16:44 ,
+            resolves: True
+          },
+          {
+            title: Investigating,
+            text: Our internal monitoring has confirmed these reports.,
+            datetime: 27.11.2023 08:30:07 ,
+            resolves: False
+          },
+          {
+            title: Notified,
+            text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+            datetime: 27.11.2023 10:43:30 ,
+            resolves: False
+          },
+        ],
+      },
+    ],
+  },
+  {
+  date: 26.11.2023,
+    incidents: [
+      {
+        id: 36,
+        severity: limited,
+        title: Sporadic erroneous rate limiting,
+        api: API 3,
+        updates: [
+          {
+            title: Resolved,
+            text: We have corrected the faulty rate limiting configuration.,
+            datetime: 26.11.2023 06:16:44 ,
+            resolves: True
+          },
+          {
+            title: Investigating,
+            text: Our internal monitoring has confirmed these reports.,
+            datetime: 26.11.2023 08:30:07 ,
+            resolves: False
+          },
+          {
+            title: Notified,
+            text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+            datetime: 26.11.2023 10:43:30 ,
+            resolves: False
+          },
+        ],
+      },
+    ],
+  },
+  {
+  date: 25.11.2023,
+    incidents: [
+    ],
+  },
+  {
+  date: 24.11.2023,
+    incidents: [
+    ],
+  },
+  {
+  date: 23.11.2023,
+    incidents: [
+    ],
+  },
+  {
+  date: 22.11.2023,
+    incidents: [
+    ],
+  },
+  {
+  date: 21.11.2023,
+    incidents: [
+    ],
+  },
+  {
+  date: 20.11.2023,
+    incidents: [
+      {
+        id: 7,
+        severity: limited,
+        title: Sporadic erroneous rate limiting,
+        api: API 1,
+        updates: [
+          {
+            title: Resolved,
+            text: We have corrected the faulty rate limiting configuration.,
+            datetime: 20.11.2023 06:16:44 ,
+            resolves: True
+          },
+          {
+            title: Investigating,
+            text: Our internal monitoring has confirmed these reports.,
+            datetime: 20.11.2023 08:30:07 ,
+            resolves: False
+          },
+          {
+            title: Notified,
+            text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+            datetime: 20.11.2023 10:43:30 ,
+            resolves: False
+          },
+        ],
+      },
+      {
+        id: 8,
+        severity: limited,
+        title: Sporadic erroneous rate limiting,
+        api: API 1,
+        updates: [
+          {
+            title: Resolved,
+            text: We have corrected the faulty rate limiting configuration.,
+            datetime: 20.11.2023 13:16:44 ,
+            resolves: True
+          },
+          {
+            title: Investigating,
+            text: Our internal monitoring has confirmed these reports.,
+            datetime: 20.11.2023 15:30:07 ,
+            resolves: False
+          },
+          {
+            title: Notified,
+            text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+            datetime: 20.11.2023 17:43:30 ,
+            resolves: False
+          },
+        ],
+      },
+      {
+        id: 35,
+        severity: maintenance,
+        title: Scheduled Maintenance,
+        api: API 3,
+        updates: [
+          {
+            title: Done,
+            text: Finished maintenance session. Service is back up.,
+            datetime: 20.11.2023 06:16:44 ,
+            resolves: True
+          },
+          {
+            title: Started,
+            text: Started the scheduled maintenance session. Return to operational state is expected in roughly two hours.,
+            datetime: 20.11.2023 08:30:07 ,
+            resolves: False
+          },
+        ],
+      },
+    ],
+  },
+  {
+  date: 19.11.2023,
+    incidents: [
+      {
+        id: 6,
+        severity: limited,
+        title: Sporadic erroneous rate limiting,
+        api: API 1,
+        updates: [
+          {
+            title: Resolved,
+            text: We have corrected the faulty rate limiting configuration.,
+            datetime: 19.11.2023 06:16:44 ,
+            resolves: True
+          },
+          {
+            title: Investigating,
+            text: Our internal monitoring has confirmed these reports.,
+            datetime: 19.11.2023 08:30:07 ,
+            resolves: False
+          },
+          {
+            title: Notified,
+            text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+            datetime: 19.11.2023 10:43:30 ,
+            resolves: False
+          },
+        ],
+      },
+    ],
+  },
+  {
+  date: 18.11.2023,
+    incidents: [
+    ],
+  },
+  {
+  date: 17.11.2023,
+    incidents: [
+    ],
+  },
+  {
+  date: 16.11.2023,
+    incidents: [
+    ],
+  },
+  {
+  date: 15.11.2023,
+    incidents: [
+      {
+        id: 5,
+        severity: limited,
+        title: Sporadic erroneous rate limiting,
+        api: API 1,
+        updates: [
+          {
+            title: Resolved,
+            text: We have corrected the faulty rate limiting configuration.,
+            datetime: 15.11.2023 06:16:44 ,
+            resolves: True
+          },
+          {
+            title: Investigating,
+            text: Our internal monitoring has confirmed these reports.,
+            datetime: 15.11.2023 08:30:07 ,
+            resolves: False
+          },
+          {
+            title: Notified,
+            text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+            datetime: 15.11.2023 10:43:30 ,
+            resolves: False
+          },
+        ],
+      },
+      {
+        id: 34,
+        severity: maintenance,
+        title: Scheduled Maintenance,
+        api: API 3,
+        updates: [
+          {
+            title: Done,
+            text: Finished maintenance session. Service is back up.,
+            datetime: 15.11.2023 06:16:44 ,
+            resolves: True
+          },
+          {
+            title: Started,
+            text: Started the scheduled maintenance session. Return to operational state is expected in roughly two hours.,
+            datetime: 15.11.2023 08:30:07 ,
+            resolves: False
+          },
+        ],
+      },
+    ],
+  },
+  {
+  date: 14.11.2023,
+    incidents: [
+    ],
+  },
+  {
+  date: 13.11.2023,
+    incidents: [
+    ],
+  },
+  {
+  date: 12.11.2023,
+    incidents: [
+      {
+        id: 33,
+        severity: broken,
+        title: Service unreachable,
+        api: API 3,
+        updates: [
+          {
+            title: Identified,
+            text: We have identified the root cause of the problem and are working on a workaround. A final fix will be scheduled for the next maintenance period.,
+            datetime: 12.11.2023 06:16:44 ,
+            resolves: True
+          },
+          {
+            title: Investigating,
+            text: We have determined that the service itself is unreachable. The server running it seems fine.,
+            datetime: 12.11.2023 08:30:07 ,
+            resolves: False
+          },
+          {
+            title: Notified,
+            text: We have received an automated warning about the service.,
+            datetime: 12.11.2023 10:43:30 ,
+            resolves: False
+          },
+        ],
+      },
+    ],
+  },
+  {
+  date: 11.11.2023,
+    incidents: [
+    ],
+  },
+  {
+  date: 10.11.2023,
+    incidents: [
+    ],
+  },
+  {
+  date: 09.11.2023,
+    incidents: [
+    ],
+  },
+  {
+  date: 08.11.2023,
+    incidents: [
+    ],
+  },
+  {
+  date: 07.11.2023,
+    incidents: [
+      {
+        id: 4,
+        severity: maintenance,
+        title: Scheduled Maintenance,
+        api: API 1,
+        updates: [
+          {
+            title: Done,
+            text: Finished maintenance session. Service is back up.,
+            datetime: 07.11.2023 06:16:44 ,
+            resolves: True
+          },
+          {
+            title: Started,
+            text: Started the scheduled maintenance session. Return to operational state is expected in roughly two hours.,
+            datetime: 07.11.2023 08:30:07 ,
+            resolves: False
+          },
+        ],
+      },
+      {
+        id: 21,
+        severity: broken,
+        title: Service unreachable,
+        api: API 2,
+        updates: [
+          {
+            title: Identified,
+            text: We have identified the root cause of the problem and are working on a workaround. A final fix will be scheduled for the next maintenance period.,
+            datetime: 07.11.2023 06:16:44 ,
+            resolves: True
+          },
+          {
+            title: Investigating,
+            text: We have determined that the service itself is unreachable. The server running it seems fine.,
+            datetime: 07.11.2023 08:30:07 ,
+            resolves: False
+          },
+          {
+            title: Notified,
+            text: We have received an automated warning about the service.,
+            datetime: 07.11.2023 10:43:30 ,
+            resolves: False
+          },
+        ],
+      },
+    ],
+  },
+  {
+  date: 06.11.2023,
+    incidents: [
+    ],
+  },
+  {
+  date: 05.11.2023,
+    incidents: [
+      {
+        id: 20,
+        severity: limited,
+        title: Sporadic erroneous rate limiting,
+        api: API 2,
+        updates: [
+          {
+            title: Resolved,
+            text: We have corrected the faulty rate limiting configuration.,
+            datetime: 05.11.2023 06:16:44 ,
+            resolves: True
+          },
+          {
+            title: Investigating,
+            text: Our internal monitoring has confirmed these reports.,
+            datetime: 05.11.2023 08:30:07 ,
+            resolves: False
+          },
+          {
+            title: Notified,
+            text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+            datetime: 05.11.2023 10:43:30 ,
+            resolves: False
+          },
+        ],
+      },
+    ],
+  },
+  {
+  date: 04.11.2023,
+    incidents: [
+    ],
+  },
+  {
+  date: 03.11.2023,
+    incidents: [
+      {
+        id: 19,
+        severity: limited,
+        title: Sporadic erroneous rate limiting,
+        api: API 2,
+        updates: [
+          {
+            title: Resolved,
+            text: We have corrected the faulty rate limiting configuration.,
+            datetime: 03.11.2023 06:16:44 ,
+            resolves: True
+          },
+          {
+            title: Investigating,
+            text: Our internal monitoring has confirmed these reports.,
+            datetime: 03.11.2023 08:30:07 ,
+            resolves: False
+          },
+          {
+            title: Notified,
+            text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+            datetime: 03.11.2023 10:43:30 ,
+            resolves: False
+          },
+        ],
+      },
+    ],
+  },
+  {
+  date: 02.11.2023,
+    incidents: [
+      {
+        id: 3,
+        severity: broken,
+        title: Service unreachable,
+        api: API 1,
+        updates: [
+          {
+            title: Identified,
+            text: We have identified the root cause of the problem and are working on a workaround. A final fix will be scheduled for the next maintenance period.,
+            datetime: 02.11.2023 06:16:44 ,
+            resolves: True
+          },
+          {
+            title: Investigating,
+            text: We have determined that the service itself is unreachable. The server running it seems fine.,
+            datetime: 02.11.2023 08:30:07 ,
+            resolves: False
+          },
+          {
+            title: Notified,
+            text: We have received an automated warning about the service.,
+            datetime: 02.11.2023 10:43:30 ,
+            resolves: False
+          },
+        ],
+      },
+    ],
+  },
+  {
+  date: 01.11.2023,
+    incidents: [
+    ],
+  },
+  {
+  date: 31.10.2023,
+    incidents: [
+    ],
+  },
+  {
+  date: 30.10.2023,
+    incidents: [
+      {
+        id: 2,
+        severity: broken,
+        title: Service unreachable,
+        api: API 1,
+        updates: [
+          {
+            title: Identified,
+            text: We have identified the root cause of the problem and are working on a workaround. A final fix will be scheduled for the next maintenance period.,
+            datetime: 30.10.2023 06:16:44 ,
+            resolves: True
+          },
+          {
+            title: Investigating,
+            text: We have determined that the service itself is unreachable. The server running it seems fine.,
+            datetime: 30.10.2023 08:30:07 ,
+            resolves: False
+          },
+          {
+            title: Notified,
+            text: We have received an automated warning about the service.,
+            datetime: 30.10.2023 10:43:30 ,
+            resolves: False
+          },
+        ],
+      },
+    ],
+  },
+  {
+  date: 29.10.2023,
+    incidents: [
+    ],
+  },
+  {
+  date: 28.10.2023,
+    incidents: [
+      {
+        id: 32,
+        severity: limited,
+        title: Sporadic erroneous rate limiting,
+        api: API 3,
+        updates: [
+          {
+            title: Resolved,
+            text: We have corrected the faulty rate limiting configuration.,
+            datetime: 28.10.2023 06:16:44 ,
+            resolves: True
+          },
+          {
+            title: Investigating,
+            text: Our internal monitoring has confirmed these reports.,
+            datetime: 28.10.2023 08:30:07 ,
+            resolves: False
+          },
+          {
+            title: Notified,
+            text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+            datetime: 28.10.2023 10:43:30 ,
+            resolves: False
+          },
+        ],
+      },
+    ],
+  },
+  {
+  date: 27.10.2023,
+    incidents: [
+    ],
+  },
+  {
+  date: 26.10.2023,
+    incidents: [
+      {
+        id: 18,
+        severity: limited,
+        title: Sporadic erroneous rate limiting,
+        api: API 2,
+        updates: [
+          {
+            title: Resolved,
+            text: We have corrected the faulty rate limiting configuration.,
+            datetime: 26.10.2023 06:16:44 ,
+            resolves: True
+          },
+          {
+            title: Investigating,
+            text: Our internal monitoring has confirmed these reports.,
+            datetime: 26.10.2023 08:30:07 ,
+            resolves: False
+          },
+          {
+            title: Notified,
+            text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+            datetime: 26.10.2023 10:43:30 ,
+            resolves: False
+          },
+        ],
+      },
+    ],
+  },
+  {
+  date: 25.10.2023,
+    incidents: [
+    ],
+  },
+  {
+  date: 24.10.2023,
+    incidents: [
+      {
+        id: 1,
+        severity: limited,
+        title: Sporadic erroneous rate limiting,
+        api: API 1,
+        updates: [
+          {
+            title: Resolved,
+            text: We have corrected the faulty rate limiting configuration.,
+            datetime: 24.10.2023 06:16:44 ,
+            resolves: True
+          },
+          {
+            title: Investigating,
+            text: Our internal monitoring has confirmed these reports.,
+            datetime: 24.10.2023 08:30:07 ,
+            resolves: False
+          },
+          {
+            title: Notified,
+            text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+            datetime: 24.10.2023 10:43:30 ,
+            resolves: False
+          },
+        ],
+      },
+    ],
+  },
+  {
+  date: 23.10.2023,
+    incidents: [
+    ],
+  },
+  {
+  date: 22.10.2023,
+    incidents: [
+    ],
+  },
+  {
+  date: 21.10.2023,
+    incidents: [
+    ],
+  },
+  {
+  date: 20.10.2023,
+    incidents: [
+    ],
+  },
+  {
+  date: 19.10.2023,
+    incidents: [
+    ],
+  },
+  {
+  date: 18.10.2023,
+    incidents: [
+      {
+        id: 0,
+        severity: limited,
+        title: Sporadic erroneous rate limiting,
+        api: API 1,
+        updates: [
+          {
+            title: Resolved,
+            text: We have corrected the faulty rate limiting configuration.,
+            datetime: 18.10.2023 06:16:44 ,
+            resolves: True
+          },
+          {
+            title: Investigating,
+            text: Our internal monitoring has confirmed these reports.,
+            datetime: 18.10.2023 08:30:07 ,
+            resolves: False
+          },
+          {
+            title: Notified,
+            text: We were notified that API 2 is sometimes unreachable due to rate limiting, even though the client is below their allotted quota.,
+            datetime: 18.10.2023 10:43:30 ,
+            resolves: False
+          },
+        ],
+      },
+      {
+        id: 17,
+        severity: broken,
+        title: Service unreachable,
+        api: API 2,
+        updates: [
+          {
+            title: Identified,
+            text: We have identified the root cause of the problem and are working on a workaround. A final fix will be scheduled for the next maintenance period.,
+            datetime: 18.10.2023 06:16:44 ,
+            resolves: True
+          },
+          {
+            title: Investigating,
+            text: We have determined that the service itself is unreachable. The server running it seems fine.,
+            datetime: 18.10.2023 08:30:07 ,
+            resolves: False
+          },
+          {
+            title: Notified,
+            text: We have received an automated warning about the service.,
+            datetime: 18.10.2023 10:43:30 ,
+            resolves: False
+          },
+        ],
+      },
+    ],
   },
 ]
 ---

@@ -1,0 +1,10 @@
+<article id="incident-{{ id }}" class="incident">
+    <h4><!--<span class="incident-api status-{{ severity }}">{{ api }}</span>--><a class="text-{{ severity }}" href="./incident.html">{{ api }} - {{ title }}</a></h4>
+    {{# updates }}
+        <div class="incident-update">
+            <h5>{{ title }}</h5>
+            <span class="incident-update-content"> - {{ text }}</span>
+            <p class="incident-update-time">{{ datetime }}</p>
+        </div>
+    {{/ updates }}
+</article>

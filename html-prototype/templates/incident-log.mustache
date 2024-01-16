@@ -1,0 +1,33 @@
+
+<h1>Incident Log</h1>
+<section>
+    <h2>Ongoing Incidents</h2>
+    <article>
+        <h3>17.11.2023</h3>
+        <article class="incident">
+            <h4><!--<span class="incident-status status-broken">ongoing</span>--><a class="text-broken" href="./incident.html">API 3 - Service unreachable</a></h4>
+            <p class="incident-start-date">since 16.11.2023</p>
+            <section class="incident-update">
+                <h5>Identified</h5>
+                <span class="incident-update-content"> - We have identified the root cause of the problem and are working on a workaround. A final fix will be scheduled for the next maintenance period.</span>
+                <p class="incident-update-time">17.11.2023, 15:07 UTC</p>
+            </section>
+            <section class="incident-update">
+                <h5>Investigating</h5>
+                <span class="incident-update-content"> - We have determined that the service itself is unreachable. The server running it seems fine.</span>
+                <p class="incident-update-time">16.11.2023, 17:22 UTC</p>
+            </section>
+            <section class="incident-update">
+                <h5>Notified</h5>
+                <span class="incident-update-content"> - We have received an automated warning about the service.</span>
+                <p class="incident-update-time">16.11.2023, 14:41 UTC</p>
+            </section>
+        </article>
+    </article>
+</section>
+<section>
+    <h2>Past Incidents</h2>
+    {{# incidents-by-day }}
+        {{> incidents-by-day }}
+    {{/ incidents-by-day }}
+</section>

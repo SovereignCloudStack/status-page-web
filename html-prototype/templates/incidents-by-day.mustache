@@ -1,0 +1,9 @@
+<article id="incidents-{{ date }}">
+    <h3>{{ date }}</h3>
+   {{^ incidents }}
+    No incidents occured
+   {{/ incidents }}
+    {{# incidents }}
+        {{> incident }}
+    {{/ incidents }}
+</article>

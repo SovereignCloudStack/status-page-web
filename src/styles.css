@@ -1,0 +1,193 @@
+@property --page-width {
+    syntax: "<dimension>";
+    inherits: true;
+    initial-value: 1100px;
+}
+
+@property --default-text-size {
+    syntax: "<length>";
+    inherits: true;
+    initial-value: 1em;
+}
+
+@property --increased-text-size {
+    syntax: "<length>";
+    inherits: true;
+    initial-value: 2em;
+}
+
+@property --list-border-radius {
+    syntax: "<dimension>";
+    inherits: true;
+    initial-value: 6px;
+}
+
+@property --btn-border-radius {
+    syntax: "<dimension>";
+    inherits: true;
+    initial-value: 6px;
+}
+
+@property --bar-border-radius {
+    syntax: "<dimension>";
+    inherits: true;
+    initial-value: 6px;
+}
+
+@property --main-bg-color {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: #fff;
+}
+
+@property --main-text-color {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: #68717a;
+}
+
+@property --title-text-color {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: #000000;
+}
+
+@property --faint-text-color {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: #9e9e9e;
+}
+
+@property --btn-color {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: #0f5fe1;
+}
+
+@property --fine-color {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: #50c3a5;
+}
+
+@property --limited-color {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: #f5c451;
+}
+
+@property --broken-color {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: #ee6a5f;
+}
+
+@property --maintenance-color {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: #0089c4;
+}
+
+@property --unknown-color {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: lightsteelblue;
+}
+
+@property --border-color {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: #e9ecef;
+}
+
+@property --link-color {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: 	#0089c4;
+}
+
+@property --line-color {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: 	#9e9e9e;
+}
+
+:root {
+    --page-width: 1100px;
+    --default-text-size: 1em;
+    --increased-text-size: 2em;
+    --list-border-radius: 6px;
+    --btn-border-radius: 6px;
+    --bar-border-radius: 6px;
+    --main-bg-color: #fff;
+    --main-text-color: #68717a;
+    --title-text-color: #000000;
+    --faint-text-color: #9e9e9e;
+    --btn-color: #0f5fe1;
+    --fine-color: #50c3a5;
+    --limited-color: #f5c451;
+    --broken-color: #ee6a5f;
+    --maintenance-color: #0089c4;
+    --unknown-color: lightsteelblue;
+    --border-color: #e9ecef;
+    --link-color: 	#0089c4;
+    --line-color: #9e9e9e;
+}
+
+body {
+    font-family: Lato, sans-serif;
+    font-size: var(--default-text-size);
+    background-color: var(--main-bg-color);
+    max-width: var(--page-width);
+    min-width: var(--page-width);
+    color: var(--main-text-color);
+    margin: 0 auto;
+}
+
+h1, h2, h3, h4 {
+    color: var(--title-text-color);
+}
+
+h1 {
+    font-size: 1.5rem;
+}
+
+h2 {
+    font-size: 1.25rem;
+}
+
+h3 {
+    font-size: 1.0rem;
+}
+
+h4 {
+    font-size: 1.0rem;
+}
+
+h5 {
+    font-size: 1.0rem;
+    display: inline;
+    margin: 0;
+    padding: 0;
+}
+
+h6 {
+    font-size: 1.0rem;
+    display: inline;
+    margin: 0;
+    padding: 0;
+}
+
+hr {
+    color: var(--line-color);
+    border-width: 1px;
+}
+
+a {
+    color: var(--link-color);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}

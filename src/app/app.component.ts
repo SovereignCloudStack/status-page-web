@@ -27,7 +27,6 @@ export class AppComponent {
     // policy pages.
     router.events.forEach((e) => {
       if (e instanceof NavigationEnd) {
-        console.log(e);
         if (e.url != "/" && !e.url.startsWith("/#")) {
           this.userSettings.setShowUserSettings(false);
         } else {

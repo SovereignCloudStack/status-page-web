@@ -1,5 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { SComponent } from '../model/incident';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-status-view',
@@ -10,4 +13,13 @@ import { Component } from '@angular/core';
 })
 export class StatusViewComponent {
 
+  components!: Observable<SComponent[]>;
+
+  constructor(
+    private http: HttpClient
+  ) {}
+
+  ngOnInit(): void {
+    this.components = this.http.get<SComponent[]>("/api/components");
+  }
 }

@@ -1,18 +1,48 @@
-
-export interface SComponent {
-    displayName: string,
-    activelyAffectedBy: SImpactComponent[]
-}
-
-export interface SImpactComponent {
-    reference: string,
-    type: string
-}
+import { HttpClient } from "@angular/common/http";
+import { EMPTY, Observable, map } from "rxjs";
+import { StatusApiResponse } from "./response";
+import { Dayjs } from "dayjs";
 
 export interface SIncident {
-    displayName: string,
-    description: string,
-    beganAt: string | null,
-    endetAt: string | null,
+    id: string;
+    displayName: string;
+    description: string;
+    // TODO Can this be null/undefined?
+    beganAt: string;
+    endetAt: string | null;
+    phase: SPhaseReference;
+    updates: SIncidentUpdate[]
 }
 
+export interface SPhaseReference {
+    generation: number;
+    order: number;
+}
+
+export interface SIncidentUpdate {
+    order: number;
+    displayName: string;
+    description: string;
+    createdAt: string;
+}
+
+export function loadIncidents(http: HttpClient, start: Dayjs, end: Dayjs): Observable<SIncident[]> {
+    return http.get<StatusApiResponse<SIncident[]>>("assets/testdata/incident.json").pipe(
+        map(response => {
+            return response.data;
+        })
+    );
+}
+
+export function loadIncidentUpdates(id: string, http: HttpClient): Observable<SIncidentUpdate[]> {
+    try {
+        return http.get<StatusApiResponse<SIncidentUpdate[]>>(`assets/testdata/updates/updates-${id}.json`).pipe(
+            map(response => {
+                return response.data;
+            }),
+        );
+    } catch (e: any) {
+        console.log(`Error loading incident updates: ${e}`);
+    }
+    return EMPTY;
+}

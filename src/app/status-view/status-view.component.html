@@ -1,5 +1,17 @@
-<p>status-view works!</p>
-
-<div *ngFor="let component of components | async">
-    <h2>component.displayName</h2>
-</div>
+<section class="about">
+    <h1>About</h1>
+    <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+</section>
+<section class="spinner-container" *ngIf="!loaded">
+    <app-spinner>Loading Data...</app-spinner>
+    <p>Loading Data</p>
+</section>
+<section id="api-list" *ngIf="loaded" >
+    <article class="api-list-entry" *ngFor="let component of components">
+        <div class="api-titlebar">
+            <h4>{{ component.displayName }}</h4>
+            <div class="status-bar status-{{ component.componentStatus() }}">{{ component.componentStatusText() }}</div>
+            <div *ngFor="let day of component.dailyData | keyvalue">{{ day.key }}</div>
+        </div>
+    </article>
+</section>

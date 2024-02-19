@@ -191,3 +191,74 @@ a {
 a:hover {
     text-decoration: underline;
 }
+
+.status-bar {
+    background-color: var(--btn-color);
+    color: var(--main-bg-color);
+    margin: 1rem 0rem;
+    padding: .75rem;
+    border-radius: var(--bar-border-radius);
+    font-weight: bold;
+    font-size: .8rem;
+}
+
+.status-bar h1 {
+    color: var(--main-bg-color);
+    margin-top: 0;
+}
+
+.status-bar h2 {
+    color: var(--main-bg-color);
+    margin-top: 0;
+}
+
+.status-bar h3 {
+    color: var(--main-bg-color);
+    margin-top: 0;
+}
+
+.status-bar h4 {
+    color: var(--main-bg-color);
+    margin-top: 0;
+    margin-bottom: .5rem;
+}
+
+.status-fine {
+    background-color: var(--fine-color) !important;
+}
+
+.status-limited {
+    background-color: var(--limited-color) !important;
+}
+
+.status-broken {
+    background-color: var(--broken-color) !important;
+}
+
+.status-maintenance {
+    background-color: var(--maintenance-color) !important;
+}
+
+.status-unknown {
+    background-color: var(--unknown-color) !important;
+}
+
+.text-fine {
+    color: var(--fine-color);
+}
+
+.text-limited {
+    color: var(--limited-color);
+}
+
+.text-broken {
+    color: var(--broken-color);
+}
+
+.text-maintenance {
+    color: var(--maintenance-color);
+}
+
+.text-unknown {
+    color: var(--unknown-color);
+}

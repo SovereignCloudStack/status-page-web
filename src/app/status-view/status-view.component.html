@@ -7,7 +7,7 @@
     <p>Loading Data</p>
 </section>
 <section id="api-list" *ngIf="loaded" >
-    <article class="api-list-entry" *ngFor="let component of components">
+    <article class="api-list-entry" *ngFor="let component of data.components">
         <div class="api-titlebar">
             <h4>{{ component.displayName }}</h4>
             <div class="status-bar status-{{ component.componentStatus() }}">{{ component.componentStatusText() }}</div>

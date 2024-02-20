@@ -1,7 +1,12 @@
 {
   "data": [
     {
-      "activelyAffectedBy": [],
+      "activelyAffectedBy": [
+        {
+          "reference": "0679b5c5-67ad-469e-a7fc-465bbf5fcbb4",
+          "type": "065f87e1-5946-4994-adf0-545195a3ef1f"
+        }
+      ],
       "displayName": "Storage",
       "id": "9a4b098a-3fda-4362-a403-72732d7dae37",
       "labels": {}

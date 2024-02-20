@@ -11,7 +11,6 @@
         <div class="api-titlebar">
             <h4>{{ component.displayName }}</h4>
             <div class="status-bar status-{{ component.componentStatus() }}">{{ component.componentStatusText() }}</div>
-            <div *ngFor="let day of component.dailyData | keyvalue">{{ day.key }}</div>
         </div>
     </article>
 </section>

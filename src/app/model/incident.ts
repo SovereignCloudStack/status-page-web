@@ -2,6 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { EMPTY, Observable, map } from "rxjs";
 import { StatusApiResponse } from "./response";
 import { Dayjs } from "dayjs";
+import { SImpactReference } from "./impact";
 
 export interface SIncident {
     id: string;
@@ -10,6 +11,7 @@ export interface SIncident {
     // TODO Can this be null/undefined?
     beganAt: string;
     endetAt: string | null;
+    affects: SImpactReference[];
     phase: SPhaseReference;
     updates: SIncidentUpdate[]
 }

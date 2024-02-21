@@ -14,10 +14,7 @@ export class FIncident {
 
     constructor(serverSide: SIncident, phases: SPhaseGeneration) {
         this.serverSide = serverSide;
-        console.log(`Retrieving entry #${this.serverSide.phase.order} from phase list`);
-        console.log(phases.phases);
         this._phase = phases.phases[this.serverSide.phase.order];
-        console.log(`Result: phase is "${this._phase}"`);
         // TODO
         this.affectedComponents = [];
         this.incidentUpdates = [];

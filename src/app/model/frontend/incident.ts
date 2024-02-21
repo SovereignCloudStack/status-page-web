@@ -48,6 +48,10 @@ export class FIncident {
         return this.serverSide.endedAt;
     }
 
+    get ongoing(): boolean {
+        return this.endedAt === null;
+    }
+
     get phase(): string {
         return this._phase;
     }

@@ -1,4 +1,4 @@
-<article id="day-{{ day.key }}" *ngFor="let day of data | keyvalue">
+<article id="day-{{ day.key }}" *ngFor="let day of data | keyvalue | reverse">
     <h3>{{ day.key }}</h3>
     <p *ngIf="day.value.length === 0">No incidents occured</p>
     <article id="incident-{{ incident.id }}" class="incident" *ngFor="let incident of day.value">

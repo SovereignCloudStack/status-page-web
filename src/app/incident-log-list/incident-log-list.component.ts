@@ -4,11 +4,12 @@ import { Dayjs } from 'dayjs';
 import { AppConfigService } from '../app-config.service';
 import { DataService } from '../data.service';
 import { FIncident } from '../model/frontend/incident';
+import { ReversePipe } from '../reverse.pipe';
 
 @Component({
   selector: 'app-incident-log-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ReversePipe],
   templateUrl: './incident-log-list.component.html',
   styleUrl: './incident-log-list.component.css'
 })

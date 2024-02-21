@@ -23,37 +23,37 @@ export class UserSettingsService {
     this._useColorblindColors = cookieService.get(COOKIE_COLORBLIND) === "true";
   }
 
-  showUserSettings(): boolean {
+  get showUserSettings(): boolean {
     return this._showUserSettings;
   }
 
-  setShowUserSettings(show: boolean) {
+  set showUserSettings(show: boolean) {
     this._showUserSettings = show;
   }
 
-  useTableDisplay(): boolean {
+  get useTableDisplay(): boolean {
     return this._useTableDisplay;
   }
 
-  setUseTableDisplay(tableMode: boolean | undefined) {
+  set useTableDisplay(tableMode: boolean | undefined) {
     this._useTableDisplay = tableMode !== undefined ? tableMode : false;
     this.cookieService.set(COOKIE_USE_TABLE, this.bs(this._useTableDisplay));
   }
 
-  hideBoringDays(): boolean {
+  get hideBoringDays(): boolean {
     return this._hideBoringDays;
   }
 
-  setHideBoringDays(hidden: boolean) {
+  set hideBoringDays(hidden: boolean) {
     this._hideBoringDays = hidden;
     this.cookieService.set(COOKIE_HIDE_BORING, this.bs(this._hideBoringDays));
   }
 
-  useColorblindColors(): boolean {
+  get useColorblindColors(): boolean {
     return this._useColorblindColors;
   }
 
-  setUseColorblindColors(colorblind: boolean) {
+  set sseColorblindColors(colorblind: boolean) {
     this._useColorblindColors = colorblind;
     this.cookieService.set(COOKIE_COLORBLIND, this.bs(this._useColorblindColors));
   }

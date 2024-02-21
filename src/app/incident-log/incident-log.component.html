@@ -1,0 +1,11 @@
+<section class="incident-log">
+    <h1>Incident Log</h1>
+    <section>
+        <h2>Ongoing Incidents</h2>
+        <app-incident-log-list [data]="data.ongoingIncidents"></app-incident-log-list>
+    </section>
+    <section>
+        <h2>Past Incidents</h2>
+        <app-incident-log-list [data]="data.completedIncidents"></app-incident-log-list>
+    </section>
+</section>

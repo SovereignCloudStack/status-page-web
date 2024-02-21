@@ -1,5 +1,5 @@
 
-export interface SImpactReference {
+export interface STypedReference {
     reference: string;
     type: string;
 }

@@ -28,9 +28,9 @@ export class AppComponent {
     router.events.forEach((e) => {
       if (e instanceof NavigationEnd) {
         if (e.url != "/" && !e.url.startsWith("/#")) {
-          this.userSettings.setShowUserSettings(false);
+          this.userSettings.showUserSettings = false;
         } else {
-          this.userSettings.setShowUserSettings(true);
+          this.userSettings.showUserSettings = true;
         }
       }
     })

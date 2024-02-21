@@ -64,6 +64,35 @@
         1,
         2
       ]
+    },
+    {
+      "affects": [
+        {
+          "reference": "3d13a413-e326-4c08-ae2c-0a0d70cfd436",
+          "type": "065f87e1-5946-4994-adf0-545195a3ef1f"
+        },
+        {
+          "reference": "e19c3d35-d7dc-4ded-98cc-5c3816748668",
+          "type": "065f87e1-5946-4994-adf0-545195a3ef1f"
+        }
+      ],
+      "beganAt": "2023-12-17T14:11:57.747+01:00",
+      "description": "Some components are unreachable",
+      "displayName": "DBaaS and IdP unreachable",
+      "endedAt": "2023-12-19T17:24:43.323+01:00",
+      "id": "2c4f98bb-1c97-4c75-877f-27446b28393e",
+      "phase": {
+        "generation": 1,
+        "order": 4
+      },
+      "updates": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
     }
   ]
 }

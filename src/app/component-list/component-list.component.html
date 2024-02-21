@@ -1,0 +1,32 @@
+<section id="{{ id }}">
+    <article class="api-list-entry" *ngFor="let component of data">
+        <div class="api-titlebar">
+            <h4>{{ component.displayName }}</h4>
+            <div class="status-bar status-{{ component.status }}">{{ component.statusText }}</div>
+        </div>
+        <div class="api-daily-status">
+            <div class="day-status-box status-{{ day.value.overallStatus }}"
+                *ngFor="let day of component.dailyData | keyvalue">
+                <div class="tooltip-wrap">
+                    <div class="tooltip-content">
+                        <div class="tooltip-title">
+                            <span>
+                                <h5>{{ day.key }}</h5>
+                            </span>
+                            <div class="status-bar status-{{ day.value.overallStatus }}">{{ day.value.overallStatusText }}</div>
+                        </div>
+                        <hr>
+                        <h6 *ngFor="let incident of day.value.activeIncidents">{{ incident.displayName }}</h6>
+                        <h6 *ngIf="day.value.activeIncidents.length === 0">No incidents occured</h6>
+                    </div>
+                </div>
+                <a href="#day-{{ day.key }}"></a>
+            </div>
+        </div>
+        <div class="api-textbar">
+            <span>90 days ago</span>
+            <span>82% up time</span>
+            <span>today</span>
+        </div>
+    </article>
+</section>

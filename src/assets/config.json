@@ -1,3 +1,4 @@
 {
-    "noOfDays": 90
+    "noOfDays": 90,
+    "dateFormat": "YYYY-MM-DD HH:mm:ssZZ"
 }

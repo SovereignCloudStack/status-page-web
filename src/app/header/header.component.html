@@ -4,13 +4,13 @@
         <!--<button type="button" class="subscribe-btn">Subscribe to Updates</button>-->
     </div>
     <div>
-        <a *ngIf="userSettings.showUserSettings()" href="#accessibility-options">Skip to accessibility options</a>
-        <span *ngIf="userSettings.showUserSettings()">
-            <input id="tableMode" type="checkbox" (change)="userSettings.setUseTableDisplay(userSettings.getCheckedState($event))"
-                [checked]="userSettings.useTableDisplay()" />
+        <a *ngIf="userSettings.showUserSettings" href="#accessibility-options">Skip to accessibility options</a>
+        <span *ngIf="userSettings.showUserSettings">
+            <input id="tableMode" type="checkbox" (change)="userSettings.useTableDisplay = userSettings.getCheckedState($event)"
+                [checked]="userSettings.useTableDisplay" />
             <label for="tableMode">Use table display</label>
-            <input id="tableHideFineDays" type="checkbox" (change)="userSettings.setHideBoringDays(userSettings.getCheckedState($event))"
-                [disabled]="!userSettings.useTableDisplay()" [checked]="userSettings.hideBoringDays()" />
+            <input id="tableHideFineDays" type="checkbox" (change)="userSettings.hideBoringDays = userSettings.getCheckedState($event)"
+                [disabled]="!userSettings.useTableDisplay" [checked]="userSettings.hideBoringDays" />
             <label id="tableHideFineDaysLabel" class="disabled" for="tableHideFineDays">
                 Hide operational days (table display only)
             </label>

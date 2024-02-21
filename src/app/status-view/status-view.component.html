@@ -1,16 +1,18 @@
 <section class="about">
     <h1>About</h1>
-    <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+    <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
+        dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
+        clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet,
+        consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed
+        diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
+        takimata sanctus est Lorem ipsum dolor sit amet.</p>
 </section>
 <section class="spinner-container" *ngIf="!loaded">
     <app-spinner>Loading Data...</app-spinner>
     <p>Loading Data</p>
 </section>
-<section id="api-list" *ngIf="loaded" >
-    <article class="api-list-entry" *ngFor="let component of data.components">
-        <div class="api-titlebar">
-            <h4>{{ component.displayName }}</h4>
-            <div class="status-bar status-{{ component.componentStatus() }}">{{ component.componentStatusText() }}</div>
-        </div>
-    </article>
+<app-component-list *ngIf="loaded && !userSettings.useTableDisplay" [data]="data.components"></app-component-list>
+<section *ngIf="loaded && userSettings.useTableDisplay">
+    <p>Table display be here</p>
 </section>
+<app-incident-log *ngIf="loaded"></app-incident-log>

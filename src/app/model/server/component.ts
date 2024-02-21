@@ -2,14 +2,13 @@ import { HttpClient } from "@angular/common/http"
 import { Observable, map } from "rxjs";
 import { StatusApiResponse } from "./response";
 import { SIncident } from "./incident";
-import { SImpactReference } from "./impact";
+import { STypedReference } from "./typed-reference";
 
 export class SComponent {
     id: string = "";
     displayName: string = "";
-    activelyAffectedBy: SImpactReference[] = [];
+    activelyAffectedBy: STypedReference[] = [];
     labels: Map<string, string> = new Map();
-    dailyData: Map<string, SIncident[]> = new Map();
 
     constructor(o: any) {
         this.id = o.id;
@@ -33,14 +32,13 @@ export class SComponent {
     }
 }
 
-export function loadComponents(http: HttpClient, incidentMap: Map<string, SIncident>): Observable<SComponent[]> {
-    return http.get<StatusApiResponse<SComponent[]>>("assets/testdata/component.json").pipe(
+export function loadComponents(http: HttpClient): Observable<SComponent[]> {
+    return http.get<StatusApiResponse<SComponent[]>>("assets/testdata/components.json").pipe(
         map(response => {
             let newArr: SComponent[] = [];
             response.data.forEach(
                 v => {
                     let component = new SComponent(v);
-                    // TODO Create daily data
                     newArr.push(component);
                 }
             );

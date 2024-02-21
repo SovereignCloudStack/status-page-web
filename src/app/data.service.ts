@@ -118,6 +118,7 @@ export class DataService {
             }
             frontendComponent.dailyData.set(day, dailyData);
           }
+          frontendComponent.calculateAvailability();
         });
         // We are now fully loaded and can display the data
         this.loadingFinished.next(true);

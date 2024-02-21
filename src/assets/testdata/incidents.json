@@ -93,6 +93,30 @@
         4,
         5
       ]
+    },
+    {
+      "affects": [
+        {
+          "reference": "3d13a413-e326-4c08-ae2c-0a0d70cfd436",
+          "type": "1cdb22d1-64c7-4000-a195-a3b546f0902a"
+        }
+      ],
+      "beganAt": "2023-12-03T06:22:50.747+01:00",
+      "description": "Something is wrong",
+      "displayName": "Something is wrong",
+      "endedAt": "2023-12-03T07:06:06.666+01:00",
+      "id": "324a0374-379b-477e-a590-cdb106240bdd",
+      "phase": {
+        "generation": 1,
+        "order": 4
+      },
+      "updates": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ]
     }
   ]
 }

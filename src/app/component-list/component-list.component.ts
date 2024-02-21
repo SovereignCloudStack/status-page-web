@@ -13,4 +13,7 @@ export class ComponentListComponent {
 
   @Input() id: string = "api-list";
   @Input() data: FComponent[] = [];
+
+  constructor() {}
+
 }

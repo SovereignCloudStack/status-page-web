@@ -4,15 +4,39 @@ import { DailyStatus } from "./daily-status";
 export class FComponent {
 
     dailyData: Map<string, DailyStatus> = new Map();
+    private _availability: number = -1;
 
     serverSide: SComponent;
 
     constructor(serverSide: SComponent) {
         this.serverSide = serverSide;
+        // Calculate the uptime value for each component
+    }
+
+    calculateAvailability(): void {
+        // Calculate the uptime value for each component
+        let daysWithIncidents = 0;
+        this.dailyData.forEach(day => {
+          if (day.activeIncidents.length > 0) {
+            daysWithIncidents++;
+          }
+        });
+        this._availability = (this.dailyData.size - daysWithIncidents) / this.dailyData.size;
+    }
+
+    get id(): string {
+        return this.serverSide.id;
     }
 
     get displayName(): string {
         return this.serverSide.displayName;
+    }
+
+    get availability(): number {
+        if (this._availability < 0) {
+            this.calculateAvailability();
+        }
+        return this._availability;
     }
 
     get status(): string {

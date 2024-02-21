@@ -12,7 +12,7 @@
         </h4>
         <p class="incident-start-date">since {{ df(incident.beganAt) }}</p>
         <p *ngIf="incident.description">{{ incident.description }}</p>
-        <section class="incident-update" *ngFor="let update of incident.updates">
+        <section class="incident-update" *ngFor="let update of incident.updates | reverse">
             <h5>{{ update.displayName }}</h5>
             <span class="incident-update-content"> - {{ update.description }}</span>
             <p class="incident-update-time">{{ df(update.createdAt) }}</p>

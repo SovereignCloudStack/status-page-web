@@ -3,16 +3,13 @@ import { FComponent } from '../model/frontend/component';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-component-list',
+  selector: 'app-component-table',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './component-list.component.html',
-  styleUrl: './component-list.component.css'
+  templateUrl: './component-table.component.html',
+  styleUrl: './component-table.component.css'
 })
-export class ComponentListComponent {
+export class ComponentTableComponent {
 
   @Input() data: FComponent[] = [];
-
-  constructor() {}
-
 }

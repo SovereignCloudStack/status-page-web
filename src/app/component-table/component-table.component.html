@@ -1,0 +1,28 @@
+<section id="api-table" class="hidden">
+    <article *ngFor="let component of data">
+        <div class="api-table-title">
+            <h4>{{ component.displayName }}</h4>
+            <span class="info">Incidents of the last 90 days</span>
+            <span class="info">Uptime is {{ component.availability | percent: "2.0-1" }}</span>
+            <span class="status-bar status-{{ component.status }}">{{ component.statusText }}</span>
+        </div>
+        <table class="api-table">
+            <thead>
+                <tr>
+                    <th>Day</th>
+                    <th>Status</th>
+                    <th>Incidents</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="marker-{{ day.value.overallStatus }}" *ngFor="let day of component.dailyData | keyvalue">
+                    <th>{{ day.value.day }}</th>
+                    <td><span class="status-bar status-{{ day.value.overallStatus }}">{{ day.value.overallStatusText }}</span></td>
+                    <td >
+                        <a style="display:block;" href="./incident.html" *ngFor="let incident of day.value.activeIncidents">{{ incident.displayName }}</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </article>
+</section>

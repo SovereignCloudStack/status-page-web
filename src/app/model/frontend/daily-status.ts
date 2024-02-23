@@ -4,9 +4,10 @@ import { FIncident } from "./incident";
 export class DailyStatus {
 
     day: string = "-1";
-    _overallStatus: string = "unknown";
-    _overallStatusText: string = "unknown";
     activeIncidents: FIncident[] = [];
+
+    private _overallStatus: string = "unknown";
+    private _overallStatusText: string = "unknown";
 
     constructor(day: string | Dayjs) {
         if (day instanceof dayjs) {

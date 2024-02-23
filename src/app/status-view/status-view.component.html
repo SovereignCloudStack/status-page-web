@@ -12,7 +12,5 @@
     <p>Loading Data</p>
 </section>
 <app-component-list *ngIf="loaded && !userSettings.useTableDisplay" [data]="data.components"></app-component-list>
-<section *ngIf="loaded && userSettings.useTableDisplay">
-    <p>Table display be here</p>
-</section>
-<app-incident-log *ngIf="loaded"></app-incident-log>
+<app-incident-log *ngIf="loaded && !userSettings.useTableDisplay"></app-incident-log>
+<app-component-table *ngIf="loaded && userSettings.useTableDisplay" [data]="data.components"></app-component-table>

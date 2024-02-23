@@ -32,7 +32,7 @@ export class DataService {
     private http: HttpClient,
     private config: AppConfigService
   ) {
-    this.phaseGenerations = {generation: 0, phases: []};
+    this.phaseGenerations = { generation: 0, phases: [] };
     this.impactTypes = new Map();
 
     this.components = [];
@@ -42,7 +42,7 @@ export class DataService {
     this.completedIncidents = new Map();
 
     this.loadingFinished = new BehaviorSubject(false);
-    
+
     this.startLoading();
   }
 
@@ -50,14 +50,38 @@ export class DataService {
     return this.loadingFinished.asObservable();
   }
 
-  private addIncidentToMap(map: Map<string, FIncident[]>, incidentDate: string, incident: FIncident): void {
+  // private addIncidentToMap(
+  //   map: Map<string, FIncident[]>,
+  //   incident: FIncident,
+  //   incidentDate: string,
+  //   currentDate: string,
+  //   dateRange: string[]
+  // ): void {
+  //   let startIndex = dateRange.findIndex(v => v === incidentDate);
+  //   let endDate = incident.endedAt?.format("YYYY-MM-DD");
+  //   if (!endDate) {
+  //     endDate = currentDate;
+  //   }
+  //   let endIndex = dateRange.findIndex(v => v === endDate);
+  //   for (let i = startIndex; i <= endIndex; i++) {
+  //     let list = map.get(dateRange[i]) ?? [];
+  //     list.push(incident);
+  //     map.set(dateRange[i], list);
+  //   }
+  // }
+
+  private addIncidentToMap(
+    map: Map<string, FIncident[]>,
+    incident: FIncident,
+    incidentDate: string
+  ): void {
     let list = map.get(incidentDate) ?? [];
     list.push(incident);
     map.set(incidentDate, list);
   }
 
   private startLoading(): void {
-    
+
     let phases$ = loadPhases(this.http);
     let impactTypes$ = loadImpactTypes(this.http);
 
@@ -75,10 +99,15 @@ export class DataService {
   private loadMainData(): void {
     // Build map of days and the incidents happening on them
     let currentDate = dayjs();
+    let currentDateStr = currentDate.format("YYYY-MM-DD");
     let startDate = currentDate.subtract(this.config.noOfDays, "days");
-    this.incidentsByDay.set(currentDate.format("YYYY-MM-DD"), []);
+    let dateRange: string[] = [];
+    this.incidentsByDay.set(currentDateStr, []);
+    dateRange[this.config.noOfDays - 1] = currentDateStr;
     for (let i = 1; i < this.config.noOfDays; i++) {
-      this.incidentsByDay.set(currentDate.subtract(i, "days").format("YYYY-MM-DD"), []);
+      let dateStr = currentDate.subtract(i, "days").format("YYYY-MM-DD");
+      dateRange[this.config.noOfDays - 1 - i] = dateStr;
+      this.incidentsByDay.set(dateStr, []);
     }
     // Start by loading the incidents
     loadIncidents(this.http, startDate, currentDate).subscribe(incidentList => {
@@ -94,11 +123,10 @@ export class DataService {
         this.incidentsByDay.get(incidentDate)?.push(frontendIncident);
         if (frontendIncident.endedAt === null) {
           // Incident is still ongoing, add it to the appropriate list
-          this.addIncidentToMap(this.ongoingIncidents, incidentDate, frontendIncident);
+          this.addIncidentToMap(this.ongoingIncidents, frontendIncident, incidentDate);
         } else {
-          this.addIncidentToMap(this.completedIncidents, incidentDate, frontendIncident);
+          this.addIncidentToMap(this.completedIncidents, frontendIncident, incidentDate);
         }
-        // TODO Handle incidents stretching more than one day
       }
       );
       // Once we are done loading all incidents (but not necessarily all updates), load the components
@@ -120,13 +148,17 @@ export class DataService {
           }
           frontendComponent.calculateAvailability();
         });
+        // Go over the list of components again and handle incidents stretching more than one day
+        this.components.forEach(component => {
+          
+        })
         // We are now fully loaded and can display the data
         this.loadingFinished.next(true);
-        
+
         console.log(this.incidentsById);
         console.log(this.incidentsByDay);
         console.log(this.components);
-        
+
       });
     });
   }

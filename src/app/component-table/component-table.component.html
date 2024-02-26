@@ -1,4 +1,4 @@
-<section id="api-table" class="hidden">
+<section id="api-table">
     <article *ngFor="let component of data">
         <div class="api-table-title">
             <h4>{{ component.displayName }}</h4>
@@ -15,7 +15,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="marker-{{ day.value.overallStatus }}" *ngFor="let day of component.dailyData | keyvalue">
+                <tr class="marker-{{ day.value.overallStatus }} {{isHidden(day.value)}}" *ngFor="let day of component.dailyData | keyvalue | callback: this.filterDays">
                     <th>{{ day.value.day }}</th>
                     <td><span class="status-bar status-{{ day.value.overallStatus }}">{{ day.value.overallStatusText }}</span></td>
                     <td >

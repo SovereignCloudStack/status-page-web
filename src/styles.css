@@ -262,3 +262,11 @@ a:hover {
 .text-unknown {
     color: var(--unknown-color);
 }
+
+.hidden {
+    display: none;
+}
+
+.disabled {
+    color: var(--faint-text-color);
+}

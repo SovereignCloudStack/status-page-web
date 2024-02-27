@@ -27,6 +27,6 @@ export class DailyStatus {
     }
 
     get overallStatusText(): string {
-        return this.activeIncidents.length > 0 ? "unknown" : "operation";
+        return this.activeIncidents.length > 0 ? "unknown" : "operational";
     }
 }

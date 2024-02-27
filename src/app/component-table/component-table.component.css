@@ -37,6 +37,23 @@ td, th {
     padding: 0.5rem;
 }
 
+thead tr th:first-of-type {
+    width: 12%;
+}
+
+thead tr th:nth-of-type(2) {
+    width: 14%;
+}
+
+tbody tr th {
+    width: 12%;
+}
+
+tbody tr td:first-of-type {
+    width: 14%;
+    text-align: center;
+}
+
 .api-table .status-bar {
     margin: 0;
     height: 1rem;

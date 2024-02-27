@@ -9,16 +9,16 @@
         <table class="api-table">
             <thead>
                 <tr>
-                    <th>Day</th>
-                    <th>Status</th>
+                    <th class="day-column">Day</th>
+                    <th class="state-column">Status</th>
                     <th>Incidents</th>
                 </tr>
             </thead>
             <tbody>
                 <tr class="marker-{{ day.value.overallStatus }} {{isHidden(day.value)}}" *ngFor="let day of component.dailyData | keyvalue | callback: this.filterDays">
-                    <th>{{ day.value.day }}</th>
-                    <td><span class="status-bar status-{{ day.value.overallStatus }}">{{ day.value.overallStatusText }}</span></td>
-                    <td >
+                    <th class="day-column">{{ day.value.day }}</th>
+                    <td class="state-column"><span class="status-bar status-{{ day.value.overallStatus }}">{{ day.value.overallStatusText }}</span></td>
+                    <td>
                         <a style="display:block;" href="./incident.html" *ngFor="let incident of day.value.activeIncidents">{{ incident.displayName }}</a>
                     </td>
                 </tr>

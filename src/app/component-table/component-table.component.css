@@ -37,21 +37,18 @@ td, th {
     padding: 0.5rem;
 }
 
-thead tr th:first-of-type {
+.day-column {
     width: 12%;
+    text-align: center;
 }
 
-thead tr th:nth-of-type(2) {
+.state-column {
     width: 14%;
+    text-align: center;
 }
 
 tbody tr th {
     width: 12%;
-}
-
-tbody tr td:first-of-type {
-    width: 14%;
-    text-align: center;
 }
 
 .api-table .status-bar {

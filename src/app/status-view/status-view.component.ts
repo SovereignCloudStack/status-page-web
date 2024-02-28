@@ -19,18 +19,8 @@ import { ComponentTableComponent } from '../component-table/component-table.comp
 })
 export class StatusViewComponent {
 
-  loaded: boolean = false;
-
   constructor(
-    private http: HttpClient,
-    private config: AppConfigService,
     public userSettings: UserSettingsService,
     public data: DataService
   ) {}
-
-  ngOnInit(): void {
-    this.data.loaded().subscribe(loadStatus => {
-      this.loaded = loadStatus;
-    });
-  }
 }

@@ -1,1 +1,3 @@
-<h1>{{ incident.displayName }} </h1>
+<span *ngFor="let component of incident.affectedComponents">{{ component.displayName }}</span>
+<h1>{{ incident.displayName }}</h1>
+<p id="incident-dates"><span>{{ incident.beganAt }}</span><span *ngIf="incident.endedAt"> - {{ incident.endedAt }}</span></p>

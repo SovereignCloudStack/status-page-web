@@ -6,8 +6,8 @@ import { SPhaseGeneration } from "../server/phase";
 
 export class FIncident {
 
-    private affectedComponents: FComponent[];
-    private incidentUpdates: SIncidentUpdate[];
+    private _affectedComponents: FComponent[];
+    private _incidentUpdates: SIncidentUpdate[];
     private _phase: string;
 
     serverSide: SIncident;
@@ -16,16 +16,16 @@ export class FIncident {
         this.serverSide = serverSide;
         this._phase = phases.phases[this.serverSide.phase.order];
         // TODO
-        this.affectedComponents = [];
-        this.incidentUpdates = [];
+        this._affectedComponents = [];
+        this._incidentUpdates = [];
     }
 
     addAffectedComponent(component: FComponent): void {
-        this.affectedComponents.push(component);
+        this._affectedComponents.push(component);
     }
 
     addUpdate(update: SIncidentUpdate): void {
-        this.incidentUpdates.push(update);
+        this._incidentUpdates.push(update);
     }
 
     get id(): string {
@@ -57,6 +57,10 @@ export class FIncident {
     }
 
     get updates(): SIncidentUpdate[] {
-        return this.incidentUpdates;
+        return this._incidentUpdates;
+    }
+
+    get affectedComponents(): FComponent[] {
+        return this._affectedComponents;
     }
 }

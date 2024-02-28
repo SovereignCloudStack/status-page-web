@@ -2,11 +2,12 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DataService } from '../data.service';
 import { FIncident } from '../model/frontend/incident';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-incident-view',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './incident-view.component.html',
   styleUrl: './incident-view.component.css'
 })

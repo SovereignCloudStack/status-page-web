@@ -1,4 +1,4 @@
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import { SIncident } from "../server/incident";
 import { FComponent } from "./component";
 import { SIncidentUpdate } from "../server/incident-update";

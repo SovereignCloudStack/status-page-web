@@ -5,11 +5,12 @@ import { AppConfigService } from '../app-config.service';
 import { DataService } from '../data.service';
 import { FIncident } from '../model/frontend/incident';
 import { ReversePipe } from '../reverse.pipe';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-incident-log-list',
   standalone: true,
-  imports: [CommonModule, ReversePipe],
+  imports: [CommonModule, RouterModule, ReversePipe],
   templateUrl: './incident-log-list.component.html',
   styleUrl: './incident-log-list.component.css'
 })
@@ -22,7 +23,10 @@ export class IncidentLogListComponent {
   ) {}
 
   // TODO Place this somewhere where it is globally available
-  df(dt: Dayjs): string {
+  df(dt: Dayjs | null): string {
+    if (!dt) {
+      return "";
+    }
     return dt.format(this.config.dateFormat);
   }
 }

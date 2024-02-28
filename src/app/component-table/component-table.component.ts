@@ -4,11 +4,12 @@ import { CommonModule, KeyValue } from '@angular/common';
 import { CallbackPipe } from '../callback.pipe';
 import { DailyStatus } from '../model/frontend/daily-status';
 import { UserSettingsService } from '../user-settings.service';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-component-table',
   standalone: true,
-  imports: [CommonModule, CallbackPipe],
+  imports: [CommonModule, RouterModule, CallbackPipe],
   templateUrl: './component-table.component.html',
   styleUrl: './component-table.component.css'
 })

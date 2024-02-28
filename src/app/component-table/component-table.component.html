@@ -19,7 +19,7 @@
                     <th class="day-column">{{ day.value.day }}</th>
                     <td class="state-column"><span class="status-bar status-{{ day.value.overallStatus }}">{{ day.value.overallStatusText }}</span></td>
                     <td>
-                        <a style="display:block;" href="./incident.html" *ngFor="let incident of day.value.activeIncidents">{{ incident.displayName }}</a>
+                        <a style="display:block;" [routerLink]="['/incident', incident.id]" *ngFor="let incident of day.value.activeIncidents">{{ incident.displayName }}</a>
                     </td>
                 </tr>
             </tbody>

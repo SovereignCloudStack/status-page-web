@@ -6,7 +6,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class ReversePipe implements PipeTransform {
 
-  transform(value: any[]): any[] {
+  transform<T>(value: T[]): T[] {
     return value.reverse();
   }
 

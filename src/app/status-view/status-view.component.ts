@@ -1,8 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { AppConfigService } from '../app-config.service';
-import { Dayjs } from 'dayjs';
 import { SpinnerComponent } from '../spinner/spinner.component';
 import { DataService } from '../data.service';
 import { IncidentLogComponent } from '../incident-log/incident-log.component';

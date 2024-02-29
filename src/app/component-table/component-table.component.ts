@@ -22,13 +22,11 @@ export class ComponentTableComponent {
     public userSettings: UserSettingsService
   ) {
     userSettings.observeHideBoringDays.subscribe(hidden => {
-      console.log("Changing property");
       this.hideOperationalDays = hidden;
     });
   }
 
   filterDays = (kv: KeyValue<string, DailyStatus>): boolean => {
-    console.log("Running!");
     if (this.hideOperationalDays && kv.value.activeIncidents.length === 0) {
       return false;
     }

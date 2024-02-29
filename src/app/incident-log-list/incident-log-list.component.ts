@@ -1,11 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { Dayjs } from 'dayjs';
-import { AppConfigService } from '../app-config.service';
-import { DataService } from '../data.service';
 import { FIncident } from '../model/frontend/incident';
 import { ReversePipe } from '../reverse.pipe';
 import { RouterModule } from '@angular/router';
+import { UtilService } from '../util.service';
 
 @Component({
   selector: 'app-incident-log-list',
@@ -19,14 +17,9 @@ export class IncidentLogListComponent {
   @Input() data: Map<string, FIncident[]> = new Map();
 
   constructor(
-    private config: AppConfigService
+    public util: UtilService
   ) {}
 
-  // TODO Place this somewhere where it is globally available
-  df(dt: Dayjs | null): string {
-    if (!dt) {
-      return "";
-    }
-    return dt.format(this.config.dateFormat);
-  }
+  df = this.util.formatDate.bind(this.util)
+  
 }

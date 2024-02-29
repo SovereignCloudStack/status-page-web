@@ -1,0 +1,22 @@
+h2 {
+    font-size: 1.25rem;
+    margin: 1.5rem 0rem .25rem 0rem;
+}
+
+h3 {
+    font-size: 1rem;
+    margin: 1rem 0rem .25rem 0rem;
+    display:inline-block;
+}
+
+#affects ul {
+    margin: .25rem 0rem;
+}
+
+#updates div {
+    margin: .75rem;
+}
+
+#updates div p {
+    margin: 0.25rem 0;
+}

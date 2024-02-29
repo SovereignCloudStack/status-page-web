@@ -1,13 +1,15 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { DataService } from '../data.service';
 import { FIncident } from '../model/frontend/incident';
 import { CommonModule } from '@angular/common';
+import { UtilService } from '../util.service';
+import { ReversePipe } from '../reverse.pipe';
 
 @Component({
   selector: 'app-incident-view',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule, ReversePipe],
   templateUrl: './incident-view.component.html',
   styleUrl: './incident-view.component.css'
 })
@@ -18,7 +20,8 @@ export class IncidentViewComponent {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private data: DataService
+    private data: DataService,
+    public util: UtilService
   ) {}
 
   ngOnInit(): void {
@@ -35,4 +38,6 @@ export class IncidentViewComponent {
         this.incident = this.data.incidentsById.get(id)!;
       });
   }
+
+  df = this.util.formatDate.bind(this.util)
 }

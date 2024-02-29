@@ -155,11 +155,11 @@ export class DataService {
         })
         // We are now fully loaded and can display the data
         this.loadingFinished.next(true);
-        
+        /*
         console.log(this.incidentsById);
         console.log(this.incidentsByDay);
         console.log(this.components);
-        
+        */
       });
     });
   }

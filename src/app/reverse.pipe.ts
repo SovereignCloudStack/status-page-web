@@ -7,7 +7,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class ReversePipe implements PipeTransform {
 
   transform<T>(value: T[]): T[] {
-    return value.reverse();
+    // We use slice to create a copy of the array before reversing it.
+    // Otherwise, the original array would be reversed every time we
+    // use this pipe, e.g. when accessing the incident detail page.
+    return value.slice().reverse();
   }
 
 }

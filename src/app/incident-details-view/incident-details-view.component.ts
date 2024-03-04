@@ -10,10 +10,10 @@ import { ReversePipe } from '../reverse.pipe';
   selector: 'app-incident-view',
   standalone: true,
   imports: [CommonModule, RouterModule, ReversePipe],
-  templateUrl: './incident-view.component.html',
-  styleUrl: './incident-view.component.css'
+  templateUrl: './incident-details-view.component.html',
+  styleUrl: './incident-details-view.component.css'
 })
-export class IncidentViewComponent {
+export class IncidentDetailsViewComponent {
 
   incident!: FIncident;
 

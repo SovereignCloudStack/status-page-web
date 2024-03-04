@@ -1,8 +1,8 @@
 <a [routerLink]="['/']">&lt;&lt; back to the overview</a>
-<h1>{{ incident.displayName }}</h1>
+<h1><span class="incident-status">{{ incident.phase }}</span> {{ incident.displayName }}</h1>
 <div id="incident-dates">
-    <span>{{ df(incident.beganAt) }}</span>
-    <span *ngIf="incident.endedAt"> → {{ df(incident.endedAt) }}</span>
+    <span class="faint">{{ df(incident.beganAt) }}</span>
+    <span class="faint" *ngIf="incident.endedAt"> → {{ df(incident.endedAt) }}</span>
 </div>
 <div id="description">
     <h2>Description</h2>
@@ -19,7 +19,7 @@
 <div id="updates" *ngIf="incident.updates.length > 0">
     <h2>Updates</h2>
     <div *ngFor="let update of incident.updates | reverse">
-        <h3>{{ update.displayName }}</h3><span> - {{ update.createdAt }}</span>
+        <h3>{{ update.displayName }}</h3><span class="faint"> - {{ update.createdAt }}</span>
         <p>
             {{ update.description }}
         </p>

@@ -20,3 +20,16 @@ h3 {
 #updates div p {
     margin: 0.25rem 0;
 }
+
+.incident-status {
+    background-color: var(--btn-color);
+    color: var(--main-bg-color);
+    margin: 1rem .5rem 1rem 0rem;
+    padding: .25rem .5rem;
+    border-radius: var(--bar-border-radius);
+    font-weight: bold;
+}
+
+.faint {
+    color: var(--faint-text-color);
+}

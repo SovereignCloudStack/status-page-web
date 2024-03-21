@@ -1,0 +1,47 @@
+.incident {
+    margin-left: .5rem;
+}
+
+.incident h4 {
+    margin: .75rem 0;
+}
+
+.incident-status {
+    background-color: var(--btn-color);
+    color: var(--main-bg-color);
+    margin: 1rem .5rem 1rem 0rem;
+    padding: .25rem;
+    border-radius: var(--bar-border-radius);
+    font-weight: bold;
+    font-size: .8rem;
+}
+
+.incident .incident-start-date {
+    color: var(--faint-text-color);
+    font-size: 0.75rem;
+    margin-top: -.5rem;
+}
+
+.incident-api {
+    color: var(--main-bg-color);
+    background-color: var(--unknown-color);
+    margin-right: .75rem;
+    padding: .25rem;
+    border-radius: var(--bar-border-radius);
+    font-weight: bold;
+    font-size: .8rem;
+}
+
+.incident-update {
+    margin-left: 1rem;
+}
+
+.incident-update-content {
+    margin-bottom: 0.25rem;
+}
+
+.incident-update-time {
+    color: var(--faint-text-color);
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+}

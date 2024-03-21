@@ -1,4 +1,26 @@
 {
     "noOfDays": 90,
-    "dateFormat": "YYYY-MM-DD HH:mm:ss z"
+    "dateFormat": "YYYY-MM-DD HH:mm:ss z",
+    "longDateFormat": "dddd, Do MMMM YYYY, HH:mm:ss z",
+    "severities": {
+        "fine": {
+            "start": 0,
+            "end": 29,
+            "color": "#50c3a5",
+            "colorblind": ""
+        },
+        "limited": {
+            "start": 30,
+            "end": 79,
+            "color": "#f5c451",
+            "colorblind": ""
+        },
+        "broken": {
+            "start": 80,
+            "end": 100,
+            "color": "#ee6a5f",
+            "colorblind": ""
+        }
+    },
+    "unknownColor": "lightsteelblue"
 }

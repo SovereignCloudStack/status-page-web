@@ -40,4 +40,5 @@ export class IncidentDetailsViewComponent {
   }
 
   df = this.util.formatDate.bind(this.util)
+  dfl = this.util.formatLongDate.bind(this.util)
 }

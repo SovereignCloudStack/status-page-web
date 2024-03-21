@@ -2,8 +2,8 @@ import { HttpClient } from "@angular/common/http";
 import { Observable, map } from "rxjs";
 import { StatusApiResponse } from "./response";
 import dayjs, { Dayjs } from "dayjs";
-import { STypedReference } from "./typed-reference";
 import { SGenerationalOrder } from "./generational-order";
+import { SImpact } from "./impact";
 
 export interface SIncident {
     id: string;
@@ -12,7 +12,7 @@ export interface SIncident {
     // TODO Can this be null/undefined?
     beganAt: Dayjs;
     endedAt: Dayjs | null;
-    affects: STypedReference[];
+    affects: SImpact[];
     phase: SGenerationalOrder;
     updates: number[];
 }

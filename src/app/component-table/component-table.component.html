@@ -2,9 +2,9 @@
     <article *ngFor="let component of data">
         <div class="api-table-title">
             <h4>{{ component.displayName }}</h4>
-            <span class="info">Incidents of the last 90 days</span>
+            <span class="info">Incidents of the last {{ config.noOfDays }} days</span>
             <span class="info">Uptime is {{ component.availability | percent: "2.0-1" }}</span>
-            <span class="status-bar status-{{ component.status }}">{{ component.statusText }}</span>
+            <span class="status-bar" [style]="util.currentStateStyle(component)">{{ util.severityName(component.currentSeverity) }}</span>
         </div>
         <table class="api-table">
             <thead>
@@ -17,7 +17,7 @@
             <tbody>
                 <tr class="marker-{{ day.value.overallStatus }} {{isHidden(day.value)}}" *ngFor="let day of component.dailyData | keyvalue | callback: this.filterDays">
                     <th class="day-column">{{ day.value.day }}</th>
-                    <td class="state-column"><span class="status-bar status-{{ day.value.overallStatus }}">{{ day.value.overallStatusText }}</span></td>
+                    <td class="state-column"><span class="status-bar" [style]="util.dayStateStyle(day.value)">{{ util.severityName(day.value.overallSeverity) }}</span></td>
                     <td>
                         <a style="display:block;" [routerLink]="['/incident', incident.id]" *ngFor="let incident of day.value.activeIncidents">{{ incident.displayName }}</a>
                     </td>

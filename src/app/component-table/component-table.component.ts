@@ -5,6 +5,8 @@ import { CallbackPipe } from '../callback.pipe';
 import { DailyStatus } from '../model/frontend/daily-status';
 import { UserSettingsService } from '../user-settings.service';
 import { RouterModule } from '@angular/router';
+import { UtilService } from '../util.service';
+import { AppConfigService } from '../app-config.service';
 
 @Component({
   selector: 'app-component-table',
@@ -19,7 +21,9 @@ export class ComponentTableComponent {
   hideOperationalDays: boolean = false;
 
   constructor(
-    public userSettings: UserSettingsService
+    public userSettings: UserSettingsService,
+    public config: AppConfigService,
+    public util: UtilService
   ) {
     userSettings.observeHideBoringDays.subscribe(hidden => {
       this.hideOperationalDays = hidden;

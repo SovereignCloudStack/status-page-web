@@ -1,3 +1,4 @@
+import { max } from "rxjs";
 import { SComponent } from "../server/component";
 import { DailyStatus } from "./daily-status";
 
@@ -10,7 +11,6 @@ export class FComponent {
 
     constructor(serverSide: SComponent) {
         this.serverSide = serverSide;
-        // Calculate the uptime value for each component
     }
 
     calculateAvailability(): void {
@@ -37,6 +37,10 @@ export class FComponent {
             this.calculateAvailability();
         }
         return this._availability;
+    }
+
+    get currentSeverity(): number {
+        return this.dailyData.values().next().value.overallSeverity;
     }
 
     get status(): string {

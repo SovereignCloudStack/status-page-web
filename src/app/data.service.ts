@@ -141,8 +141,20 @@ export class DataService {
               // Check if the incident affects this component
               let affectingIncidentReferences = incident.serverSide.affects.filter(c => c.reference === component.id);
               for (let reference of affectingIncidentReferences) {
+                // We traverse the list twice. In the first traversal, we only update the
+                // incidents. By the end of it, they will have not only all the necessary
+                // references, but the maximum severity amongst the affected components will
+                // also be updated to the correct value.
+                // TODO This whole initialization step could benefit from a cleaner rewite.
+                incident.addAffectedComponent(frontendComponent, reference.severity);
+              }
+              for (let reference of affectingIncidentReferences) {
+                // NOW we can update the DailyStatus objects without ending up
+                // using incomplete severities, which would happen if we didn't
+                // traverse the list twice or added the incidents to the daily
+                // status BEFORE we updated the incidents themselves.
+                // So, no matter how tempting: Don't refactor this into a single list traversal.
                 dailyData.addIncident(incident);
-                incident.addAffectedComponent(frontendComponent);
               }
             }
             frontendComponent.dailyData.set(day, dailyData);

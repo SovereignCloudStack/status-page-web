@@ -4,9 +4,9 @@
     "name": "scs/status-page-web",
     // Create a container form the following Containerfile
     "build": {
-        "dockerfile": "Containerfile"
+        "dockerfile": "Devcontainerfile"
     },
- 
+    "image": "localhost/vsc-status-page-web-a984e6b0e5dc9e3426b321c420443cb3e6d83079e4ae9c654cd641b94f371434",
     "features": {
         // Prepare the user inside the container
         "ghcr.io/devcontainers/features/common-utils:2": {
@@ -17,10 +17,10 @@
             "installOhMyZsh": false
         }
     },
- 
+
     // Use 'forwardPorts' to make a list of ports inside the container available locally.
     // "forwardPorts": [],
- 
+
     // Configure tool-specific properties.
     "customizations": {
         "vscode": {
@@ -32,7 +32,7 @@
            ]
         }
     },
- 
+
     // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
     "remoteUser": "codeuser",
     //"workspaceMount": "",

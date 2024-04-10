@@ -110,11 +110,11 @@ export class DataService {
       this.incidentsByDay.set(dateStr, []);
     }
     // Start by loading the incidents
-    loadIncidents(this.http, startDate, currentDate).subscribe(incidentList => {
+    loadIncidents(this.http, this.config, startDate, currentDate).subscribe(incidentList => {
       // For each incident, we also load the updates, but this can happen in parallel
       incidentList.forEach(incident => {
         let frontendIncident = new FIncident(incident, this.phaseGenerations);
-        loadIncidentUpdates(incident.id, this.http).subscribe(
+        loadIncidentUpdates(this.config, incident.id, this.http).subscribe(
           updateList => updateList.forEach(update => frontendIncident.addUpdate(update))
         );
         this.incidentsById.set(incident.id, frontendIncident);
@@ -130,7 +130,7 @@ export class DataService {
       }
       );
       // Once we are done loading all incidents (but not necessarily all updates), load the components
-      loadComponents(this.http).subscribe(componentList => {
+      loadComponents(this.http, this.config).subscribe(componentList => {
         componentList.forEach(component => {
           let frontendComponent = new FComponent(component);
           this.components.push(frontendComponent);
@@ -163,7 +163,8 @@ export class DataService {
         });
         // Go over the list of components again and handle incidents stretching more than one day
         this.components.forEach(component => {
-          
+          // TODO Do we actually want to do this? This would somewhat hide new incidents 
+          // affecting the same component, atleast in the default list view.
         })
         // We are now fully loaded and can display the data
         this.loadingFinished.next(true);

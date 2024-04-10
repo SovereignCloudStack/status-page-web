@@ -9,11 +9,13 @@ interface Severity {
 }
 
 class Config {
+  apiServerUrl: string = "";
   noOfDays: number = 90;
   dateFormat: string = "YYYY-MM-DD HH:mm:ss z";
   longDateFormat: string = "dddd, Do MMMM YYYY, HH:mm:ss z";
   severities: Map<string, Severity> = new Map();
   unknownColor: string = "lightsteelblue";
+  useTestData: boolean = false;
 
   constructor() {
     // Add default values to severities map?
@@ -55,5 +57,37 @@ export class AppConfigService {
 
   get unknownColor(): string {
     return this.config.unknownColor;
+  }
+
+  get apiServerUrl(): string {
+    return this.config.apiServerUrl;
+  }
+
+  get useTestData(): boolean {
+    return this.config.useTestData;
+  }
+
+  get incidentsUrl(): string {
+    if (this.useTestData) {
+      return "assets/testdata/incidents.json";
+    } else {
+      return `${this.config.apiServerUrl}/incidents`;
+    }
+  }
+
+  incidentUpdateUrl(id: string): string {
+    if (this.useTestData) {
+      return `assets/testdata/updates/updates-${id}.json`;
+    } else {
+      return `${this.config.apiServerUrl}/incidents/${id}/updates`;
+    }
+  }
+
+  get componentsUrl(): string {
+    if (this.useTestData) {
+      return "assets/testdata/components.json";
+    } else {
+      return `${this.config.apiServerUrl}/components`;
+    }
   }
 }

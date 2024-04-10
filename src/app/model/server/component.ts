@@ -3,6 +3,7 @@ import { Observable, map } from "rxjs";
 import { StatusApiResponse } from "./response";
 import { SIncident } from "./incident";
 import { STypedReference } from "./typed-reference";
+import { AppConfigService } from "../../app-config.service";
 
 export class SComponent {
     id: string = "";
@@ -32,8 +33,8 @@ export class SComponent {
     }
 }
 
-export function loadComponents(http: HttpClient): Observable<SComponent[]> {
-    return http.get<StatusApiResponse<SComponent[]>>("assets/testdata/components.json").pipe(
+export function loadComponents(http: HttpClient, config: AppConfigService): Observable<SComponent[]> {
+    return http.get<StatusApiResponse<SComponent[]>>(config.componentsUrl).pipe(
         map(response => {
             let newArr: SComponent[] = [];
             response.data.forEach(

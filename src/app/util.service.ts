@@ -6,6 +6,7 @@ import advformat from 'dayjs/plugin/advancedFormat'
 import { FComponent } from './model/frontend/component';
 import { DailyStatus } from './model/frontend/daily-status';
 import { SImpact } from './model/server/impact';
+import { UserSettingsService } from './user-settings.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,8 @@ import { SImpact } from './model/server/impact';
 export class UtilService {
 
   constructor(
-    private config: AppConfigService
+    private config: AppConfigService,
+    private userSettings: UserSettingsService
   ) {
     dayjs.extend(timezone);
     dayjs.extend(advformat);
@@ -45,7 +47,9 @@ export class UtilService {
   severityColor(severity: number): string {
     for (let s of this.config.severities.values()) {
       if (severity >= s.start && severity <= s.end) {
-        // TODO Deal with colorblind mode
+        if (this.userSettings.useColorblindColors) {
+          return s.colorblind;
+        }
         return s.color;
       }
     }

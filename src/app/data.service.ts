@@ -75,15 +75,15 @@ export class DataService {
     incident: FIncident,
     incidentDate: string
   ): void {
-    let list = map.get(incidentDate) ?? [];
+    const list = map.get(incidentDate) ?? [];
     list.push(incident);
     map.set(incidentDate, list);
   }
 
   private startLoading(): void {
 
-    let phases$ = loadPhases(this.http);
-    let impactTypes$ = loadImpactTypes(this.http);
+    const phases$ = loadPhases(this.http);
+    const impactTypes$ = loadImpactTypes(this.http);
 
     phases$.pipe(
       combineLatestWith(impactTypes$)
@@ -98,14 +98,14 @@ export class DataService {
 
   private loadMainData(): void {
     // Build map of days and the incidents happening on them
-    let currentDate = dayjs();
-    let currentDateStr = currentDate.format("YYYY-MM-DD");
-    let startDate = currentDate.subtract(this.config.noOfDays, "days");
-    let dateRange: string[] = [];
+    const currentDate = dayjs();
+    const currentDateStr = currentDate.format("YYYY-MM-DD");
+    const startDate = currentDate.subtract(this.config.noOfDays, "days");
+    const dateRange: string[] = [];
     this.incidentsByDay.set(currentDateStr, []);
     dateRange[this.config.noOfDays - 1] = currentDateStr;
     for (let i = 1; i < this.config.noOfDays; i++) {
-      let dateStr = currentDate.subtract(i, "days").format("YYYY-MM-DD");
+      const dateStr = currentDate.subtract(i, "days").format("YYYY-MM-DD");
       dateRange[this.config.noOfDays - 1 - i] = dateStr;
       this.incidentsByDay.set(dateStr, []);
     }
@@ -113,13 +113,13 @@ export class DataService {
     loadIncidents(this.http, this.config, startDate, currentDate).subscribe(incidentList => {
       // For each incident, we also load the updates, but this can happen in parallel
       incidentList.forEach(incident => {
-        let frontendIncident = new FIncident(incident, this.phaseGenerations);
+        const frontendIncident = new FIncident(incident, this.phaseGenerations);
         loadIncidentUpdates(this.config, incident.id, this.http).subscribe(
           updateList => updateList.forEach(update => frontendIncident.addUpdate(update))
         );
         this.incidentsById.set(incident.id, frontendIncident);
         // Sort the incident into the map of incidents per day
-        let incidentDate = incident.beganAt.format("YYYY-MM-DD");
+        const incidentDate = incident.beganAt.format("YYYY-MM-DD");
         this.incidentsByDay.get(incidentDate)?.push(frontendIncident);
         if (frontendIncident.endedAt === null) {
           // Incident is still ongoing, add it to the appropriate list
@@ -132,15 +132,15 @@ export class DataService {
       // Once we are done loading all incidents (but not necessarily all updates), load the components
       loadComponents(this.http, this.config).subscribe(componentList => {
         componentList.forEach(component => {
-          let frontendComponent = new FComponent(component);
+          const frontendComponent = new FComponent(component);
           this.components.push(frontendComponent);
           // Create daily data for each component
-          for (let [day, incidents] of this.incidentsByDay) {
-            let dailyData = new DailyStatus(day);
-            for (let incident of incidents) {
+          for (const [day, incidents] of this.incidentsByDay) {
+            const dailyData = new DailyStatus(day);
+            for (const incident of incidents) {
               // Check if the incident affects this component
-              let affectingIncidentReferences = incident.serverSide.affects.filter(c => c.reference === component.id);
-              for (let reference of affectingIncidentReferences) {
+              const affectingIncidentReferences = incident.serverSide.affects.filter(c => c.reference === component.id);
+              for (const reference of affectingIncidentReferences) {
                 // We traverse the list twice. In the first traversal, we only update the
                 // incidents. By the end of it, they will have not only all the necessary
                 // references, but the maximum severity amongst the affected components will
@@ -148,7 +148,7 @@ export class DataService {
                 // TODO This whole initialization step could benefit from a cleaner rewite.
                 incident.addAffectedComponent(frontendComponent, reference.severity);
               }
-              for (let reference of affectingIncidentReferences) {
+              for (const reference of affectingIncidentReferences) { // eslint-disable-line @typescript-eslint/no-unused-vars
                 // NOW we can update the DailyStatus objects without ending up
                 // using incomplete severities, which would happen if we didn't
                 // traverse the list twice or added the incidents to the daily
@@ -162,7 +162,7 @@ export class DataService {
           frontendComponent.calculateAvailability();
         });
         // Go over the list of components again and handle incidents stretching more than one day
-        this.components.forEach(component => {
+        this.components.forEach(component => { // eslint-disable-line @typescript-eslint/no-unused-vars
           // TODO Do we actually want to do this? This would somewhat hide new incidents 
           // affecting the same component, atleast in the default list view.
         })

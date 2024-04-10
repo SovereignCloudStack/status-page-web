@@ -45,7 +45,7 @@ export class UserSettingsService {
   }
 
   set useTableDisplay(tableMode: boolean | undefined) {
-    let mode = tableMode !== undefined ? tableMode : false;
+    const mode = tableMode !== undefined ? tableMode : false;
     this.cookieService.set(COOKIE_USE_TABLE, this.bs(mode));
     this._useTableDisplay$.next(mode);
   }

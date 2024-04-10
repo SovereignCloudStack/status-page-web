@@ -1,4 +1,3 @@
-import { max } from "rxjs";
 import { SComponent } from "../server/component";
 import { DailyStatus } from "./daily-status";
 

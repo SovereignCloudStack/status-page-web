@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { DataService } from '../data.service';
 import { FIncident } from '../model/frontend/incident';
@@ -13,7 +13,7 @@ import { ReversePipe } from '../reverse.pipe';
   templateUrl: './incident-details-view.component.html',
   styleUrl: './incident-details-view.component.css'
 })
-export class IncidentDetailsViewComponent {
+export class IncidentDetailsViewComponent implements OnInit {
 
   incident!: FIncident;
 
@@ -30,7 +30,7 @@ export class IncidentDetailsViewComponent {
           this.router.navigate(["/notfound"]);
           return;
         }
-        let id = params.get("id")!;
+        const id = params.get("id")!;
         if (!this.data.incidentsById.has(id)) {
           this.router.navigate(["/notfound"]);
           return;

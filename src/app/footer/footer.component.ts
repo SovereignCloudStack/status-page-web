@@ -1,5 +1,5 @@
-import { CommonModule, NgIf } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
 import { UserSettingsService } from '../user-settings.service';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';

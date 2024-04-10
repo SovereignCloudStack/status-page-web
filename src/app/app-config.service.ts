@@ -1,5 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Dayjs } from 'dayjs';
+
+const DT_QUERY_FORMAT = "YYYY-MM-DDTHH[%3A]mm[%3A]ss.SSSZ";
 
 interface Severity {
   start: number;
@@ -67,11 +70,11 @@ export class AppConfigService {
     return this.config.useTestData;
   }
 
-  get incidentsUrl(): string {
+  incidentsUrl(start: Dayjs, end: Dayjs): string {
     if (this.useTestData) {
       return "assets/testdata/incidents.json";
     } else {
-      return `${this.config.apiServerUrl}/incidents`;
+      return `${this.config.apiServerUrl}/incidents?start=${start.utc().format(DT_QUERY_FORMAT)}&end=${end.utc().format(DT_QUERY_FORMAT)}`;
     }
   }
 

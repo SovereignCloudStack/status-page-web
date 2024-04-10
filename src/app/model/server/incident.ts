@@ -5,7 +5,6 @@ import dayjs, { Dayjs } from "dayjs";
 import { SGenerationalOrder } from "./generational-order";
 import { SImpact } from "./impact";
 import { AppConfigService } from "../../app-config.service";
-import { inject } from "@angular/core";
 
 export interface SIncident {
     id: string;
@@ -20,7 +19,7 @@ export interface SIncident {
 }
 
 export function loadIncidents(http: HttpClient, config: AppConfigService, start: Dayjs, end: Dayjs): Observable<SIncident[]> {
-    return http.get<StatusApiResponse<SIncident[]>>(config.incidentsUrl).pipe(
+    return http.get<StatusApiResponse<SIncident[]>>(config.incidentsUrl(start, end)).pipe(
         map(response => {
             response.data.forEach(incident => {
                 incident.beganAt = dayjs(incident.beganAt);

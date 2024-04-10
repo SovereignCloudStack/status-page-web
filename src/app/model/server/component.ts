@@ -1,7 +1,6 @@
 import { HttpClient } from "@angular/common/http"
 import { Observable, map } from "rxjs";
 import { StatusApiResponse } from "./response";
-import { SIncident } from "./incident";
 import { STypedReference } from "./typed-reference";
 import { AppConfigService } from "../../app-config.service";
 
@@ -11,6 +10,7 @@ export class SComponent {
     activelyAffectedBy: STypedReference[] = [];
     labels: Map<string, string> = new Map();
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(o: any) {
         this.id = o.id;
         this.displayName = o.displayName;
@@ -36,10 +36,10 @@ export class SComponent {
 export function loadComponents(http: HttpClient, config: AppConfigService): Observable<SComponent[]> {
     return http.get<StatusApiResponse<SComponent[]>>(config.componentsUrl).pipe(
         map(response => {
-            let newArr: SComponent[] = [];
+            const newArr: SComponent[] = [];
             response.data.forEach(
                 v => {
-                    let component = new SComponent(v);
+                    const component = new SComponent(v);
                     newArr.push(component);
                 }
             );

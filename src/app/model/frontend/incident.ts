@@ -1,4 +1,4 @@
-import dayjs, { Dayjs } from "dayjs";
+import { Dayjs } from "dayjs";
 import { SIncident } from "../server/incident";
 import { FComponent } from "./component";
 import { SIncidentUpdate } from "../server/incident-update";
@@ -76,7 +76,7 @@ export class FIncident {
 
     get maxSeverity(): number {
         let severity = 0;
-        for (let impact of this.severities.values()) {
+        for (const impact of this.severities.values()) {
             severity = Math.max(severity, impact);
         }
         return severity;

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { DataService } from '../data.service';
 import { IncidentLogListComponent } from '../incident-log-list/incident-log-list.component';
 

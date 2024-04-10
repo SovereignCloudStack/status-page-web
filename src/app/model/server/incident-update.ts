@@ -21,7 +21,7 @@ export function loadIncidentUpdates(config: AppConfigService, id: string, http: 
                 return response.data;
             }),
         );
-    } catch (e: any) {
+    } catch (e: unknown) {
         console.log(`Error loading incident updates: ${e}`);
     }
     return EMPTY;

@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { AppConfigService } from './app-config.service';
 import dayjs, { Dayjs } from 'dayjs';
-import timezone from 'dayjs/plugin/timezone'
-import advformat from 'dayjs/plugin/advancedFormat'
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+import advformat from 'dayjs/plugin/advancedFormat';
 import { FComponent } from './model/frontend/component';
 import { DailyStatus } from './model/frontend/daily-status';
-import { SImpact } from './model/server/impact';
 import { UserSettingsService } from './user-settings.service';
 
 @Injectable({
@@ -17,6 +17,7 @@ export class UtilService {
     private config: AppConfigService,
     private userSettings: UserSettingsService
   ) {
+    dayjs.extend(utc)
     dayjs.extend(timezone);
     dayjs.extend(advformat);
   }
@@ -36,7 +37,7 @@ export class UtilService {
   }
 
   severityName(severity: number): string {
-    for (let s of this.config.severities.entries()) {
+    for (const s of this.config.severities.entries()) {
       if (severity >= s[1].start && severity <= s[1].end) {
         return s[0];
       }
@@ -45,7 +46,7 @@ export class UtilService {
   }
 
   severityColor(severity: number): string {
-    for (let s of this.config.severities.values()) {
+    for (const s of this.config.severities.values()) {
       if (severity >= s.start && severity <= s.end) {
         if (this.userSettings.useColorblindColors) {
           return s.colorblind;
@@ -61,7 +62,7 @@ export class UtilService {
   }
 
   dayStateStyle(day: DailyStatus): string {
-    let severityColor = this.severityColor(day.overallSeverity);
+    const severityColor = this.severityColor(day.overallSeverity);
     return `background-color: ${severityColor}`;
   }
 }

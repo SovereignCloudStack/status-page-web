@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AppConfigService } from './app-config.service';
-import dayjs, { Dayjs } from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
-import advformat from 'dayjs/plugin/advancedFormat';
+import { Dayjs } from 'dayjs';
 import { FComponent } from './model/frontend/component';
 import { DailyStatus } from './model/frontend/daily-status';
 import { UserSettingsService } from './user-settings.service';
@@ -16,11 +13,7 @@ export class UtilService {
   constructor(
     private config: AppConfigService,
     private userSettings: UserSettingsService
-  ) {
-    dayjs.extend(utc)
-    dayjs.extend(timezone);
-    dayjs.extend(advformat);
-  }
+  ) {}
 
   formatDate(dt: Dayjs | null): string {
     if (!dt) {

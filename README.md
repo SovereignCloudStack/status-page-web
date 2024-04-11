@@ -18,7 +18,7 @@ Your SCS setup needs to include an instance of the [Status Page API server](http
 
 You will find a configuration file named `config.json` in the `src/assets` directory. This file looks like this (sans comments, for the JSON gods abhor them):
 
-```json
+```json5
 {
     // The URL to the status page API server
     "statusApiUrl": "",

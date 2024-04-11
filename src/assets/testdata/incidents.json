@@ -1,0 +1,176 @@
+{
+  "data": [
+    {
+      "affects": [
+        {
+          "reference": "e19c3d35-d7dc-4ded-98cc-5c3816748668",
+          "type": "065f87e1-5946-4994-adf0-545195a3ef1f",
+          "severity": "82"
+        }
+      ],
+      "beganAt": "2024-02-10T11:10:10+01:00",
+      "description": "The API server is no longer available",
+      "displayName": "Broken API",
+      "endedAt": null,
+      "id": "51f6b0f5-25e8-4465-a7d7-8e3d77951595",
+      "phase": {
+        "generation": 0,
+        "order": 0
+      },
+      "updates": [
+        0
+      ]
+    },
+    {
+      "affects": [
+        {
+          "reference": "9a4b098a-3fda-4362-a403-72732d7dae37",
+          "type": "72076620-3d1c-4816-8c7d-bd7c1731cf79",
+          "severity": "40"
+        }
+      ],
+      "beganAt": "2024-01-02T12:25:55.111+01:00",
+      "description": "Access to entries in our main database is slow.",
+      "displayName": "Slow Database Access",
+      "endedAt": "2024-01-02T16:34:19.826+01:00",
+      "id": "5a4e9752-2179-4b15-9799-02d04ece5ab0",
+      "phase": {
+        "generation": 1,
+        "order": 4
+      },
+      "updates": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "affects": [
+        {
+          "reference": "9a4b098a-3fda-4362-a403-72732d7dae37",
+          "type": "065f87e1-5946-4994-adf0-545195a3ef1f",
+          "severity": "45"
+        }
+      ],
+      "beganAt": "2024-02-20T09:15:51.571+01:00",
+      "description": "The database can sometimes not be reached",
+      "displayName": "Datebase sporadically unreachable",
+      "endedAt": null,
+      "id": "0679b5c5-67ad-469e-a7fc-465bbf5fcbb4",
+      "phase": {
+        "generation": 1,
+        "order": 2
+      },
+      "updates": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "affects": [
+        {
+          "reference": "3d13a413-e326-4c08-ae2c-0a0d70cfd436",
+          "type": "065f87e1-5946-4994-adf0-545195a3ef1f",
+          "severity": "90"
+        },
+        {
+          "reference": "e19c3d35-d7dc-4ded-98cc-5c3816748668",
+          "type": "065f87e1-5946-4994-adf0-545195a3ef1f",
+          "severity": "90"
+        }
+      ],
+      "beganAt": "2024-02-28T14:11:57.747+01:00",
+      "description": "Some components are unreachable",
+      "displayName": "DBaaS and IdP unreachable",
+      "endedAt": "2024-02-30T17:24:43.323+01:00",
+      "id": "2c4f98bb-1c97-4c75-877f-27446b28393e",
+      "phase": {
+        "generation": 1,
+        "order": 4
+      },
+      "updates": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "affects": [
+        {
+          "reference": "3d13a413-e326-4c08-ae2c-0a0d70cfd436",
+          "type": "1cdb22d1-64c7-4000-a195-a3b546f0902a",
+          "severity": "99"
+        }
+      ],
+      "beganAt": "2024-03-03T06:22:50.747+01:00",
+      "description": "Something is wrong",
+      "displayName": "Something is wrong",
+      "endedAt": "2024-03-03T07:06:06.666+01:00",
+      "id": "324a0374-379b-477e-a590-cdb106240bdd",
+      "phase": {
+        "generation": 1,
+        "order": 4
+      },
+      "updates": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "affects": [
+        {
+          "reference": "3d13a413-e326-4c08-ae2c-0a0d70cfd436",
+          "type": "1cdb22d1-64c7-4000-a195-a3b546f0902a",
+          "severity": "64"
+        }
+      ],
+      "beganAt": "2024-03-19T06:22:50.747+01:00",
+      "description": "Certain queries seem to apply a massive slowdown to the database service.",
+      "displayName": "Massive slowdown",
+      "endedAt": null,
+      "id": "324af272-379b-83ee-a590-def314159bad",
+      "phase": {
+        "generation": 1,
+        "order": 1
+      },
+      "updates": [
+        0
+      ]
+    },
+    {
+      "affects": [
+        {
+          "reference": "f37815f9-0025-4aba-affe-56fff43eee90",
+          "type": "065f87e1-5946-4994-adf0-545195a3ef1f",
+          "severity": "64"
+        },
+        {
+          "reference": "3d13a413-e326-4c08-ae2c-0a0d70cfd436",
+          "type": "065f87e1-5946-4994-adf0-545195a3ef1f",
+          "severity": "85"
+        }
+      ],
+      "beganAt": "2024-03-21T06:22:50.747+01:00",
+      "description": "Several components experience slowdown or a complete blackout",
+      "displayName": "Connectivity Issues",
+      "endedAt": null,
+      "id": "1928fd6b-bbac-7afe-9277-83abaa53798e",
+      "phase": {
+        "generation": 1,
+        "order": 2
+      },
+      "updates": [
+        0,
+        2
+      ]
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+<a [routerLink]="['/']">&lt;&lt; back to the overview</a>
+<h1><span class="incident-status">{{ incident.phase }}</span> {{ incident.displayName }}</h1>
+<div id="incident-dates">
+    <span class="faint">{{ df(incident.beganAt) }}</span>
+    <span class="faint" *ngIf="incident.endedAt"> → {{ df(incident.endedAt) }}</span>
+</div>
+<div id="description">
+    <h2>Description</h2>
+    <p>
+        {{ incident.description }}
+    </p>
+</div>
+<div id="affects" *ngIf="incident.affectedComponents.length > 0">
+    <h2>Affected components</h2>
+    <ul>
+        <li *ngFor="let component of incident.affectedComponents">{{ component.displayName }}</li>
+    </ul>
+</div>
+<div id="updates" *ngIf="incident.updates.length > 0">
+    <h2>Updates</h2>
+    <div *ngFor="let update of incident.updates | reverse">
+        <h3>{{ update.displayName }}</h3><span class="faint"> - {{ dfl(update.createdAt) }}</span>
+        <p>
+            {{ update.description }}
+        </p>
+    </div>
+</div>

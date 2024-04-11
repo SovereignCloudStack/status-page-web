@@ -1,0 +1,22 @@
+<article id="day-{{ day.key }}" *ngFor="let day of data | keyvalue | reverse">
+    <h3>{{ day.key }}</h3>
+    <p *ngIf="day.value.length === 0">No incidents occured</p>
+    <article id="incident-{{ incident.id }}" class="incident" *ngFor="let incident of day.value">
+        <h4>
+            <span class="incident-status status-unknown">{{ incident.phase }}</span>
+            <a class="text-broken"
+                title="Open incident view for this incident"
+                [routerLink]="['/incident', incident.id]">
+                {{ incident.displayName }}
+            </a>
+        </h4>
+        <p class="incident-start-date" *ngIf="incident.ongoing">since {{ df(incident.beganAt) }}</p>
+        <p class="incident-start-date" *ngIf="!incident.ongoing">{{ df(incident.beganAt) }} to {{ df(incident.endedAt) }}</p>
+        <p *ngIf="incident.description">{{ incident.description }}</p>
+        <section class="incident-update" *ngFor="let update of incident.updates | reverse">
+            <h5>{{ update.displayName }}</h5>
+            <span class="incident-update-content"> - {{ update.description }}</span>
+            <p class="incident-update-time">{{ df(update.createdAt) }}</p>
+        </section>
+    </article>
+</article>

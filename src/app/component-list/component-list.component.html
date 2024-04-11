@@ -1,0 +1,33 @@
+<section id="api-list">
+    <article class="api-list-entry" *ngFor="let component of data">
+        <div class="api-titlebar">
+            <h4>{{ component.displayName }}</h4>
+            <div class="status-bar" [style]="util.currentStateStyle(component)">{{ util.severityName(component.currentSeverity) }}</div>
+        </div>
+        <div class="api-daily-status">
+            <div class="day-status-box"
+                [style]="util.dayStateStyle(day.value)"
+                *ngFor="let day of component.dailyData | keyvalue">
+                <div class="tooltip-wrap">
+                    <div class="tooltip-content">
+                        <div class="tooltip-title">
+                            <span>
+                                <h5>{{ day.key }}</h5>
+                            </span>
+                            <div class="status-bar" [style]="util.dayStateStyle(day.value)">{{ util.severityName(day.value.overallSeverity) }}</div>
+                        </div>
+                        <hr>
+                        <h6 *ngFor="let incident of day.value.activeIncidents" style="display: block;">{{ incident.displayName }}</h6>
+                        <h6 *ngIf="day.value.activeIncidents.length === 0">No incidents occured</h6>
+                    </div>
+                </div>
+                <a href="#day-{{ day.key }}">&nbsp;</a>
+            </div>
+        </div>
+        <div class="api-textbar">
+            <span>{{ config.noOfDays }} days ago</span>
+            <span>{{ component.availability | percent: "2.0-1" }} up time</span>
+            <span>today</span>
+        </div>
+    </article>
+</section>

@@ -1,0 +1,34 @@
+{
+    "statusApiUrl": "",
+    "noOfDays": 90,
+    "dateFormat": "YYYY-MM-DD HH:mm:ss z",
+    "longDateFormat": "dddd, Do MMMM YYYY, HH:mm:ss z",
+    "severities": {
+        "operational": {
+            "start": 0,
+            "end": 25,
+            "color": "#50c3a5",
+            "colorblind": "#8ce05d"
+        },
+        "maintenance": {
+            "start": 26,
+            "end": 50,
+            "color": "#50c3a5",
+            "colorblind": "#e1be6a"
+        },
+        "limited": {
+            "start": 51,
+            "end": 75,
+            "color": "#f5c451",
+            "colorblind": "#5d3a9b"
+        },
+        "broken": {
+            "start": 76,
+            "end": 100,
+            "color": "#ee6a5f",
+            "colorblind": "#d62c13"
+        }
+    },
+    "unknownColor": "lightsteelblue",
+    "useTestData": true
+}

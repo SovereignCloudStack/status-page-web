@@ -1,0 +1,12 @@
+{
+    "data": {
+      "generation": 1,
+      "phases": [
+        "Scheduled",
+        "Investigation ongoing",
+        "Working on it",
+        "Potential fix deployed",
+        "Done"
+      ]
+    }
+  }

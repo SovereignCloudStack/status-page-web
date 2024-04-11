@@ -1,0 +1,3 @@
+<app-component-list *ngIf="!userSettings.useTableDisplay" [data]="data.components"></app-component-list>
+<app-incident-log *ngIf="!userSettings.useTableDisplay"></app-incident-log>
+<app-component-table *ngIf="userSettings.useTableDisplay" [data]="data.components"></app-component-table>

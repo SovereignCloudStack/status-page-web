@@ -6,11 +6,16 @@ h2 {
 h3 {
     font-size: 1rem;
     margin: 1rem 0rem .25rem 0rem;
-    display:inline-block;
+    display: inline-block;
 }
 
 #affects ul {
     margin: .25rem 0rem;
+    list-style-type: square;
+}
+
+#affects ul li::marker {
+    color: var(--btn-color);
 }
 
 #updates div {

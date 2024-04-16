@@ -50,25 +50,9 @@ export class DataService {
     return this.loadingFinished.asObservable();
   }
 
-  // private addIncidentToMap(
-  //   map: Map<string, FIncident[]>,
-  //   incident: FIncident,
-  //   incidentDate: string,
-  //   currentDate: string,
-  //   dateRange: string[]
-  // ): void {
-  //   let startIndex = dateRange.findIndex(v => v === incidentDate);
-  //   let endDate = incident.endedAt?.format("YYYY-MM-DD");
-  //   if (!endDate) {
-  //     endDate = currentDate;
-  //   }
-  //   let endIndex = dateRange.findIndex(v => v === endDate);
-  //   for (let i = startIndex; i <= endIndex; i++) {
-  //     let list = map.get(dateRange[i]) ?? [];
-  //     list.push(incident);
-  //     map.set(dateRange[i], list);
-  //   }
-  // }
+  impactTypeName(type: string): string {
+    return this.impactTypes.get(type)?.displayName ?? "unknown";
+  }
 
   private addIncidentToMap(
     map: Map<string, FIncident[]>,

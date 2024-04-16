@@ -41,12 +41,4 @@ export class FComponent {
     get currentSeverity(): number {
         return this.dailyData.values().next().value.overallSeverity;
     }
-
-    get status(): string {
-        return this.serverSide.activelyAffectedBy.length > 0 ? "unknown" : "fine";
-    }
-
-    get statusText(): string {
-        return this.serverSide.activelyAffectedBy.length > 0 ? "unknown" : "operational";
-    }
 }

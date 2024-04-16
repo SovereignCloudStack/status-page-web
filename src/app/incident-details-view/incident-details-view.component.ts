@@ -49,6 +49,24 @@ export class IncidentDetailsViewComponent implements OnInit {
     return "unknown";
   }
 
+  impactSeverity(component: FComponent): string {
+    for (const impact of this.incident.serverSide.affects) {
+      if (impact.reference == component.id) {
+        return `${this.util.severityName(impact.severity)} (${impact.severity})`;
+      }
+    }
+    return "unknown";
+  }
+
+  is(component: FComponent): number {
+    for (const impact of this.incident.serverSide.affects) {
+      if (impact.reference == component.id) {
+        return impact.severity;
+      }
+    }
+    return -1;
+  }
+
   df = this.util.formatDate.bind(this.util)
   dfl = this.util.formatLongDate.bind(this.util)
 }

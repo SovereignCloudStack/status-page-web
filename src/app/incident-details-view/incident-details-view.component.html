@@ -13,7 +13,7 @@
 <div id="affects" *ngIf="incident.affectedComponents.length > 0">
     <h2>Affected components</h2>
     <ul>
-        <li *ngFor="let component of incident.affectedComponents">{{ component.displayName }} <span class="faint">| {{ impactType(component) }}</span></li>
+        <li *ngFor="let component of incident.affectedComponents"><span>{{ component.displayName }}</span><span class="faint"> | Severity: {{ impactSeverity(component) }}</span><span class="faint"> | Category: {{ impactType(component) }}</span></li>
     </ul>
 </div>
 <div id="updates" *ngIf="incident.updates.length > 0">

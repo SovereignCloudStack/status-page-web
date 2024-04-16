@@ -21,7 +21,7 @@
                         <h6 *ngIf="day.value.activeIncidents.length === 0">No incidents occured</h6>
                     </div>
                 </div>
-                <a href="#day-{{ day.key }}">&nbsp;</a>
+                <a href="{{ dayId(day.value) }}">&nbsp;</a>
             </div>
         </div>
         <div class="api-textbar">

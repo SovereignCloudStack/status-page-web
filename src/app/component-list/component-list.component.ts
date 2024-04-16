@@ -3,6 +3,7 @@ import { FComponent } from '../model/frontend/component';
 import { CommonModule } from '@angular/common';
 import { AppConfigService } from '../app-config.service';
 import { UtilService } from '../util.service';
+import { DailyStatus } from '../model/frontend/daily-status';
 
 @Component({
   selector: 'app-component-list',
@@ -20,4 +21,11 @@ export class ComponentListComponent {
     public util: UtilService
   ) {}
 
+  dayId(day: DailyStatus): string {
+    if (day.topLevelIncident) {
+      const targetDate = day.topLevelIncident.beganAt.format("YYYY-MM-DD");
+      return `#day-${targetDate}`;
+    }
+    return `#day-${day.day}`;
+  }
 }

@@ -5,6 +5,7 @@ export class DailyStatus {
 
     day: string = "-1";
     activeIncidents: FIncident[] = [];
+    _topLevelIncident?: FIncident = undefined;
 
     private _severity: number = 0;
 
@@ -19,9 +20,20 @@ export class DailyStatus {
     addIncident(incident: FIncident) {
         this.activeIncidents.push(incident);
         this._severity = Math.max(this._severity, incident.maxSeverity);
+        if (this._topLevelIncident) {
+            if (this._topLevelIncident.maxSeverity < incident.maxSeverity) {
+                this._topLevelIncident = incident;
+            }
+        } else {
+            this._topLevelIncident = incident;
+        }
     }
 
     get overallSeverity(): number {
         return this._severity;
+    }
+
+    get topLevelIncident(): FIncident | undefined {
+        return this._topLevelIncident;
     }
 }

@@ -31,7 +31,6 @@ class Config {
 export class AppConfigService {
 
   private config: Config = new Config();
-  private s: Severity
 
   constructor(private http: HttpClient) {
     http.get<Config>("/assets/config.json").subscribe(c => {

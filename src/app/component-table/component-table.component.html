@@ -15,7 +15,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="marker-{{ day.value.overallStatus }} {{isHidden(day.value)}}" *ngFor="let day of component.dailyData | keyvalue | callback: this.filterDays">
+                <tr class="{{isHidden(day.value)}}" *ngFor="let day of component.dailyData | keyvalue | callback: this.filterDays">
                     <th class="day-column">{{ day.value.day }}</th>
                     <td class="state-column"><span class="status-bar" [style]="util.dayStateStyle(day.value)">{{ util.severityName(day.value.overallSeverity) }}</span></td>
                     <td>

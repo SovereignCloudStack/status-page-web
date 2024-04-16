@@ -163,8 +163,27 @@ export class DataService {
         });
         // Go over the list of components again and handle incidents stretching more than one day
         this.components.forEach(component => { // eslint-disable-line @typescript-eslint/no-unused-vars
-          // TODO Do we actually want to do this? This would somewhat hide new incidents 
-          // affecting the same component, atleast in the default list view.
+          const processedIncidents: string[] = [];
+          component.dailyData.forEach((status, day, _) => { // eslint-disable-line @typescript-eslint/no-unused-vars
+            status.activeIncidents.forEach(incident => {
+              if (!processedIncidents.includes(incident.id)) {
+                // Get the number of days between start and end date of the incident.
+                // If it is more than 1, add the incident to all following days
+                // until we have exhausted the number of days of difference.
+                const startDate = dayjs(incident.beganAt.format("YYYY-MM-DD"));
+                const endDate = dayjs(incident.endedAt?.format("YYYY-MM-DD") ?? currentDate);
+                const diff = endDate.diff(startDate, "days");
+                console.log(`difference in days: ${diff}`);
+                for (let i = 1; i <= diff; i++) {
+                  const updateDate = startDate.add(i, "days");
+                  component.dailyData.get(updateDate.format("YYYY-MM-DD"))?.addIncident(incident);
+                }
+                processedIncidents.push(incident.id);
+              }
+            })
+          });
+          // Update the availability at the very end
+          component.calculateAvailability();
         })
         // We are now fully loaded and can display the data
         this.loadingFinished.next(true);

@@ -10,7 +10,9 @@ export interface SIncident {
     id: string;
     displayName: string;
     description: string;
-    // TODO Can this be null/undefined?
+    // TODO This is currently marked as nullable in the OpenAPI
+    // spec of the status API server. Is that sensible? Could we
+    // change it so it is a required field?
     beganAt: Dayjs;
     endedAt: Dayjs | null;
     affects: SImpact[];

@@ -5,9 +5,8 @@ export class DailyStatus {
 
     day: string = "-1";
     activeIncidents: FIncident[] = [];
+    _topLevelIncident?: FIncident = undefined;
 
-    private _overallStatus: string = "unknown";
-    private _overallStatusText: string = "unknown";
     private _severity: number = 0;
 
     constructor(day: string | Dayjs) {
@@ -19,16 +18,22 @@ export class DailyStatus {
     }
 
     addIncident(incident: FIncident) {
-        // TODO Determine if this changes the day's overall status
         this.activeIncidents.push(incident);
         this._severity = Math.max(this._severity, incident.maxSeverity);
-    }
-
-    get overallStatus(): string {
-        return this.activeIncidents.length > 0 ? "unknown" : "fine";
+        if (this._topLevelIncident) {
+            if (this._topLevelIncident.maxSeverity < incident.maxSeverity) {
+                this._topLevelIncident = incident;
+            }
+        } else {
+            this._topLevelIncident = incident;
+        }
     }
 
     get overallSeverity(): number {
         return this._severity;
+    }
+
+    get topLevelIncident(): FIncident | undefined {
+        return this._topLevelIncident;
     }
 }

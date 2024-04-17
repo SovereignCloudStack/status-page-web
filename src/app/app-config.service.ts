@@ -37,7 +37,35 @@ export class AppConfigService {
       // The parsed JSON object has the severity entries as object properties.
       // Convert them into the map format we expect.
       c.severities = new Map(Object.entries(c.severities ?? []));
-      // TODO Add default map or error on map missing
+      // Add default map if none was specified in the config file.
+      // This maps the default severities as defined in the status API server 
+      // to our default colors and states.
+      if (c.severities.size == 0) {
+        c.severities.set("operational", {
+          start: 0,
+          end: 25,
+          color: "#50c3a5",
+          colorblind: "#8ce05d"
+        });
+        c.severities.set("maintenance", {
+          start: 26,
+          end: 50,
+          color: "#50c3a5",
+          colorblind: "#e1be6a"
+        });
+        c.severities.set("limited", {
+          start: 51,
+          end: 75,
+          color: "#f5c451",
+          colorblind: "#5d3a9b"
+        });
+        c.severities.set("broken", {
+          start: 76,
+          end: 100,
+          color: "#ee6a5f",
+          colorblind: "#d62c13"
+        });
+      }
       this.config = c;
     });
   }

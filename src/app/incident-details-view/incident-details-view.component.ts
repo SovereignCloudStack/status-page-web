@@ -5,6 +5,7 @@ import { FIncident } from '../model/frontend/incident';
 import { CommonModule } from '@angular/common';
 import { UtilService } from '../util.service';
 import { ReversePipe } from '../reverse.pipe';
+import { FComponent } from '../model/frontend/component';
 
 @Component({
   selector: 'app-incident-view',
@@ -37,6 +38,33 @@ export class IncidentDetailsViewComponent implements OnInit {
         }
         this.incident = this.data.incidentsById.get(id)!;
       });
+  }
+
+  impactType(component: FComponent): string {
+    for (const impact of this.incident.serverSide.affects) {
+      if (impact.reference == component.id) {
+        return this.data.impactTypeName(impact.type);
+      }
+    }
+    return "unknown";
+  }
+
+  impactSeverity(component: FComponent): string {
+    for (const impact of this.incident.serverSide.affects) {
+      if (impact.reference == component.id) {
+        return `${this.util.severityName(impact.severity)} (${impact.severity})`;
+      }
+    }
+    return "unknown";
+  }
+
+  is(component: FComponent): number {
+    for (const impact of this.incident.serverSide.affects) {
+      if (impact.reference == component.id) {
+        return impact.severity;
+      }
+    }
+    return -1;
   }
 
   df = this.util.formatDate.bind(this.util)

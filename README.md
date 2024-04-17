@@ -86,6 +86,8 @@ podman run -e SCS_SP_API_SERVER_URL="localhost:3000/status" -p 8080:8080 scs-sta
 
 There is also the `SCS_SP_USE_TEST_DATA` environment variable, which you can set to `true` to have the statuspage deliver the status example data included in its `src/assets/testdata` directory. This setting is obviously not meant to be used in production environments, but can be useful to check that the statuspage is running, even if no status API server is available.
 
+**Important:** If you are running the status page technical preview in a way that requires you to have a valid imprint, you need to replace the example imprint in `src/app/imprint/imprint.component.html` with your actual imprint. A mechanism to do so automatically is being worked on.
+
 ## Developing
 
 The status page is using Angular 2. The currently used version is **17.1**. This repository contains a devcontainer setup for VSCode. Using this is the simplest way to set up a development environment.

@@ -1,3 +1,22 @@
 {
-    "data": []
-}
+    "data": [
+      {
+        "createdAt": "2024-02-10T10:10:01+01:00",
+        "description": "Parts of the API are broken. We are investigating why",
+        "displayName": "Investigating",
+        "order": 0
+      },
+      {
+        "createdAt": "2024-02-11T08:32:01+01:00",
+        "description": "We have identified a possible cause and are working on an exploratory fix.",
+        "displayName": "Working on it",
+        "order": 1
+      },
+      {
+        "createdAt": "2024-02-11T21:04:01+01:00",
+        "description": "The fix worked. Everything is fine now.",
+        "displayName": "Done",
+        "order": 2
+      }
+    ]
+  }

@@ -1,5 +1,5 @@
 {
-    "statusApiUrl": "${STATUS_PAGE_API_URL}",
+    "statusApiUrl": "${STATUS_PAGE_WEB_API_URL}",
     "noOfDays": 90,
     "dateFormat": "YYYY-MM-DD HH:mm:ss z",
     "longDateFormat": "dddd, Do MMMM YYYY, HH:mm:ss z",
@@ -30,5 +30,5 @@
         }
     },
     "unknownColor": "lightsteelblue",
-    "useTestData": ${STATUS_PAGE_USE_TEST_DATA}
+    "useTestData": ${STATUS_PAGE_WEB_USE_TEST_DATA}
 }

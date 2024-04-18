@@ -1,0 +1,14 @@
+.git/
+.angular/
+.vscode/
+dist/
+html-prototype/
+node_modules/
+.devcontainer.json
+.editorconfig
+.eslintrc.json
+.gitignore
+.containerignore
+Containerfile
+Devcontainerfile
+Makefile

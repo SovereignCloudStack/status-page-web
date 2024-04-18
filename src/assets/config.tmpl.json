@@ -1,5 +1,5 @@
 {
-    "statusApiUrl": "${STATUS_PAGE_WEB_API_URL}",
+    "apiServerUrl": "${STATUS_PAGE_WEB_API_URL}",
     "noOfDays": 90,
     "dateFormat": "YYYY-MM-DD HH:mm:ss z",
     "longDateFormat": "dddd, Do MMMM YYYY, HH:mm:ss z",

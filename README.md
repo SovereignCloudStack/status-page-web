@@ -21,7 +21,7 @@ You will find a configuration file named `config.json` in the `src/assets` direc
 ```json5
 {
     // The URL to the status page API server
-    "statusApiUrl": "",
+    "apiServerUrl": "",
     // Number of days to retrieve data for
     "noOfDays": 90,
     // The date format used for most dates displayed on the page

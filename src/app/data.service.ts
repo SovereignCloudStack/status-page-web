@@ -157,7 +157,6 @@ export class DataService {
                 const startDate = dayjs(incident.beganAt.format("YYYY-MM-DD"));
                 const endDate = dayjs(incident.endedAt?.format("YYYY-MM-DD") ?? currentDate);
                 const diff = endDate.diff(startDate, "days");
-                console.log(`difference in days: ${diff}`);
                 for (let i = 1; i <= diff; i++) {
                   const updateDate = startDate.add(i, "days");
                   component.dailyData.get(updateDate.format("YYYY-MM-DD"))?.addIncident(incident);

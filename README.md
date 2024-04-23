@@ -21,7 +21,7 @@ You will find a configuration file named `config.json` in the `src/assets` direc
 ```json5
 {
     // The URL to the status page API server
-    "statusApiUrl": "",
+    "apiServerUrl": "",
     // Number of days to retrieve data for
     "noOfDays": 90,
     // The date format used for most dates displayed on the page
@@ -78,13 +78,13 @@ If you use a in which there is only one API server with a static URL you already
 
 ### Building the Image
 
-Build the included `Dockerfile` using `docker` or `podman`. Use the resulting image as usual. You can define the environment variable `SCS_SP_API_SERVER_URL` to define the URL of the status API server the statuspage is supposed to use. Example using podman locally:
+Build the included `Dockerfile` using `docker` or `podman`. Use the resulting image as usual. You can define the environment variable `STATUS_PAGE_WEB_API_URL` to define the URL of the status API server the statuspage is supposed to use. Example using podman locally:
 
 ```sh
-podman run -e SCS_SP_API_SERVER_URL="localhost:3000/status" -p 8080:8080 scs-status-page-web
+podman run -e STATUS_PAGE_WEB_API_URL="localhost:3000/status" -p 8080:8080 scs-status-page-web
 ```
 
-There is also the `SCS_SP_USE_TEST_DATA` environment variable, which you can set to `true` to have the statuspage deliver the status example data included in its `src/assets/testdata` directory. This setting is obviously not meant to be used in production environments, but can be useful to check that the statuspage is running, even if no status API server is available.
+There is also the `STATUS_PAGE_WEB_USE_TEST_DATA=` environment variable, which you can set to `true` to have the statuspage deliver the status example data included in its `src/assets/testdata` directory. This setting is obviously not meant to be used in production environments, but can be useful to check that the statuspage is running, even if no status API server is available.
 
 **Important:** If you are running the status page technical preview in a way that requires you to have a valid imprint, you need to replace the example imprint in `src/app/imprint/imprint.component.html` with your actual imprint. A mechanism to do so automatically is being worked on.
 

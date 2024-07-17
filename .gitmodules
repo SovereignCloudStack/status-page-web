@@ -1,3 +1,6 @@
 [submodule "status-page-githubprojects"]
 	path = status-page-githubprojects
 	url = https://github.com/SovereignCloudStack/status-page-githubprojects.git
+[submodule "external/status-page-openapi"]
+	path = external/status-page-openapi
+	url = https://github.com/SovereignCloudStack/status-page-openapi.git

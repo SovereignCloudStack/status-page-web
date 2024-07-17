@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { FIncident } from '../model/frontend/incident';
+import { Incident } from 'scs-status-page-api';
 import { ReversePipe } from '../reverse.pipe';
 import { RouterModule } from '@angular/router';
 import { UtilService } from '../util.service';
+import { IncidentId } from '../model/base';
 
 @Component({
   selector: 'app-incident-log-list',
@@ -14,7 +15,7 @@ import { UtilService } from '../util.service';
 })
 export class IncidentLogListComponent {
 
-  @Input() data: Map<string, FIncident[]> = new Map();
+  @Input() data: Map<string, [IncidentId, Incident][]> = new Map();
 
   constructor(
     public util: UtilService

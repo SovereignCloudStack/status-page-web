@@ -22,6 +22,7 @@
     "dayjs": "^1.11.10",
     "ngx-cookie-service": "^17.0.1",
     "rxjs": "~7.8.0",
+    "scs-status-page-api": "file:external/status-page-openapi/lib/status-page-api/angular-client/dist/scs-status-page-api-1.1.2.tgz",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.2"
   },

@@ -1,181 +1,181 @@
 import { Injectable } from '@angular/core';
-import { loadComponents } from './model/server/component';
-import { loadIncidents } from './model/server/incident';
 import dayjs from 'dayjs';
 import { HttpClient } from '@angular/common/http';
 import { AppConfigService } from './app-config.service';
 import { BehaviorSubject, Observable, combineLatestWith } from 'rxjs';
-import { FIncident } from './model/frontend/incident';
-import { FComponent } from './model/frontend/component';
 import { DailyStatus } from './model/frontend/daily-status';
-import { loadIncidentUpdates } from './model/server/incident-update';
-import { SPhaseGeneration, loadPhases } from './model/server/phase';
-import { SImpactTypes, loadImpactTypes } from './model/server/impact-types';
+import { Component, ComponentService, Impact, ImpactService, ImpactType, Incident, IncidentService, IncidentUpdate, PhaseList, PhaseService, Severity } from 'scs-status-page-api';
+import { ComponentId, ImpactId, IncidentId, SHORT_DAY_FORMAT, ShortDayString } from './model/base';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
 
-  phaseGenerations: SPhaseGeneration;
-  impactTypes: Map<string, SImpactTypes>;
+  currentDay!: ShortDayString;
 
-  components!: FComponent[];
-  incidentsById!: Map<string, FIncident>;
-  incidentsByDay!: Map<string, FIncident[]>;
-  ongoingIncidents!: Map<string, FIncident[]>;
-  completedIncidents!: Map<string, FIncident[]>;
+  phaseGenerations!: PhaseList;
+  severities!: Severity[];
+  impactTypes!: Map<ImpactId, ImpactType>;
 
-  private loadingFinished: BehaviorSubject<boolean>;
+  components!: Map<ComponentId, Component>;
+  componentAvailability!: Map<ComponentId, number>;
+  componentStatusByDay!: Map<ComponentId, Map<ShortDayString, DailyStatus>>;
+
+  incidents!: Map<IncidentId, Incident>;
+  incidentsByDay!: Map<ShortDayString, [IncidentId, Incident][]>;
+  ongoingIncidents!: Map<ShortDayString, [IncidentId, Incident][]>;
+  completedIncidents!: Map<ShortDayString, [IncidentId, Incident][]>;
+
+  incidentUpdates!: Map<IncidentId, IncidentUpdate[]>;
+
+  private _loadingFinished!: BehaviorSubject<boolean>;
 
   constructor(
     private http: HttpClient,
-    private config: AppConfigService
+    private config: AppConfigService,
+    private comps: ComponentService,
+    private incs: IncidentService,
+    private phas: PhaseService,
+    private imps: ImpactService
   ) {
-    this.phaseGenerations = { generation: 0, phases: [] };
+    this.currentDay = dayjs().format(SHORT_DAY_FORMAT);
+
+    this.phaseGenerations = { phases: [] };
+    this.severities = [];
     this.impactTypes = new Map();
 
-    this.components = [];
-    this.incidentsById = new Map();
+    this.components = new Map();
+    this.componentAvailability = new Map();
+    this.componentStatusByDay = new Map();
+
+    this.incidents = new Map();
     this.incidentsByDay = new Map();
     this.ongoingIncidents = new Map();
     this.completedIncidents = new Map();
 
-    this.loadingFinished = new BehaviorSubject(false);
+    this.incidentUpdates = new Map();
 
-    this.startLoading();
+    this._loadingFinished = new BehaviorSubject(false);
+
+    this.loadData();
   }
 
-  loaded(): Observable<boolean> {
-    return this.loadingFinished.asObservable();
+  get loadingFinished(): Observable<boolean> {
+    return this._loadingFinished.asObservable();
   }
 
   impactTypeName(type: string): string {
     return this.impactTypes.get(type)?.displayName ?? "unknown";
   }
 
-  private addIncidentToMap(
-    map: Map<string, FIncident[]>,
-    incident: FIncident,
-    incidentDate: string
+  private addToMapList<T>(
+    map: Map<string, T[]>,
+    value: T,
+    key: string
   ): void {
-    const list = map.get(incidentDate) ?? [];
-    list.push(incident);
-    map.set(incidentDate, list);
+    const list = map.get(key) ?? [];
+    list.push(value);
+    map.set(key, list);
   }
 
-  private startLoading(): void {
+  private loadData(): void {
+    // TODO Implement test data loading or just remove that feature
+    // Start requests for most data types from API server
+    const phases$ = this.phas.getPhaseList();
+    const severities$ = this.imps.getSeverities();
+    const impactTypes$ = this.imps.getImpactTypes();
+    const components$ = this.comps.getComponents();
 
-    const phases$ = loadPhases(this.http);
-    const impactTypes$ = loadImpactTypes(this.http);
-
-    phases$.pipe(
-      combineLatestWith(impactTypes$)
-    ).subscribe(([phases, impacts]) => {
-      this.phaseGenerations = phases;
-      impacts.forEach(impact => {
-        this.impactTypes.set(impact.id, impact);
-      });
-      this.loadMainData();
-    });
-  }
-
-  private loadMainData(): void {
     // Build map of days and the incidents happening on them
     const currentDate = dayjs();
-    const currentDateStr = currentDate.format("YYYY-MM-DD");
     const startDate = currentDate.subtract(this.config.noOfDays, "days");
     const dateRange: string[] = [];
-    this.incidentsByDay.set(currentDateStr, []);
-    dateRange[this.config.noOfDays - 1] = currentDateStr;
+    this.incidentsByDay.set(this.currentDay, []);
+    dateRange[this.config.noOfDays - 1] = this.currentDay;
     for (let i = 1; i < this.config.noOfDays; i++) {
-      const dateStr = currentDate.subtract(i, "days").format("YYYY-MM-DD");
+      const dateStr = currentDate.subtract(i, "days").format(SHORT_DAY_FORMAT);
       dateRange[this.config.noOfDays - 1 - i] = dateStr;
       this.incidentsByDay.set(dateStr, []);
     }
-    // Start by loading the incidents
-    loadIncidents(this.http, this.config, startDate, currentDate).subscribe(incidentList => {
-      // For each incident, we also load the updates, but this can happen in parallel
-      incidentList.forEach(incident => {
-        const frontendIncident = new FIncident(incident, this.phaseGenerations);
-        loadIncidentUpdates(this.config, incident.id, this.http).subscribe(
-          updateList => updateList.forEach(update => frontendIncident.addUpdate(update))
-        );
-        this.incidentsById.set(incident.id, frontendIncident);
-        // Sort the incident into the map of incidents per day
-        const incidentDate = incident.beganAt.format("YYYY-MM-DD");
-        this.incidentsByDay.get(incidentDate)?.push(frontendIncident);
-        if (frontendIncident.endedAt === null) {
-          // Incident is still ongoing, add it to the appropriate list
-          this.addIncidentToMap(this.ongoingIncidents, frontendIncident, incidentDate);
-        } else {
-          this.addIncidentToMap(this.completedIncidents, frontendIncident, incidentDate);
-        }
-      }
-      );
-      // Once we are done loading all incidents (but not necessarily all updates), load the components
-      loadComponents(this.http, this.config).subscribe(componentList => {
-        componentList.forEach(component => {
-          const frontendComponent = new FComponent(component);
-          this.components.push(frontendComponent);
-          // Create daily data for each component
-          for (const [day, incidents] of this.incidentsByDay) {
-            const dailyData = new DailyStatus(day);
-            for (const incident of incidents) {
-              // Check if the incident affects this component
-              const affectingIncidentReferences = incident.serverSide.affects.filter(c => c.reference === component.id);
-              for (const reference of affectingIncidentReferences) {
-                // We traverse the list twice. In the first traversal, we only update the
-                // incidents. By the end of it, they will have not only all the necessary
-                // references, but the maximum severity amongst the affected components will
-                // also be updated to the correct value.
-                // TODO This whole initialization step could benefit from a cleaner rewite.
-                incident.addAffectedComponent(frontendComponent, reference.severity);
-              }
-              for (const reference of affectingIncidentReferences) { // eslint-disable-line @typescript-eslint/no-unused-vars
-                // NOW we can update the DailyStatus objects without ending up
-                // using incomplete severities, which would happen if we didn't
-                // traverse the list twice or added the incidents to the daily
-                // status BEFORE we updated the incidents themselves.
-                // So, no matter how tempting: Don't refactor this into a single list traversal.
-                dailyData.addIncident(incident);
-              }
-            }
-            frontendComponent.dailyData.set(day, dailyData);
-          }
-          frontendComponent.calculateAvailability();
-        });
-        // Go over the list of components again and handle incidents stretching more than one day
-        this.components.forEach(component => { // eslint-disable-line @typescript-eslint/no-unused-vars
-          const processedIncidents: string[] = [];
-          component.dailyData.forEach((status, day, _) => { // eslint-disable-line @typescript-eslint/no-unused-vars
-            status.activeIncidents.forEach(incident => {
-              if (!processedIncidents.includes(incident.id)) {
-                // Get the number of days between start and end date of the incident.
-                // If it is more than 1, add the incident to all following days
-                // until we have exhausted the number of days of difference.
-                const startDate = dayjs(incident.beganAt.format("YYYY-MM-DD"));
-                const endDate = dayjs(incident.endedAt?.format("YYYY-MM-DD") ?? currentDate);
-                const diff = endDate.diff(startDate, "days");
-                for (let i = 1; i <= diff; i++) {
-                  const updateDate = startDate.add(i, "days");
-                  component.dailyData.get(updateDate.format("YYYY-MM-DD"))?.addIncident(incident);
-                }
-                processedIncidents.push(incident.id);
-              }
-            })
-          });
-          // Update the availability at the very end
-          component.calculateAvailability();
-        })
-        // We are now fully loaded and can display the data
-        this.loadingFinished.next(true);
-        /*
-        console.log(this.incidentsById);
-        console.log(this.incidentsByDay);
-        console.log(this.components);
-        */
+
+    // Start incidents query to complete our data loading
+    const incidents$ = this.incs.getIncidents(
+      this.config.formatQueryDate(startDate),
+      this.config.formatQueryDate(currentDate)
+    );
+
+    // Set up result handling 
+    phases$.pipe(
+      combineLatestWith(severities$, impactTypes$, components$, incidents$)
+    ).subscribe(([phases, severities, impacts, components, incidents]) => {
+      this.phaseGenerations = phases.data;
+      this.severities = severities.data;
+      impacts.data.forEach(impact => {
+        this.impactTypes.set(impact.id, impact);
       });
+      components.data.forEach((comp) => {
+        this.components.set(comp.id, comp);
+        this.componentAvailability.set(comp.id, -1);
+      });
+      incidents.data.forEach(incident => {
+        this.incidents.set(incident.id, incident);
+        const incidentDate = dayjs(incident.beganAt).format(SHORT_DAY_FORMAT);
+        this.incidentsByDay.get(incidentDate)?.push([incident.id, incident]);
+        if (incident.endedAt) {
+          this.addToMapList(this.completedIncidents, [incident.id, incident], incidentDate);
+        } else {
+          this.addToMapList(this.ongoingIncidents, [incident.id, incident], incidentDate);
+        }
+        // Query the updates for this incident, too.
+        const updates$ = this.incs.getIncidentUpdates(incident.id);
+        updates$.subscribe(answer => {
+          const list = this.incidentUpdates.get(incident.id) ?? [];
+          this.incidentUpdates.set(incident.id, list.concat(answer.data));
+          // TODO Mark this one as loaded? So that we can differentiate between
+          // an incident that has all updates retrieved and one that simply has
+          // no updates to retrieve?
+        });
+      });
+      
+      // Set up cross references
+      this.components.forEach((component, componentId, _) => {
+        // Create daily data for each component
+        for (const [day, incidents] of this.incidentsByDay) {
+          const dailyData = new DailyStatus(day);
+          for (const incident of incidents) {
+            // Check if the incident affects this component
+            const affectingImpacts = incident[1].affects?.filter(c => c.reference === componentId) ?? [];
+            for (const impact of affectingImpacts) {
+              dailyData.addIncident(incident[0], incident[1], impact);
+            }
+          }
+          const statusList = this.componentStatusByDay.get(componentId) ?? new Map<ShortDayString, DailyStatus>();
+          statusList.set(day, dailyData);
+          this.componentStatusByDay.set(componentId, statusList);
+        }
+        // Calculate availability of this component
+        this.calculateAvailability(componentId);
+      });
+      // We are now fully loaded and can display the data
+      this._loadingFinished.next(true);
     });
+  }
+
+  private calculateAvailability(component: ComponentId): void {
+    const statusList = this.componentStatusByDay.get(component);
+    if (!statusList) {
+      // TODO Error properly
+      console.log("Found a component with missing daily status list?");
+      return;
+    }
+    let daysWithIncidents = 0;
+    statusList.forEach(day => {
+      if (day.activeIncidents.length > 0) {
+        daysWithIncidents++;
+      }
+    });
+    const availability = (statusList.size - daysWithIncidents) / statusList.size;
+    this.componentAvailability.set(component, availability);
   }
 }

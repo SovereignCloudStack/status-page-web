@@ -98,6 +98,10 @@ export class AppConfigService {
     return this.config.useTestData;
   }
 
+  formatQueryDate(date: Dayjs): string {
+    return date.format(DT_QUERY_FORMAT);
+  }
+
   incidentsUrl(start: Dayjs, end: Dayjs): string {
     if (this.useTestData) {
       return "assets/testdata/incidents.json";

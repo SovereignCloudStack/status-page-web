@@ -6,11 +6,12 @@ import { HeaderComponent } from './header/header.component';
 import { UserSettingsService } from './user-settings.service';
 import { DataService } from './data.service';
 import { SpinnerComponent } from './spinner/spinner.component';
+import { ApiModule } from 'scs-status-page-api';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, FooterComponent, HeaderComponent, SpinnerComponent],
+  imports: [CommonModule, RouterOutlet, FooterComponent, HeaderComponent, SpinnerComponent, ApiModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -26,6 +27,7 @@ export class AppComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private api: ApiModule,
     private data: DataService,
     public userSettings: UserSettingsService,
   ) {
@@ -44,11 +46,12 @@ export class AppComponent implements OnInit {
           this.showAboutSection = true;
         }
       }
-    })
+    });
+    // TODO Set status API server URL here?
   }
 
   ngOnInit(): void {
-    this.data.loaded().subscribe(loadStatus => {
+    this.data.loadingFinished.subscribe(loadStatus => {
       this.loaded = loadStatus;
     });
   }

@@ -32,32 +32,33 @@ You will find a configuration file named `config.json` in the `src/assets` direc
     "longDateFormat": "dddd, Do MMMM YYYY, HH:mm:ss z",
     // Mapping severity values to states and their associated colors
     "severities": {
+        // Maintenance is a special case with a hardcoded severity value of 0
+        "maintenance": {
+            "start": 0,
+            "end": 0,
+            "color": "#50c3a5",
+            "colorblind": "#e1be6a"
+        },
         // Display name of the severity is used as the key
         "operational": {
             // Start value is explicit
-            "start": 0,
+            "start": 1,
             // End value
-            "end": 25,
+            "end": 33,
             // Normal mode color
             // Colors can be specified as in CSS
             "color": "#50c3a5",
             // Color to use for colorblind mode
             "colorblind": "#8ce05d"
         },
-        "maintenance": {
-            "start": 26,
-            "end": 50,
-            "color": "#50c3a5",
-            "colorblind": "#e1be6a"
-        },
         "limited": {
-            "start": 51,
-            "end": 75,
+            "start": 34,
+            "end": 66,
             "color": "#f5c451",
             "colorblind": "#5d3a9b"
         },
         "broken": {
-            "start": 76,
+            "start": 67,
             "end": 100,
             "color": "#ee6a5f",
             "colorblind": "#d62c13"
@@ -65,10 +66,6 @@ You will find a configuration file named `config.json` in the `src/assets` direc
     },
     // Backup color in case an unmapped severity value has been found
     "unknownColor": "lightsteelblue",
-    // Use the test data included in the assets folder instead of querying
-    // a status page API server. This setting is meant to simplyfy development
-    // setups.
-    "useTestData": false
 }
 ```
 
@@ -84,15 +81,13 @@ Build the included `Dockerfile` using `docker` or `podman`. Use the resulting im
 podman run -e STATUS_PAGE_WEB_API_URL="localhost:3000/status" -p 8080:8080 scs-status-page-web
 ```
 
-There is also the `STATUS_PAGE_WEB_USE_TEST_DATA=` environment variable, which you can set to `true` to have the statuspage deliver the status example data included in its `src/assets/testdata` directory. This setting is obviously not meant to be used in production environments, but can be useful to check that the statuspage is running, even if no status API server is available.
-
 **Important:** If you are running the status page technical preview in a way that requires you to have a valid imprint, you need to replace the example imprint in `src/app/imprint/imprint.component.html` with your actual imprint. A mechanism to do so automatically is being worked on.
 
 ## Developing
 
 The status page is using Angular 2. The currently used version is **17.1**. This repository contains a devcontainer setup for VSCode. Using this is the simplest way to set up a development environment.
 
-Once your environment has been set up, you have to customize the application configuration file. Either set the URL to the API server instance you will use or set `useTestData` to `true` to use the test data included under `src/assets/testdata`. Please note that you might have to adapt the datetime values in the included data to make them appear. A system to automatically do so is under consideration. Likewise, a system to separate development and production configuration files is in the works, but has not yet been added.
+Once your environment has been set up, you have to customize the application configuration file. Set the URL to the API server instance you will use.
 
 You can now start the development server using `ng serve` and start modifying the application.
 

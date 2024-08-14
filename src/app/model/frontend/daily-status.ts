@@ -1,31 +1,36 @@
 import dayjs, { Dayjs } from "dayjs";
-import { FIncident } from "./incident";
+import { Impact, Incident } from "../../../external/lib/status-page-api/angular-client";
+import { IncidentId, SHORT_DAY_FORMAT, ShortDayString } from "../base";
 
 export class DailyStatus {
 
-    day: string = "-1";
-    activeIncidents: FIncident[] = [];
-    _topLevelIncident?: FIncident = undefined;
+    day: ShortDayString = "-1";
+    activeIncidents: [IncidentId, Incident][] = [];
+    private _topLevelIncident?: [IncidentId, Incident] = undefined;
+    private _topLevelImpact?: Impact = undefined;
 
     private _severity: number = 0;
 
-    constructor(day: string | Dayjs) {
+    constructor(day: ShortDayString | Dayjs) {
         if (day instanceof dayjs) {
-            this.day = day.format("YYYY-MM-DD");
+            this.day = day.format(SHORT_DAY_FORMAT);
         } else {
-            this.day = <string> day;
+            this.day = <ShortDayString> day;
         }
     }
 
-    addIncident(incident: FIncident) {
-        this.activeIncidents.push(incident);
-        this._severity = Math.max(this._severity, incident.maxSeverity);
+    addIncident(incidentId: IncidentId, incident: Incident, impact: Impact) {
+        this.activeIncidents.push([incidentId, incident]);
+        console.log(`new impact severity: ${impact.severity}`);
+        this._severity = Math.max(this._severity, impact.severity ?? 0);
         if (this._topLevelIncident) {
-            if (this._topLevelIncident.maxSeverity < incident.maxSeverity) {
-                this._topLevelIncident = incident;
+            if ((this._topLevelImpact?.severity ?? 0) < (impact.severity ?? 0)) {
+                this._topLevelIncident = [incidentId, incident];
+                this._topLevelImpact = impact;
             }
         } else {
-            this._topLevelIncident = incident;
+            this._topLevelIncident = [incidentId, incident];
+            this._topLevelImpact = impact;
         }
     }
 
@@ -33,7 +38,7 @@ export class DailyStatus {
         return this._severity;
     }
 
-    get topLevelIncident(): FIncident | undefined {
+    get topLevelIncident(): [IncidentId, Incident] | undefined {
         return this._topLevelIncident;
     }
 }

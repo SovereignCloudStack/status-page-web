@@ -1,10 +1,10 @@
 <section id="api-table">
-    <article *ngFor="let component of data">
+    <article *ngFor="let component of data | keyvalue">
         <div class="api-table-title">
-            <h4>{{ component.displayName }}</h4>
+            <h4>{{ component.value.displayName }}</h4>
             <span class="info">Incidents of the last {{ config.noOfDays }} days</span>
-            <span class="info">Uptime is {{ component.availability | percent: "2.0-1" }}</span>
-            <span class="status-bar" [style]="util.currentStateStyle(component)">{{ util.severityName(component.currentSeverity) }}</span>
+            <span class="info">Uptime is {{ util.componentAvailability(component.key) | percent: "2.0-1" }}</span>
+            <span class="status-bar" [style]="util.currentStateStyle(component.key)">{{ util.severityName(util.currentDaySeverity(component.key)) }}</span>
         </div>
         <table class="api-table">
             <thead>
@@ -15,11 +15,11 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="{{isHidden(day.value)}}" *ngFor="let day of component.dailyData | keyvalue | callback: this.filterDays">
+                <tr class="{{isHidden(day.value)}}" *ngFor="let day of util.dailyStatesForComponent(component.key) | keyvalue | callback: this.filterDays">
                     <th class="day-column">{{ day.value.day }}</th>
                     <td class="state-column"><span class="status-bar" [style]="util.dayStateStyle(day.value)">{{ util.severityName(day.value.overallSeverity) }}</span></td>
                     <td>
-                        <a style="display:block;" [routerLink]="['/incident', incident.id]" *ngFor="let incident of day.value.activeIncidents">{{ incident.displayName }}</a>
+                        <a style="display:block;" [routerLink]="['/incident', incident[0]]" *ngFor="let incident of day.value.activeIncidents">{{ incident[1].displayName }}</a>
                     </td>
                 </tr>
             </tbody>

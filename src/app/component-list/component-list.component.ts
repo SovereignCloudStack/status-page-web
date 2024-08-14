@@ -1,11 +1,13 @@
-import { Component, Input } from '@angular/core';
-import { FComponent } from '../model/frontend/component';
+import { Component as AComponent, Input } from '@angular/core';
+import { Component } from '../../external/lib/status-page-api/angular-client'; 
 import { CommonModule } from '@angular/common';
 import { AppConfigService } from '../app-config.service';
 import { UtilService } from '../util.service';
 import { DailyStatus } from '../model/frontend/daily-status';
+import dayjs from 'dayjs';
+import { ComponentId } from '../model/base';
 
-@Component({
+@AComponent({
   selector: 'app-component-list',
   standalone: true,
   imports: [CommonModule],
@@ -14,7 +16,7 @@ import { DailyStatus } from '../model/frontend/daily-status';
 })
 export class ComponentListComponent {
 
-  @Input() data: FComponent[] = [];
+  @Input() data: Map<ComponentId, Component> = new Map();
 
   constructor(
     public config: AppConfigService,
@@ -23,7 +25,7 @@ export class ComponentListComponent {
 
   dayId(day: DailyStatus): string {
     if (day.topLevelIncident) {
-      const targetDate = day.topLevelIncident.beganAt.format("YYYY-MM-DD");
+      const targetDate = dayjs(day.topLevelIncident[1].beganAt).format("YYYY-MM-DD");
       return `#day-${targetDate}`;
     }
     return `#day-${day.day}`;

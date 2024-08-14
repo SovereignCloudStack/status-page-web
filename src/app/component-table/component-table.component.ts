@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
-import { FComponent } from '../model/frontend/component';
+import { Component as AComponent, Input } from '@angular/core';
+import { Component } from '../../external/lib/status-page-api/angular-client'; 
 import { CommonModule, KeyValue } from '@angular/common';
 import { CallbackPipe } from '../callback.pipe';
 import { DailyStatus } from '../model/frontend/daily-status';
@@ -7,8 +7,9 @@ import { UserSettingsService } from '../user-settings.service';
 import { RouterModule } from '@angular/router';
 import { UtilService } from '../util.service';
 import { AppConfigService } from '../app-config.service';
+import { ComponentId } from '../model/base';
 
-@Component({
+@AComponent({
   selector: 'app-component-table',
   standalone: true,
   imports: [CommonModule, RouterModule, CallbackPipe],
@@ -17,7 +18,7 @@ import { AppConfigService } from '../app-config.service';
 })
 export class ComponentTableComponent {
 
-  @Input() data: FComponent[] = [];
+  @Input() data: Map<ComponentId, Component> = new Map();
   hideOperationalDays: boolean = false;
 
   constructor(

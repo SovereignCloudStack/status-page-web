@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { DataService } from '../data.service';
-import { FIncident } from '../model/frontend/incident';
 import { CommonModule } from '@angular/common';
 import { UtilService } from '../util.service';
 import { ReversePipe } from '../reverse.pipe';
-import { FComponent } from '../model/frontend/component';
+import { Incident, Impact, IncidentUpdate } from '../../external/lib/status-page-api/angular-client';
+import { IncidentId } from '../model/base';
 
 @Component({
   selector: 'app-incident-view',
@@ -16,7 +16,9 @@ import { FComponent } from '../model/frontend/component';
 })
 export class IncidentDetailsViewComponent implements OnInit {
 
-  incident!: FIncident;
+  incidentId!: IncidentId;
+  incident!: Incident;
+  incidentUpdates!: IncidentUpdate[];
 
   constructor(
     private route: ActivatedRoute,
@@ -32,39 +34,42 @@ export class IncidentDetailsViewComponent implements OnInit {
           return;
         }
         const id = params.get("id")!;
-        if (!this.data.incidentsById.has(id)) {
+        if (!this.data.incidents.has(id)) {
           this.router.navigate(["/notfound"]);
           return;
         }
-        this.incident = this.data.incidentsById.get(id)!;
+        this.incidentId = id;
+        this.incident = this.data.incidents.get(id)!;
+        this.incidentUpdates = this.data.incidentUpdates.get(this.incidentId) ?? [];
       });
   }
 
-  impactType(component: FComponent): string {
-    for (const impact of this.incident.serverSide.affects) {
-      if (impact.reference == component.id) {
-        return this.data.impactTypeName(impact.type);
-      }
+  componentName(impact: Impact): string {
+    if (!impact.reference) {
+      console.error(`Found impact without reference to a component on incident ${this.incidentId}`);
+      return "";
     }
-    return "unknown";
+    const component = this.data.components.get(impact.reference);
+    if (!component) {
+      console.error(`No component for impact reference ${impact.reference} found (incident: ${this.incidentId})`);
+      return "";
+    }
+    return "";
   }
 
-  impactSeverity(component: FComponent): string {
-    for (const impact of this.incident.serverSide.affects) {
-      if (impact.reference == component.id) {
-        return `${this.util.severityName(impact.severity)} (${impact.severity})`;
-      }
+  impactType(impact: Impact): string {
+    if (!impact.type) {
+      return "unknown";
     }
-    return "unknown";
+    return this.data.impactTypeName(impact.type);
   }
 
-  is(component: FComponent): number {
-    for (const impact of this.incident.serverSide.affects) {
-      if (impact.reference == component.id) {
-        return impact.severity;
-      }
+  impactSeverity(impact: Impact): string {
+    if (!impact.severity) {
+      console.error(`Found impact without severity value on incident ID ${this.incidentId}`);
+      return "";
     }
-    return -1;
+    return `${this.util.severityName(impact.severity)} (${impact.severity})`;
   }
 
   df = this.util.formatDate.bind(this.util)

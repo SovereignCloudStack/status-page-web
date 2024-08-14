@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Dayjs } from 'dayjs';
 
-const DT_QUERY_FORMAT = "YYYY-MM-DDTHH[%3A]mm[%3A]ss[Z]";
+const DT_QUERY_FORMAT = "YYYY-MM-DDTHH[:]mm[:]ss[Z]";
 
 interface Severity {
   start: number;
@@ -96,6 +96,10 @@ export class AppConfigService {
 
   get useTestData(): boolean {
     return this.config.useTestData;
+  }
+
+  formatQueryDate(date: Dayjs): string {
+    return date.format(DT_QUERY_FORMAT);
   }
 
   incidentsUrl(start: Dayjs, end: Dayjs): string {

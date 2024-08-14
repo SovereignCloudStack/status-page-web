@@ -13,7 +13,7 @@ export const appConfig: ApplicationConfig = {
       provide: Configuration,
       useFactory: () => new Configuration(
         {
-          basePath: "http://localhost:3000",
+          basePath: "http://api.test:8080",
           
         },
       ),

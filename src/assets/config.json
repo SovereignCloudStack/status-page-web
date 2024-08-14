@@ -1,5 +1,5 @@
 {
-    "apiServerUrl": "http://localhost:3000",
+    "apiServerUrl": "http://api.test:8080",
     "noOfDays": 90,
     "dateFormat": "YYYY-MM-DD HH:mm:ss z",
     "longDateFormat": "dddd, Do MMMM YYYY, HH:mm:ss z",

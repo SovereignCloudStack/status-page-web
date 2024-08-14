@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
-import { Component as ScsComponent } from 'scs-status-page-api';
+import { Component as AComponent, Input } from '@angular/core';
+import { Component } from '../../external/lib/status-page-api/angular-client'; 
 import { CommonModule } from '@angular/common';
 import { AppConfigService } from '../app-config.service';
 import { UtilService } from '../util.service';
@@ -7,7 +7,7 @@ import { DailyStatus } from '../model/frontend/daily-status';
 import dayjs from 'dayjs';
 import { ComponentId } from '../model/base';
 
-@Component({
+@AComponent({
   selector: 'app-component-list',
   standalone: true,
   imports: [CommonModule],
@@ -16,7 +16,7 @@ import { ComponentId } from '../model/base';
 })
 export class ComponentListComponent {
 
-  @Input() data: Map<ComponentId, ScsComponent> = new Map();
+  @Input() data: Map<ComponentId, Component> = new Map();
 
   constructor(
     public config: AppConfigService,

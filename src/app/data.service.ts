@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { AppConfigService } from './app-config.service';
 import { BehaviorSubject, Observable, combineLatestWith } from 'rxjs';
 import { DailyStatus } from './model/frontend/daily-status';
-import { Component, ComponentService, Impact, ImpactService, ImpactType, Incident, IncidentService, IncidentUpdate, PhaseList, PhaseService, Severity } from 'scs-status-page-api';
+import { Component, ComponentService, Impact, ImpactService, ImpactType, Incident, IncidentService, IncidentUpdate, PhaseList, PhaseService, Severity } from '../external/lib/status-page-api/angular-client';
 import { ComponentId, ImpactId, IncidentId, SHORT_DAY_FORMAT, ShortDayString } from './model/base';
 
 @Injectable({
@@ -147,6 +147,7 @@ export class DataService {
             // Check if the incident affects this component
             const affectingImpacts = incident[1].affects?.filter(c => c.reference === componentId) ?? [];
             for (const impact of affectingImpacts) {
+              console.log(`Incident ${incident[0]} affects component ${componentId} with severity ${impact.severity}`);
               dailyData.addIncident(incident[0], incident[1], impact);
             }
           }
@@ -159,6 +160,7 @@ export class DataService {
       });
       // We are now fully loaded and can display the data
       this._loadingFinished.next(true);
+      console.log(this.incidents);
     });
   }
 

@@ -1,5 +1,5 @@
 import dayjs, { Dayjs } from "dayjs";
-import { Impact, Incident } from "scs-status-page-api";
+import { Impact, Incident } from "../../../external/lib/status-page-api/angular-client";
 import { IncidentId, SHORT_DAY_FORMAT, ShortDayString } from "../base";
 
 export class DailyStatus {
@@ -21,6 +21,7 @@ export class DailyStatus {
 
     addIncident(incidentId: IncidentId, incident: Incident, impact: Impact) {
         this.activeIncidents.push([incidentId, incident]);
+        console.log(`new impact severity: ${impact.severity}`);
         this._severity = Math.max(this._severity, impact.severity ?? 0);
         if (this._topLevelIncident) {
             if ((this._topLevelImpact?.severity ?? 0) < (impact.severity ?? 0)) {

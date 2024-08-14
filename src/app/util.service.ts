@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AppConfigService } from './app-config.service';
-import dayjs, { Dayjs } from 'dayjs';
-import { FComponent } from './model/frontend/component';
+import dayjs from 'dayjs';
 import { DailyStatus } from './model/frontend/daily-status';
 import { UserSettingsService } from './user-settings.service';
-import { Component, Incident, IncidentUpdate } from 'scs-status-page-api';
+import { Incident, IncidentUpdate } from '../external/lib/status-page-api/angular-client';
 import { DataService } from './data.service';
 import { ComponentId, IncidentId, Severity, ShortDayString } from './model/base';
 
@@ -78,6 +77,7 @@ export class UtilService {
 
   dayStateStyle(day: DailyStatus): string {
     const severityColor = this.severityColor(day.overallSeverity);
+    // console.log(`Style for day ${day.day} of severity ${day.overallSeverity}: ${severityColor}`);
     return `background-color: ${severityColor}`;
   }
 
@@ -120,5 +120,16 @@ export class UtilService {
 
   updatesFor(incidentId: IncidentId): IncidentUpdate[] {
     return this.dataService.incidentUpdates.get(incidentId) ?? [];
+  }
+
+  phaseName(phase?: number): string {
+    console.log(`got phase ${phase} and it is ${(phase ?? 0) >= 0}`);
+    if (phase !== undefined) {
+      if (phase >= 0 && phase < this.dataService.phaseGenerations.phases.length) {
+        return this.dataService.phaseGenerations.phases[phase];
+      }
+      return "unknown phase";
+    }
+    return "unknown phase";
   }
 }

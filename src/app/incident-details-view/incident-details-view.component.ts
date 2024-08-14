@@ -4,8 +4,7 @@ import { DataService } from '../data.service';
 import { CommonModule } from '@angular/common';
 import { UtilService } from '../util.service';
 import { ReversePipe } from '../reverse.pipe';
-import { FComponent } from '../model/frontend/component';
-import { Component as ScsComponent, Incident, Impact, IncidentUpdate } from 'scs-status-page-api';
+import { Incident, Impact, IncidentUpdate } from '../../external/lib/status-page-api/angular-client';
 import { IncidentId } from '../model/base';
 
 @Component({

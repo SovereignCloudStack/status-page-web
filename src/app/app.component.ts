@@ -6,7 +6,7 @@ import { HeaderComponent } from './header/header.component';
 import { UserSettingsService } from './user-settings.service';
 import { DataService } from './data.service';
 import { SpinnerComponent } from './spinner/spinner.component';
-import { ApiModule } from 'scs-status-page-api';
+import { ApiModule } from '../external/lib/status-page-api/angular-client';
 
 @Component({
   selector: 'app-root',

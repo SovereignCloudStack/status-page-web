@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { Incident } from 'scs-status-page-api';
+import { Incident } from '../../external/lib/status-page-api/angular-client'; 
 import { ReversePipe } from '../reverse.pipe';
 import { RouterModule } from '@angular/router';
 import { UtilService } from '../util.service';

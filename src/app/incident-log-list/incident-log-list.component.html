@@ -3,7 +3,7 @@
     <p *ngIf="day.value.length === 0">No incidents occured</p>
     <article id="incident-{{ incident[0] }}" class="incident" *ngFor="let incident of day.value">
         <h4>
-            <span class="incident-status status-unknown">{{ incident[1].phase }}</span>
+            <span class="incident-status status-unknown">{{ util.phaseName(incident[1].phase?.order) }}</span>
             <a class="text-broken"
                 title="Open incident view for this incident"
                 [routerLink]="['/incident', incident[0]]">

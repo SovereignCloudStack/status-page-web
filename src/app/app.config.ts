@@ -3,7 +3,7 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { HttpClientModule } from '@angular/common/http';
-import { Configuration } from 'scs-status-page-api';
+import { Configuration } from '../external/lib/status-page-api/angular-client';
 
 export const appConfig: ApplicationConfig = {
   providers: [

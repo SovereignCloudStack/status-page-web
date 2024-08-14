@@ -66,6 +66,8 @@ You will find a configuration file named `config.json` in the `src/assets` direc
     },
     // Backup color in case an unmapped severity value has been found
     "unknownColor": "lightsteelblue",
+    // A short text to be displayed above the components
+    "aboutText": "This is the status page for the SCS project. It displays incidents impacting any of the important components of this SCS stack."
 }
 ```
 

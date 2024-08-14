@@ -77,7 +77,6 @@ export class UtilService {
 
   dayStateStyle(day: DailyStatus): string {
     const severityColor = this.severityColor(day.overallSeverity);
-    // console.log(`Style for day ${day.day} of severity ${day.overallSeverity}: ${severityColor}`);
     return `background-color: ${severityColor}`;
   }
 
@@ -123,7 +122,6 @@ export class UtilService {
   }
 
   phaseName(phase?: number): string {
-    console.log(`got phase ${phase} and it is ${(phase ?? 0) >= 0}`);
     if (phase !== undefined) {
       if (phase >= 0 && phase < this.dataService.phaseGenerations.phases.length) {
         return this.dataService.phaseGenerations.phases[phase];

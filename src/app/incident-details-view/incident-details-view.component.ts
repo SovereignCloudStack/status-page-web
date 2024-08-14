@@ -54,7 +54,11 @@ export class IncidentDetailsViewComponent implements OnInit {
       console.error(`No component for impact reference ${impact.reference} found (incident: ${this.incidentId})`);
       return "";
     }
-    return "";
+    if (!component.displayName) {
+      console.error(`Component ${impact.reference} has no display name (incident: ${this.incidentId})`);
+      return "";
+    }
+    return component.displayName;
   }
 
   impactType(impact: Impact): string {

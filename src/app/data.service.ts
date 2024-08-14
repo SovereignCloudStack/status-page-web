@@ -147,7 +147,6 @@ export class DataService {
             // Check if the incident affects this component
             const affectingImpacts = incident[1].affects?.filter(c => c.reference === componentId) ?? [];
             for (const impact of affectingImpacts) {
-              console.log(`Incident ${incident[0]} affects component ${componentId} with severity ${impact.severity}`);
               dailyData.addIncident(incident[0], incident[1], impact);
             }
           }
@@ -160,7 +159,6 @@ export class DataService {
       });
       // We are now fully loaded and can display the data
       this._loadingFinished.next(true);
-      console.log(this.incidents);
     });
   }
 

@@ -18,7 +18,7 @@ class Config {
   longDateFormat: string = "dddd, Do MMMM YYYY, HH:mm:ss z";
   severities: Map<string, Severity> = new Map();
   unknownColor: string = "lightsteelblue";
-  useTestData: boolean = false;
+  aboutText: string = "";
 
   constructor() {
     // Add default values to severities map?
@@ -94,8 +94,8 @@ export class AppConfigService {
     return this.config.apiServerUrl;
   }
 
-  get useTestData(): boolean {
-    return this.config.useTestData;
+  get aboutText(): string {
+    return this.config.aboutText;
   }
 
   formatQueryDate(date: Dayjs): string {
@@ -103,26 +103,14 @@ export class AppConfigService {
   }
 
   incidentsUrl(start: Dayjs, end: Dayjs): string {
-    if (this.useTestData) {
-      return "assets/testdata/incidents.json";
-    } else {
-      return `${this.config.apiServerUrl}/incidents?start=${start.utc().format(DT_QUERY_FORMAT)}&end=${end.utc().format(DT_QUERY_FORMAT)}`;
+    return `${this.config.apiServerUrl}/incidents?start=${start.utc().format(DT_QUERY_FORMAT)}&end=${end.utc().format(DT_QUERY_FORMAT)}`;
     }
-  }
 
   incidentUpdateUrl(id: string): string {
-    if (this.useTestData) {
-      return `assets/testdata/updates/updates-${id}.json`;
-    } else {
-      return `${this.config.apiServerUrl}/incidents/${id}/updates`;
-    }
+    return `${this.config.apiServerUrl}/incidents/${id}/updates`;
   }
 
   get componentsUrl(): string {
-    if (this.useTestData) {
-      return "assets/testdata/components.json";
-    } else {
-      return `${this.config.apiServerUrl}/components`;
-    }
+    return `${this.config.apiServerUrl}/components`;
   }
 }

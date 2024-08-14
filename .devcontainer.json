@@ -6,7 +6,7 @@
     "build": {
         "dockerfile": "Devcontainerfile"
     },
-    "image": "localhost/vsc-status-page-web-a984e6b0e5dc9e3426b321c420443cb3e6d83079e4ae9c654cd641b94f371434",
+    //"image": "localhost/vsc-status-page-web-a984e6b0e5dc9e3426b321c420443cb3e6d83079e4ae9c654cd641b94f371434",
     "features": {
         // Prepare the user inside the container
         "ghcr.io/devcontainers/features/common-utils:2": {
@@ -28,13 +28,22 @@
                 "ms-azuretools.vscode-docker",
                 "angular.ng-template",
                 "golang.go",
-                "imgildev.vscode-mustache-snippets"
+                "imgildev.vscode-mustache-snippets",
+                "waderyan.gitblame",
+                "mhutchie.git-graph",
+                "donjayamanne.githistory",
+                "vivaxy.vscode-conventional-commits",
+                "alefragnani.numbered-bookmarks",
+                "adamhartford.vscode-base64"
            ]
         }
     },
-
     // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
     "remoteUser": "codeuser",
     //"workspaceMount": "",
-    "containerUser": "codeuser"
+    "containerUser": "codeuser",
+    "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces/${localWorkspaceFolderBasename},type=bind,Z",
+    "runArgs": [
+        "--userns=keep-id"
+    ]
 }

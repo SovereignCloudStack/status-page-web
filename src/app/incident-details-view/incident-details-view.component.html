@@ -1,5 +1,5 @@
 <a [routerLink]="['/']">&lt;&lt; back to the overview</a>
-<h1><span class="incident-status">{{ incident.phase }}</span> {{ incident.displayName }}</h1>
+<h1><span class="incident-status">{{ util.phaseName(incident.phase?.order) }}</span> {{ incident.displayName }}</h1>
 <div id="incident-dates">
     <span class="faint">{{ df(incident.beganAt) }}</span>
     <span class="faint" *ngIf="incident.endedAt"> → {{ df(incident.endedAt) }}</span>

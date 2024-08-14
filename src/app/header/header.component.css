@@ -13,6 +13,14 @@ header div {
     margin-bottom: .75rem;
 }
 
+#accessibility-options {
+    padding-left: 0;
+}
+
+#accessibility-options input:first-of-type {
+    margin-left: 0;
+}
+
 header div:last-of-type {
     margin-bottom: 0;
 }

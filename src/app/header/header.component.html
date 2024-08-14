@@ -4,7 +4,11 @@
         <!--<button type="button" class="subscribe-btn">Subscribe to Updates</button>-->
     </div>
     <div>
-        <a *ngIf="userSettings.showUserSettings" href="#accessibility-options">Skip to accessibility options</a>
+        <span id="accessibility-options">
+            <input *ngIf="userSettings.showUserSettings" id="colorBlindMode" type="checkbox" [(ngModel)]="userSettings.useColorblindColors" />
+            <label for="colorBlindMode">Colors for colorblind</label>
+        </span>
+        <!--<a *ngIf="userSettings.showUserSettings" href="#accessibility-options">Skip to accessibility options</a>-->
         <span *ngIf="userSettings.showUserSettings">
             <input id="tableMode" type="checkbox" [(ngModel)]="userSettings.useTableDisplay"/>
             <label for="tableMode">Use table display</label>

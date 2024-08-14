@@ -1,5 +1,8 @@
 {
     "apiServerUrl": "${STATUS_PAGE_WEB_API_URL}",
+    "redirectUri": "",
+    "dexId": "",
+    "dexUri": "dex.test:8080",
     "noOfDays": 90,
     "dateFormat": "YYYY-MM-DD HH:mm:ss z",
     "longDateFormat": "dddd, Do MMMM YYYY, HH:mm:ss z",
@@ -30,5 +33,5 @@
         }
     },
     "unknownColor": "lightsteelblue",
-    "useTestData": ${STATUS_PAGE_WEB_USE_TEST_DATA}
+    "aboutText": ""
 }

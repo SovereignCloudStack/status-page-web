@@ -7,6 +7,7 @@ import { UserSettingsService } from './user-settings.service';
 import { DataService } from './data.service';
 import { SpinnerComponent } from './spinner/spinner.component';
 import { ApiModule } from '../external/lib/status-page-api/angular-client';
+import { AppConfigService } from './app-config.service';
 
 @Component({
   selector: 'app-root',
@@ -23,12 +24,13 @@ export class AppComponent implements OnInit {
   showViewModeOptions: boolean = true;
 
   loaded: boolean = false;
-  showAboutSection: boolean = true;
+  _showAboutSection: boolean = true;
 
   constructor(
     private router: Router,
     private api: ApiModule,
     private data: DataService,
+    public appConfig: AppConfigService,
     public userSettings: UserSettingsService,
   ) {
     // Only enable about section as well as accessibility and view options when we 
@@ -40,14 +42,18 @@ export class AppComponent implements OnInit {
       if (e instanceof NavigationEnd) {
         if (e.url != "/" && !e.url.startsWith("/#")) {
           this.userSettings.showUserSettings = false;
-          this.showAboutSection = false;
+          this._showAboutSection = false;
         } else {
           this.userSettings.showUserSettings = true;
-          this.showAboutSection = true;
+          this._showAboutSection = true;
         }
       }
     });
     // TODO Set status API server URL here?
+  }
+
+  get showAboutSection(): boolean {
+    return this._showAboutSection && this.appConfig.aboutText.length > 0;
   }
 
   ngOnInit(): void {

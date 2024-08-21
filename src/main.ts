@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { appConfig } from './app/app.config';
+import { buildAppConfig } from './app/app.config';
 import { AppComponent } from './app/app.component';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -11,5 +11,11 @@ dayjs.extend(timezone);
 dayjs.extend(advformat);
 dayjs.extend(utc);
 
-bootstrapApplication(AppComponent, appConfig)
-  .catch((err) => console.error(err));
+fetch("/assets/config.json")
+  .then((response) => response.json())
+  .then((json) => {
+    bootstrapApplication(AppComponent, buildAppConfig(json))
+    .catch((err) => console.error(err));
+  });
+
+

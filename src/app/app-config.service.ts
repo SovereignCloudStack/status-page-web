@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, InjectionToken } from '@angular/core';
 import { Dayjs } from 'dayjs';
 
 const DT_QUERY_FORMAT = "YYYY-MM-DDTHH[:]mm[:]ss[Z]";
@@ -21,7 +21,30 @@ class Config {
   aboutText: string = "";
 
   constructor() {
-    // Add default values to severities map?
+    this.severities.set("maintenance", {
+    start: 0,
+    end: 0,
+    color: "#50c3a5",
+    colorblind: "#e1be6a"
+    });
+    this.severities.set("operational", {
+    start: 1,
+    end: 33,
+    color: "#50c3a5",
+    colorblind: "#8ce05d"
+    });
+    this.severities.set("limited", {
+    start: 34,
+    end: 66,
+    color: "#f5c451",
+    colorblind: "#5d3a9b"
+    });
+    this.severities.set("broken", {
+    start: 67,
+    end: 100,
+    color: "#ee6a5f",
+    colorblind: "#d62c13"
+    });
   }
 }
 
@@ -32,42 +55,11 @@ export class AppConfigService {
 
   private config: Config = new Config();
 
-  constructor(private http: HttpClient) {
-    http.get<Config>("/assets/config.json").subscribe(c => {
-      // The parsed JSON object has the severity entries as object properties.
-      // Convert them into the map format we expect.
-      c.severities = new Map(Object.entries(c.severities ?? []));
-      // Add default map if none was specified in the config file.
-      // This maps the default severities as defined in the status API server 
-      // to our default colors and states.
-      if (c.severities.size == 0) {
-        c.severities.set("operational", {
-          start: 0,
-          end: 25,
-          color: "#50c3a5",
-          colorblind: "#8ce05d"
-        });
-        c.severities.set("maintenance", {
-          start: 26,
-          end: 50,
-          color: "#50c3a5",
-          colorblind: "#e1be6a"
-        });
-        c.severities.set("limited", {
-          start: 51,
-          end: 75,
-          color: "#f5c451",
-          colorblind: "#5d3a9b"
-        });
-        c.severities.set("broken", {
-          start: 76,
-          end: 100,
-          color: "#ee6a5f",
-          colorblind: "#d62c13"
-        });
-      }
-      this.config = c;
-    });
+  constructor(@Inject(CONFIG_JSON) private json: any) {
+    // The parsed JSON object has the severity entries as object properties.
+    // Convert them into the map format we expect.
+    json.severities = new Map(Object.entries(json.severities ?? []));
+    this.config = Object.assign(this.config, json);
   }
 
   get noOfDays(): number {
@@ -101,16 +93,6 @@ export class AppConfigService {
   formatQueryDate(date: Dayjs): string {
     return date.format(DT_QUERY_FORMAT);
   }
-
-  incidentsUrl(start: Dayjs, end: Dayjs): string {
-    return `${this.config.apiServerUrl}/incidents?start=${start.utc().format(DT_QUERY_FORMAT)}&end=${end.utc().format(DT_QUERY_FORMAT)}`;
-    }
-
-  incidentUpdateUrl(id: string): string {
-    return `${this.config.apiServerUrl}/incidents/${id}/updates`;
-  }
-
-  get componentsUrl(): string {
-    return `${this.config.apiServerUrl}/components`;
-  }
 }
+
+export const CONFIG_JSON: InjectionToken<any> = new InjectionToken("CONFIG_JSON");

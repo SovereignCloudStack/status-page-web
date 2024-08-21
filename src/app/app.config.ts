@@ -4,21 +4,30 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { HttpClientModule } from '@angular/common/http';
 import { Configuration } from '../external/lib/status-page-api/angular-client';
+import { AppConfigService, CONFIG_JSON } from './app-config.service';
 
-export const appConfig: ApplicationConfig = {
-  providers: [
-    provideRouter(routes),
-    importProvidersFrom(HttpClientModule),
-    {
-      provide: Configuration,
-      useFactory: () => new Configuration(
-        {
-          basePath: "http://api.test:8080",
-          
+export function buildAppConfig(jsonConfig: any): ApplicationConfig {
+  return {
+    providers: [
+      provideRouter(routes),
+      importProvidersFrom(HttpClientModule),
+      {
+        provide: CONFIG_JSON,
+        useValue: jsonConfig
+      },
+      {
+        provide: Configuration,
+        useFactory: (appConfig: AppConfigService) => {
+          return new Configuration(
+          {
+            basePath: appConfig.apiServerUrl,
+            
+          })
         },
-      ),
-      deps: [],
-      multi: false
-    }
-  ]
-};
+        deps: [AppConfigService],
+        multi: false
+      }
+    ]
+  };
+}
+

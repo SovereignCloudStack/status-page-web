@@ -22,7 +22,13 @@ You will find a configuration file named `config.json` in the `src/assets` direc
 {
     // The URL to the status page API server
     "apiServerUrl": "",
-    // Number of days to retrieve data for
+    // TODO
+    "redirectUrl": "${STATUS_PAGE_REDIRECT_URL}",
+    // URL to your Dex instance
+    "dexUrl": "${STATUS_PAGE_DEX_URL}",
+    // Your Dex ID
+    "dexId": "${STATUS_PAGE_DEX_ID}",
+    // Number of days to retrieve data for (we suggest not changing this)
     "noOfDays": 90,
     // The date format used for most dates displayed on the page
     // All date formats use the formatting specified by dayjs: https://day.js.org/docs/en/display/format

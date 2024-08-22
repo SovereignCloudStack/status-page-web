@@ -1,6 +1,6 @@
 import dayjs, { Dayjs } from "dayjs";
-import { Impact, Incident } from "../../../external/lib/status-page-api/angular-client";
-import { IncidentId, SHORT_DAY_FORMAT, ShortDayString } from "../base";
+import { Impact, Incident } from "../../external/lib/status-page-api/angular-client";
+import { IncidentId, SHORT_DAY_FORMAT, ShortDayString } from "./base";
 
 export class DailyStatus {
 

@@ -3,7 +3,7 @@ import { Component } from '../../external/lib/status-page-api/angular-client';
 import { CommonModule } from '@angular/common';
 import { AppConfigService } from '../app-config.service';
 import { UtilService } from '../util.service';
-import { DailyStatus } from '../model/frontend/daily-status';
+import { DailyStatus } from '../model/daily-status';
 import dayjs from 'dayjs';
 import { ComponentId } from '../model/base';
 

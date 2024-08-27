@@ -109,7 +109,7 @@
 @property --link-color {
     syntax: "<color>";
     inherits: false;
-    initial-value: 	#0089c4;
+    initial-value: 	#0089c4;                        
 }
 
 @property --line-color {
@@ -118,16 +118,16 @@
     initial-value: 	#9e9e9e;
 }
 
-@property --clickable-row-color {
+@property --odd-row-color {
     syntax: "<color>";
     inherits: false;
     initial-value: 	#ffffff;
 }
 
-@property --clickable-row-color-hover {
+@property --even-row-color {
     syntax: "<color>";
     inherits: false;
-    initial-value: 	beige;
+    initial-value: 	whitesmoke;
 }
 
 @font-face {
@@ -180,8 +180,8 @@
     --border-color: #e9ecef;
     --link-color: 	#0089c4;
     --line-color: #9e9e9e;
-    --clickable-row-color: #fff;
-    --clickable-row-color-hover: beige;
+    --odd-row-color: #fff;
+    --even-row-color: whitesmoke;
 }
 
 body {

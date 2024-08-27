@@ -1,8 +1,4 @@
-import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable, InjectionToken } from '@angular/core';
-import { Dayjs } from 'dayjs';
-
-const DT_QUERY_FORMAT = "YYYY-MM-DDTHH[:]mm[:]ss[Z]";
 
 interface Severity {
   start: number;
@@ -13,6 +9,9 @@ interface Severity {
 
 class Config {
   apiServerUrl: string = "";
+  redirectUrl: string = "";
+  dexUrl: string = "";
+  dexId: string = "";
   noOfDays: number = 90;
   dateFormat: string = "YYYY-MM-DD HH:mm:ss z";
   longDateFormat: string = "dddd, Do MMMM YYYY, HH:mm:ss z";
@@ -86,12 +85,20 @@ export class AppConfigService {
     return this.config.apiServerUrl;
   }
 
-  get aboutText(): string {
-    return this.config.aboutText;
+  get redirectUrl(): string {
+    return this.config.redirectUrl;
   }
 
-  formatQueryDate(date: Dayjs): string {
-    return date.format(DT_QUERY_FORMAT);
+  get dexUrl(): string {
+    return this.config.dexUrl;
+  }
+
+  get dexId(): string {
+    return this.config.dexId;
+  }
+
+  get aboutText(): string {
+    return this.config.aboutText;
   }
 }
 

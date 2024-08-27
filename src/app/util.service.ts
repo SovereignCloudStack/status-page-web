@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AppConfigService } from './app-config.service';
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import { DailyStatus } from './model/daily-status';
 import { UserSettingsService } from './user-settings.service';
 import { Incident, IncidentUpdate } from '../external/lib/status-page-api/angular-client';
@@ -18,16 +18,16 @@ export class UtilService {
     private dataService: DataService
   ) { }
 
-  formatDate(dt: string | null | undefined): string {
+  formatDate(dt: string | null | undefined): string | null {
     if (!dt) {
-      return "";
+      return null;
     }
     return dayjs(dt).format(this.config.dateFormat);
   }
 
-  formatLongDate(dt: string | null | undefined): string {
+  formatLongDate(dt: string | null | undefined): string | null {
     if (!dt) {
-      return "";
+      return null;
     }
     return dayjs(dt).format(this.config.longDateFormat);
   }
@@ -129,5 +129,16 @@ export class UtilService {
       return "unknown phase";
     }
     return "unknown phase";
+  }
+
+  componentName(componentId?: ComponentId): string {
+    if (componentId !== undefined) {
+      let component = this.dataService.components.get(componentId);
+      if (component) {
+        return component.displayName ?? "component missing name";
+      }
+      return "component not found";
+    }
+    return "unknown component";
   }
 }

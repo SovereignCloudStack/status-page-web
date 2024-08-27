@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import dayjs from 'dayjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { AppConfigService } from './app-config.service';
 import { BehaviorSubject, Observable, combineLatestWith } from 'rxjs';
 import { DailyStatus } from './model/daily-status';
 import { Component, ComponentService, Impact, ImpactService, ImpactType, Incident, IncidentService, IncidentUpdate, PhaseList, PhaseService, Severity } from '../external/lib/status-page-api/angular-client';
-import { ComponentId, ImpactId, IncidentId, SHORT_DAY_FORMAT, ShortDayString } from './model/base';
+import { ComponentId, formatQueryDate, ImpactId, IncidentId, SHORT_DAY_FORMAT, ShortDayString } from './model/base';
 
 @Injectable({
   providedIn: 'root'
@@ -37,10 +37,17 @@ export class DataService {
     private comps: ComponentService,
     private incs: IncidentService,
     private phas: PhaseService,
-    private imps: ImpactService
+    private imps: ImpactService,
   ) {
     this.currentDay = dayjs().format(SHORT_DAY_FORMAT);
 
+    this._loadingFinished = new BehaviorSubject(false);
+
+    this.prepareLoading();
+    this.loadData();
+  }
+
+  private prepareLoading() {
     this.phaseGenerations = { phases: [] };
     this.severities = [];
     this.impactTypes = new Map();
@@ -55,10 +62,6 @@ export class DataService {
     this.completedIncidents = new Map();
 
     this.incidentUpdates = new Map();
-
-    this._loadingFinished = new BehaviorSubject(false);
-
-    this.loadData();
   }
 
   get loadingFinished(): Observable<boolean> {
@@ -67,6 +70,10 @@ export class DataService {
 
   impactTypeName(type: string): string {
     return this.impactTypes.get(type)?.displayName ?? "unknown";
+  }
+
+  updateIncident(id: IncidentId, incident: Incident) : Observable<HttpResponse<any>> {
+    return this.incs.updateIncident(id, incident);
   }
 
   private addToMapList<T>(
@@ -101,8 +108,8 @@ export class DataService {
 
     // Start incidents query to complete our data loading
     const incidents$ = this.incs.getIncidents(
-      this.config.formatQueryDate(startDate),
-      this.config.formatQueryDate(currentDate)
+      formatQueryDate(startDate),
+      formatQueryDate(currentDate)
     );
 
     // Set up result handling 

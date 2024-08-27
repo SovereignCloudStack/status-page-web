@@ -4,7 +4,7 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { AppConfigService } from './app-config.service';
 import { BehaviorSubject, Observable, combineLatestWith } from 'rxjs';
 import { DailyStatus } from './model/daily-status';
-import { Component, ComponentService, Impact, ImpactService, ImpactType, Incident, IncidentService, IncidentUpdate, PhaseList, PhaseService, Severity } from '../external/lib/status-page-api/angular-client';
+import { Component, ComponentService, IdField, Impact, ImpactService, ImpactType, Incident, IncidentService, IncidentUpdate, PhaseList, PhaseService, Severity } from '../external/lib/status-page-api/angular-client';
 import { ComponentId, formatQueryDate, ImpactId, IncidentId, SHORT_DAY_FORMAT, ShortDayString } from './model/base';
 
 @Injectable({
@@ -72,8 +72,12 @@ export class DataService {
     return this.impactTypes.get(type)?.displayName ?? "unknown";
   }
 
-  updateIncident(id: IncidentId, incident: Incident) : Observable<HttpResponse<any>> {
-    return this.incs.updateIncident(id, incident);
+  createIncident(incident: Incident): Observable<HttpResponse<IdField>> {
+    return this.incs.createIncident(incident, "response");
+  }
+
+  updateIncident(id: IncidentId, incident: Incident): Observable<HttpResponse<any>> {
+    return this.incs.updateIncident(id, incident, "response");
   }
 
   private addToMapList<T>(

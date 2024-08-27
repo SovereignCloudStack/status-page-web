@@ -5,8 +5,8 @@ import { DataService } from '../data.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faPenToSquare, faTrashCan, faSquarePlus, faFloppyDisk, faXmarkCircle } from '@fortawesome/free-regular-svg-icons';
 import { UtilService } from '../util.service';
-import { Impact, Incident } from '../../external/lib/status-page-api/angular-client';
-import dayjs, { Dayjs } from 'dayjs';
+import { Incident } from '../../external/lib/status-page-api/angular-client';
+import dayjs from 'dayjs';
 import { formatQueryDate } from '../model/base';
 import { SpinnerComponent } from '../spinner/spinner.component';
 
@@ -93,14 +93,23 @@ export class ManagementViewComponent {
   }
 
   createNewIncident() {
-
+    // TODO Check for missing fields
+    this.editingIncident.displayName = this.inputIncidentName.nativeElement.value;
+    this.editingIncident.description = this.inputIncidentDescription.nativeElement.value;
+    this.editingIncident.beganAt = formatQueryDate(dayjs(this.inputIncidentStartDate.nativeElement.value).utc());
+    if (this.inputIncidentEndDate.nativeElement.value) {
+      this.editingIncident.endedAt = formatQueryDate(dayjs(this.inputIncidentEndDate.nativeElement.value).utc());
+    }
+    this.waitSpinnerDialog.nativeElement.showModal();
+    this.data.createIncident(this.editingIncident).subscribe((response) => {
+      console.log(`Creation attempt of incident was okay: ${response.ok}, gave ID ${response.body}`); 
+      this.editingIncident = {};
+      this.editingIncidentId = "";
+      this.waitSpinnerDialog.nativeElement.close();
+    });
   }
 
   saveChanges() {
-    if (!this.editingIncident) {
-      console.error("why is this null?");
-      return;
-    }
     // TODO Check for missing fields
     this.editingIncident.displayName = this.inputIncidentName.nativeElement.value;
     this.editingIncident.description = this.inputIncidentDescription.nativeElement.value;
@@ -111,6 +120,8 @@ export class ManagementViewComponent {
     this.waitSpinnerDialog.nativeElement.showModal();
     this.data.updateIncident(this.editingIncidentId, this.editingIncident).subscribe((response) => {
       console.log(`Update attempt of incident ${this.editingIncidentId} was okay: ${response.ok}`); 
+      this.editingIncident = {};
+      this.editingIncidentId = "";
       this.waitSpinnerDialog.nativeElement.close();
     });
   }
@@ -125,6 +136,17 @@ export class ManagementViewComponent {
     this.addComponentDialog.nativeElement.showModal();
   }
 
+  checkValidIncidentName(event: any) {
+    let displayName = event.target.value;
+    if (displayName == "") {
+        this.errorMessage = "The incident's display name cannot be empty";
+        this.inputIsFine = false;
+        return;
+    }
+    this.errorMessage = "";
+    this.inputIsFine = true;
+  }
+
   checkValidReference(event: any) {
     let reference = event.target.value;
     for (let impact of this.editingIncident.affects ?? []) {
@@ -133,6 +155,17 @@ export class ManagementViewComponent {
         this.inputIsFine = false;
         return;
       }
+    }
+    this.errorMessage = "";
+    this.inputIsFine = true;
+  }
+
+  checkValidSeverity(event: any) {
+    let severity = event.target.valueAsNumber;
+    if (severity < 0 || severity > 100) {
+      this.errorMessage = "The severity must be a value between 0 and 100";
+      this.inputIsFine = false;
+      return;
     }
     this.errorMessage = "";
     this.inputIsFine = true;
@@ -149,7 +182,7 @@ export class ManagementViewComponent {
     // TODO Check for missing fields
     this.editingIncident.affects.push({
       reference: this.inputAddComponentSelect.nativeElement.value,
-      severity: this.inputAddComponentSeverity.nativeElement.valueAsNumber,
+      severity: Math.max(0, Math.min(100, this.inputAddComponentSeverity.nativeElement.valueAsNumber)),
       type: this.inputAddComponentType.nativeElement.value,
     });
     this.addComponentDialog.nativeElement.close();

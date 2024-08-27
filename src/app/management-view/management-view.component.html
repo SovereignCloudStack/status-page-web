@@ -34,7 +34,7 @@
     <h1 *ngIf="isNewIncident()">Creating new Incident</h1>
     <form>
             <label for="inputIncidentName">Display Name</label>
-            <input type="text" #inputIncidentName id="inputIncidentName" name="inputIncidentName" [value]="editingIncident.displayName">
+            <input type="text" #inputIncidentName id="inputIncidentName" name="inputIncidentName" [value]="editingIncident.displayName" (change)="checkValidIncidentName($event)">
             <label for="inputIncidentDescription">Description</label>
             <textarea rows="4" #inputIncidentDescription id="inputIncidentDescription" name="inputIncidentDescription" [value]="editingIncident.description"></textarea>
             <label for="inputIncidentStartDate">Start Date</label>
@@ -57,34 +57,26 @@
             <select #inputIncidentPhase id="inputIncidentPhase" name="inputIncidentPhase">
                 <option *ngFor="let phase of data.phaseGenerations.phases">{{ phase }}</option>
             </select>
-            <!--
+            <label>Impacted Components</label>
+            <div class="subform">
+                <select id="inputIncidentImpact" name="inputIncidentImpact" class="stretch">
+                    <option *ngFor="let impact of editingIncident.affects" value="{{ impact.reference }}">{{ util.componentName(impact.reference) }} (Sev. {{ impact.severity }})</option>
+                </select>
+                <button type="button" (click)="openAddAffectedComponentDialog()"><fa-icon [icon]="iconAddUpdate"></fa-icon></button>
+                <button type="button" class="dangerous"><fa-icon [icon]="iconDeleteUpdate"></fa-icon></button>
+            </div>
             <label>Updates</label>
             <div class="subform">
                 <select id="inputIncidentUpdate" name="inputIncidentUpdate" class="stretch">
                     <option *ngFor="let update of data.incidentUpdates.get(editingIncidentId)">{{ update.displayName }}</option>
                 </select>
                 <button type="button"><fa-icon [icon]="iconAddUpdate"></fa-icon></button>
-                <button type="button"><fa-icon [icon]="iconDeleteUpdate"></fa-icon></button>
-                <label for="inputIncidentUpdateName">Display Name</label>
-                <input type="text" id="inputIncidentUpdateName" name="inputIncidentUpdateName">
-                <label for="inputIncidentUpdateDate">When</label>
-                <input readonly
-                    type="datetime-local" 
-                    id="inputIncidentUpdateDate"
-                    name="inputIncidentUpdateDate"
-                    value="{{ formatDateTime(editingIncident?.beganAt) }}"
-                >
-            </div>
-            -->
-            <label>Impacted Components</label>
-            <div class="subform">
-                <select id="inputIncidentImpact" name="inputIncidentImpact" class="stretch">
-                    <option *ngFor="let impact of editingIncident.affects">{{ util.componentName(impact.reference) }}</option>
-                </select>
-                <button type="button" (click)="openAddAffectedComponentDialog()"><fa-icon [icon]="iconAddUpdate"></fa-icon></button>
                 <button type="button" class="dangerous"><fa-icon [icon]="iconDeleteUpdate"></fa-icon></button>
             </div>
     </form>
+    <div [class]="inputIsFine ? 'hidden-border' : 'danger-border'">
+        <p class="error-message">{{ errorMessage }}</p>
+    </div>
     <div class="dialog-controls">
         <button type="button" (click)="saveChanges()" *ngIf="!isNewIncident()" [disabled]="!inputIsFine"><fa-icon [icon]="iconSaveChanges"></fa-icon><span>Save Changes</span></button>
         <button type="button" (click)="createNewIncident()" *ngIf="isNewIncident()" [disabled]="!inputIsFine"><fa-icon [icon]="iconNewIncident"></fa-icon><span>Create Incident</span></button>
@@ -104,7 +96,16 @@
             <option *ngFor="let impactType of data.impactTypes | keyvalue" value="{{ impactType.key }}">{{ impactType.value.displayName}}</option>
         </select>
         <label for="inputAddComponentSeverity">Severity</label>
-        <input #inputAddComponentSeverity type="number" id="inputAddComponentSeverity" name="inputAddComponentSeverity" min="0" max="100" [defaultValue]="50">
+        <input 
+            #inputAddComponentSeverity
+            type="number"
+            id="inputAddComponentSeverity"
+            name="inputAddComponentSeverity"
+            min="0"
+            max="100"
+            [defaultValue]="50"
+            (change)="checkValidSeverity($event)"
+        >
     </form>
     <div [class]="inputIsFine ? 'hidden-border' : 'danger-border'">
         <p class="error-message">{{ errorMessage }}</p>

@@ -22,7 +22,7 @@ You will find a configuration file named `config.json` in the `src/assets` direc
 {
     // The URL to the status page API server
     "apiServerUrl": "",
-    // TODO
+    // URL Dex redirects to after code retrieval
     "redirectUrl": "${STATUS_PAGE_REDIRECT_URL}",
     // URL to your Dex instance
     "dexUrl": "${STATUS_PAGE_DEX_URL}",
@@ -77,7 +77,7 @@ You will find a configuration file named `config.json` in the `src/assets` direc
 }
 ```
 
-If you use a in which there is only one API server with a static URL you already know, you can replace the API server URL with it. Either way, you will need to adapt the severity mapping to your setup. For an explanation of severity values, refer to [this documentation page](https://docs.scs.community/standards/scs-0402-v1-status-page-openapi-spec-decision#severity).
+If you use a development enfironment in which there is only one API server with a static URL you already know, you can replace the API server URL with it. Either way, you will need to adapt the severity mapping to your setup. For an explanation of severity values, refer to [this documentation page](https://docs.scs.community/standards/scs-0402-v1-status-page-openapi-spec-decision#severity).
 
 **Please note that the configuration file may still be subject to changes over the course of the preview stage.**
 
@@ -95,7 +95,27 @@ podman run -e STATUS_PAGE_WEB_API_URL="localhost:3000/status" -p 8080:8080 scs-s
 
 The status page is using Angular 2. The currently used version is **17.1**. This repository contains a devcontainer setup for VSCode. Using this is the simplest way to set up a development environment.
 
-Once your environment has been set up, you have to customize the application configuration file. Set the URL to the API server instance you will use.
+We suggest using the local KinD deployment of our [status-page-deployment](https://github.com/SovereignCloudStack/status-page-deployment/) project to create a local development environment. It contains not only an API server, but also a Dex instance to allow for authorization against providers such as Github (though currently configured to do so for the SCS project on Github). The included reverse proxy makes the API server, Dex instance and other assorted pieces available under `api.localhost:8080`, `dex.localhost:8080`, etc.
+
+Once your environment has been set up, you have to create and customize the `config.json` file in this repo. Copy the included `config.tmpl.json` and replace all variables with the proper values. If you're using our provided KinD deployment, these will be as follows:
+
+```json5
+"apiServerUrl": "http://api.localhost:8080",
+"redirectUrl": "http://localhost:4200/login",
+"dexUrl": "http://dex.localhost:8080",
+"dexId": "status-page-web",
+```
+
+You will also have to modify the files of the KinD deployment itself as follows: 
+
+- `kubernetes/environments/kind/api/api.env`
+  - add `http://localhost:4200` to the `STATUS_PAGE_SERVER_ALLOWED_ORIGINS` variable, if not already in place.
+- `kubernetes/environments/kind/dex/config.yaml`
+  - add the property `allowedOrigins` to the `web` property with a single list entry: `http://localhost:4200`
+- `a/kubernetes/environments/kind/web/web.env`
+  - replace the value of `STATUS_PAGE_WEB_OIDC_REDIRECT_URI` with `http://localhost:4200/login`
+
+Follow the README of the deployment project to start the KinD environment.
 
 You can now start the development server using `ng serve` and start modifying the application.
 

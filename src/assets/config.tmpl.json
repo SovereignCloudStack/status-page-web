@@ -33,5 +33,6 @@
         }
     },
     "unknownColor": "lightsteelblue",
-    "aboutText": ""
+    "aboutText": "",
+    "maintenancePreviewDays": ${STATUS_PAGE_WEB_MAINTENANCE_PREVIEW_DAYS}
 }

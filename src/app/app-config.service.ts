@@ -18,6 +18,7 @@ class Config {
   severities: Map<string, Severity> = new Map();
   unknownColor: string = "lightsteelblue";
   aboutText: string = "";
+  maintenancePreviewDays: number = 30;
 
   constructor() {
     this.severities.set("maintenance", {
@@ -99,6 +100,14 @@ export class AppConfigService {
 
   get aboutText(): string {
     return this.config.aboutText;
+  }
+
+  get maintenancePreviewDays(): number {
+    return this.config.maintenancePreviewDays;
+  }
+
+  formatQueryDate(date: Dayjs): string {
+    return date.format(DT_QUERY_FORMAT);
   }
 }
 

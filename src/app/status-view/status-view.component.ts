@@ -6,11 +6,12 @@ import { IncidentLogComponent } from '../incident-log/incident-log.component';
 import { ComponentListComponent } from '../component-list/component-list.component';
 import { UserSettingsService } from '../user-settings.service';
 import { ComponentTableComponent } from '../component-table/component-table.component';
+import { MaintenanceOverviewComponent } from '../maintenance-overview/maintenance-overview.component';
 
 @Component({
   selector: 'app-status-view',
   standalone: true,
-  imports: [CommonModule, SpinnerComponent, IncidentLogComponent, ComponentListComponent, ComponentTableComponent],
+  imports: [CommonModule, SpinnerComponent, IncidentLogComponent, ComponentListComponent, ComponentTableComponent, MaintenanceOverviewComponent],
   templateUrl: './status-view.component.html',
   styleUrl: './status-view.component.css'
 })

@@ -3,9 +3,9 @@ import dayjs from 'dayjs';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { AppConfigService } from './app-config.service';
 import { BehaviorSubject, Observable, combineLatestWith } from 'rxjs';
-import { DailyStatus } from './model/daily-status';
-import { Component, ComponentService, IdField, Impact, ImpactService, ImpactType, Incident, IncidentService, IncidentUpdate, PhaseList, PhaseService, Severity } from '../external/lib/status-page-api/angular-client';
-import { ComponentId, formatQueryDate, ImpactId, IncidentId, SHORT_DAY_FORMAT, ShortDayString } from './model/base';
+import { DailyStatus } from './model/frontend/daily-status';
+import { Component, ComponentService, ImpactService, ImpactType, Incident, IncidentService, IncidentUpdate, PhaseList, PhaseService, Severity } from '../external/lib/status-page-api/angular-client';
+import { ComponentId, ImpactId, IncidentId, SHORT_DAY_FORMAT, ShortDayString } from './model/base';
 
 @Injectable({
   providedIn: 'root'
@@ -116,7 +116,7 @@ export class DataService {
       formatQueryDate(currentDate)
     );
 
-    // Set up result handling 
+    // Set up result handling
     phases$.pipe(
       combineLatestWith(severities$, impactTypes$, components$, incidents$)
     ).subscribe(([phases, severities, impacts, components, incidents]) => {
@@ -148,9 +148,9 @@ export class DataService {
           // no updates to retrieve?
         });
       });
-      
+
       // Set up cross references
-      this.components.forEach((component, componentId, _) => {
+      this.components.forEach((component, componentId) => {
         // Create daily data for each component
         for (const [day, incidents] of this.incidentsByDay) {
           const dailyData = new DailyStatus(day);

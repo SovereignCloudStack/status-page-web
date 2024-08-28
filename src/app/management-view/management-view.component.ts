@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { DataService } from '../data.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faPenToSquare, faTrashCan, faSquarePlus, faFloppyDisk, faXmarkCircle } from '@fortawesome/free-regular-svg-icons';
@@ -9,6 +9,7 @@ import { Incident } from '../../external/lib/status-page-api/angular-client';
 import dayjs from 'dayjs';
 import { formatQueryDate } from '../model/base';
 import { SpinnerComponent } from '../spinner/spinner.component';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
 
 const DT_FORMAT = "YYYY-MM-DDTHH:mm";
 
@@ -63,7 +64,18 @@ export class ManagementViewComponent {
   constructor(
     public data: DataService,
     public util: UtilService,
+    private security: OidcSecurityService,
+    private router: Router
   ) {}
+
+  ngOnInit(): void {
+    this.security.checkAuth().subscribe(response => {
+      if (!response.isAuthenticated) {
+        console.log(`Unauthenticated, potential error: ${response.errorMessage}`);
+        this.router.navigate([""]);
+      }
+    });
+  }
 
   isNewIncident() {
     return this.editingIncidentId == "";

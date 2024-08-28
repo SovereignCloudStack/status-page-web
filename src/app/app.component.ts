@@ -49,7 +49,6 @@ export class AppComponent implements OnInit {
         }
       }
     });
-    // TODO Set status API server URL here?
   }
 
   get showAboutSection(): boolean {

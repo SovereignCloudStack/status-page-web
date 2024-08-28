@@ -3,11 +3,13 @@
         <h5>Accessibility options:</h5>
         <input id="colorBlindMode" type="checkbox" [(ngModel)]="userSettings.useColorblindColors" /><label for="colorBlindMode">Colors for colorblind</label>
     </div>-->
-    <span id="other-links">
-        <a [routerLink]="['/imprint']">Imprint</a>
-        <a [routerLink]="['/cookies']">Cookie Policy</a>
-    </span>
-    <span id="admin-section">
-        <a [routerLink]="['/manage']">Manage Incidents</a>
-    </span>
+    <div id="other-links">
+        <a [routerLink]="['imprint']">Imprint</a>
+        <a [routerLink]="['cookies']">Cookie Policy</a>
+    </div>
+    <div id="admin-section">
+        <a class="auth-link" (click)="login()" *ngIf="!authenticated().isAuthenticated">Login</a>
+        <span id="user-info" *ngIf="authenticated().isAuthenticated">Logged in as {{ userData().userData.name }}</span>
+        <a [routerLink]="['manage']" *ngIf="authenticated().isAuthenticated">Manage Incidents</a>         
+    </div>
 </footer>

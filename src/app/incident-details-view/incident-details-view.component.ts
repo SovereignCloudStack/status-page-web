@@ -30,12 +30,12 @@ export class IncidentDetailsViewComponent implements OnInit {
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
         if (!params.has("id")) {
-          this.router.navigate(["/notfound"]);
+          this.router.navigate(["notfound"]);
           return;
         }
         const id = params.get("id")!;
         if (!this.data.incidents.has(id)) {
-          this.router.navigate(["/notfound"]);
+          this.router.navigate(["notfound"]);
           return;
         }
         this.incidentId = id;

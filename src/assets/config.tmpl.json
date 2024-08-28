@@ -1,8 +1,8 @@
 {
     "apiServerUrl": "${STATUS_PAGE_WEB_API_URL}",
-    "redirectUrl": "${STATUS_PAGE_REDIRECT_URL}",
+    "redirectUrl": "${STATUS_PAGE_WEB_OIDC_REDIRECT_URI}",
     "dexUrl": "${STATUS_PAGE_DEX_URL}",
-    "dexId": "${STATUS_PAGE_DEX_ID}",
+    "dexId": "${STATUS_PAGE_WEB_OIDC_ID}",
     "noOfDays": 90,
     "dateFormat": "YYYY-MM-DD HH:mm:ss z",
     "longDateFormat": "dddd, Do MMMM YYYY, HH:mm:ss z",

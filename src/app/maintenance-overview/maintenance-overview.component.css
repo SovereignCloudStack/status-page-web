@@ -1,0 +1,29 @@
+.maintenance-header> h3 {
+  margin-block-end: 0.5em;
+}
+
+.maintenance-header> p:first-of-type {
+  margin-block-start: 0.5em;
+}
+
+.maintenance-header> p:last-of-type {
+  margin-block-end: 1.5em;
+}
+
+.maintenance-entry {
+  border-left: 1px var(--border-color) solid;
+  border-right: 1px var(--border-color) solid;
+  border-top: 1px var(--border-color) solid;
+  padding: .5rem 1rem;
+}
+
+.maintenance-entry:first-of-type {
+  border-top-left-radius: var(--list-border-radius);
+  border-top-right-radius: var(--list-border-radius);
+}
+
+.maintenance-entry:last-of-type {
+  border-bottom: 1px var(--border-color) solid;
+  border-bottom-left-radius: var(--list-border-radius);
+  border-bottom-right-radius: var(--list-border-radius);
+}

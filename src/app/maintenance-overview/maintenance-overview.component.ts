@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import { AppConfigService } from '../app-config.service';
 import { DataService } from '../data.service';
 import { DatePipe } from '../date.pipe';
+import { formatQueryDate } from '../model/base';
 
 @Component({
   selector: 'app-maintenance-overview',
@@ -27,8 +28,8 @@ export class MaintenanceOverviewComponent implements OnInit {
     const future = currentDate.add(this.config.maintenancePreviewDays, "d");
 
     const incidents = (await firstValueFrom(this.incidentService.getIncidents(
-      this.config.formatQueryDate(currentDate),
-      this.config.formatQueryDate(future)
+      formatQueryDate(currentDate),
+      formatQueryDate(future)
     )))?.data;
 
     this.maintenanceEvents = incidents.filter((incident) => {

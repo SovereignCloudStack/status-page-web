@@ -1,5 +1,8 @@
 {
     "apiServerUrl": "http://api.localhost:8080",
+    "redirectUrl": "http://localhost:4200/login",
+    "dexUrl": "http://dex.localhost:8080",
+    "dexId": "status-page-web",
     "noOfDays": 90,
     "dateFormat": "YYYY-MM-DD HH:mm:ss z",
     "longDateFormat": "dddd, Do MMMM YYYY, HH:mm:ss z",

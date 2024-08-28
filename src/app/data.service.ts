@@ -3,9 +3,9 @@ import dayjs from 'dayjs';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { AppConfigService } from './app-config.service';
 import { BehaviorSubject, Observable, combineLatestWith } from 'rxjs';
-import { DailyStatus } from './model/frontend/daily-status';
-import { Component, ComponentService, ImpactService, ImpactType, Incident, IncidentService, IncidentUpdate, PhaseList, PhaseService, Severity } from '../external/lib/status-page-api/angular-client';
-import { ComponentId, ImpactId, IncidentId, SHORT_DAY_FORMAT, ShortDayString } from './model/base';
+import { DailyStatus } from './model/daily-status';
+import { Component, ComponentService, IdField, ImpactService, ImpactType, Incident, IncidentService, IncidentUpdate, PhaseList, PhaseService, Severity } from '../external/lib/status-page-api/angular-client';
+import { ComponentId, formatQueryDate, ImpactId, IncidentId, SHORT_DAY_FORMAT, ShortDayString } from './model/base';
 
 @Injectable({
   providedIn: 'root'

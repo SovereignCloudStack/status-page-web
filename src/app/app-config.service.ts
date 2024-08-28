@@ -105,10 +105,6 @@ export class AppConfigService {
   get maintenancePreviewDays(): number {
     return this.config.maintenancePreviewDays;
   }
-
-  formatQueryDate(date: Dayjs): string {
-    return date.format(DT_QUERY_FORMAT);
-  }
 }
 
 export const CONFIG_JSON: InjectionToken<any> = new InjectionToken("CONFIG_JSON");

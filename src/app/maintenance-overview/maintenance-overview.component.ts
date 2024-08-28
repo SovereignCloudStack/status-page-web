@@ -20,7 +20,7 @@ export class MaintenanceOverviewComponent implements OnInit {
     private incidentService: IncidentService,
     protected config: AppConfigService,
     protected dataService: DataService
-  ) {};
+  ) {}
 
   async ngOnInit(): Promise<void> {
     const currentDate = dayjs();

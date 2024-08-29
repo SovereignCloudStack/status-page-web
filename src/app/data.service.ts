@@ -91,7 +91,6 @@ export class DataService {
   }
 
   private loadData(): void {
-    // TODO Implement test data loading or just remove that feature
     // Start requests for most data types from API server
     const phases$ = this.phas.getPhaseList();
     const severities$ = this.imps.getSeverities();

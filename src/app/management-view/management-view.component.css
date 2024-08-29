@@ -14,12 +14,17 @@ button {
     font-weight: bold;
     font-size: 1.0rem;
     background-color: var(--main-bg-color);
+    margin-right: 1rem;
 }
 
 button:hover {
     color: var(--main-bg-color);
     background-color: var(--btn-color);
     cursor: pointer;
+}
+
+button:last-child {
+    margin-right: 0;
 }
 
 #incident-list {

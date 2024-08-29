@@ -15,17 +15,6 @@ export function buildAppConfig(jsonConfig: any): ApplicationConfig {
         provide: CONFIG_JSON,
         useValue: jsonConfig
       },
-      {
-        provide: Configuration,
-        useFactory: (appConfig: AppConfigService) => {
-          return new Configuration(
-          {
-            basePath: appConfig.apiServerUrl
-          })
-        },
-        deps: [AppConfigService],
-        multi: false
-      },
       provideAuth({
         loader: {
           provide: StsConfigLoader,
@@ -35,7 +24,7 @@ export function buildAppConfig(jsonConfig: any): ApplicationConfig {
               postLoginRoute: '/home',
               forbiddenRoute: '/forbidden',
               unauthorizedRoute: '/unauthorized',
-              logLevel: LogLevel.Debug,
+              logLevel: LogLevel.Warn,
               historyCleanupOff: true,
               authority: appConfig.dexUrl,
               redirectUrl: appConfig.redirectUrl,
@@ -53,6 +42,17 @@ export function buildAppConfig(jsonConfig: any): ApplicationConfig {
           deps: [AppConfigService]
         },
       }),
+      {
+        provide: Configuration,
+        useFactory: (appConfig: AppConfigService) => {
+          return new Configuration(
+          {
+            basePath: appConfig.apiServerUrl
+          })
+        },
+        deps: [AppConfigService],
+        multi: false
+      },
       provideRouter(routes, withEnabledBlockingInitialNavigation()),
     ]
   };

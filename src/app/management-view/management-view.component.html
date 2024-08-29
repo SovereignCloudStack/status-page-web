@@ -2,6 +2,7 @@
 <h1>Manage Incidents</h1>
 <div id="controls">
     <button type="button" autofocus (click)="editNewIncident()"><fa-icon [icon]="iconNewIncident"></fa-icon><span>New Incident</span></button>
+    <button type="button" autofocus><fa-icon [icon]="iconNewIncident"></fa-icon><span>New Maintenance Event</span></button>
 </div>
 <div id="incident-list">
     <table>
@@ -22,6 +23,32 @@
                 <td class="id-column" title="{{ incident.key }}">{{ incident.key.split("-")[0] }}</td>
                 <td class="control-column">
                     <button type="button" title="Edit this incident" (click)="editExistingIncident(incident.key, incident.value)"><fa-icon [icon]="iconEdit"></fa-icon></button>
+                    <button ngClass="dangerous" type="button" title="Delete this incident"><fa-icon [icon]="iconDelete"></fa-icon></button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<h2>Maintenance Events</h2>
+<div id="maintenance-list">
+    <table>
+        <thead>
+            <tr>
+                <th>Display Name</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>ID</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ngClass="clickable-row" *ngFor="let event of maintenanceEvents">
+                <td>{{ event.displayName }}</td>
+                <td class="date-column">{{ util.formatDate(event.beganAt) }}</td>
+                <td class="date-column">{{ util.formatDate(event.endedAt) ?? "Ongoing"}}</td>
+                <td class="id-column" title="{{ event.id }}">{{ event.id.split("-")[0] }}</td>
+                <td class="control-column">
+                    <button type="button" title="Edit this incident"><fa-icon [icon]="iconEdit"></fa-icon></button>
                     <button ngClass="dangerous" type="button" title="Delete this incident"><fa-icon [icon]="iconDelete"></fa-icon></button>
                 </td>
             </tr>

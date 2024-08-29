@@ -1,15 +1,18 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, Signal, ViewChild } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { DataService } from '../data.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faPenToSquare, faTrashCan, faSquarePlus, faFloppyDisk, faXmarkCircle } from '@fortawesome/free-regular-svg-icons';
 import { UtilService } from '../util.service';
-import { Incident } from '../../external/lib/status-page-api/angular-client';
+import { Incident, IncidentResponseData, IncidentService } from '../../external/lib/status-page-api/angular-client';
 import dayjs from 'dayjs';
 import { formatQueryDate } from '../model/base';
 import { SpinnerComponent } from '../spinner/spinner.component';
-import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { OidcSecurityService, UserDataResult } from 'angular-auth-oidc-client';
+import { firstValueFrom } from 'rxjs';
+import { HttpHeaders } from '@angular/common/http';
+import { AppConfigService } from '../app-config.service';
 
 const DT_FORMAT = "YYYY-MM-DDTHH:mm";
 
@@ -61,19 +64,50 @@ export class ManagementViewComponent {
   @ViewChild("waitSpinnerDialog")
   private waitSpinnerDialog!: ElementRef<HTMLDialogElement>;
 
+  private userData!: Signal<UserDataResult>;
+
+  protected maintenanceEvents?: Array<IncidentResponseData>;
+
   constructor(
     public data: DataService,
     public util: UtilService,
+    private config: AppConfigService,
     private security: OidcSecurityService,
-    private router: Router
+    private router: Router,
+    private incidentService: IncidentService
   ) {}
 
-  ngOnInit(): void {
-    this.security.checkAuth().subscribe(response => {
+  async ngOnInit(): Promise<void> {
+    this.security.checkAuth().subscribe(async response => {
       if (!response.isAuthenticated) {
         console.log(`Unauthenticated, potential error: ${response.errorMessage}`);
         this.router.navigate([""]);
       }
+      this.userData = this.security.userData;
+      const token = await firstValueFrom(this.security.getAccessToken());
+      this.incidentService.configuration.withCredentials = true;
+      this.incidentService.configuration.credentials = {
+        "BearerAuth": token
+      };
+      console.log(`Set token in BearerAuth to ${token}`);         
+    });
+    const currentDate = dayjs();
+    const future = currentDate.add(this.config.maintenancePreviewDays, "d");
+
+    const incidents = (await firstValueFrom(this.incidentService.getIncidents(
+      formatQueryDate(currentDate),
+      formatQueryDate(future)
+    )))?.data;
+
+    this.maintenanceEvents = incidents.filter((incident) => {
+      incident.affects = incident.affects?.filter((affects) => {
+        const maintenanceSeverity = this.config.severities.get('maintenance');
+        const maintenanceSeverityValue = maintenanceSeverity ? maintenanceSeverity.end : 0;
+
+        return affects.severity !== undefined && affects.severity <= maintenanceSeverityValue;
+      });
+
+      return incident.affects !== undefined && incident.affects.length > 0;
     });
   }
 

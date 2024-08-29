@@ -10,8 +10,7 @@ import dayjs from 'dayjs';
 import { formatQueryDate } from '../model/base';
 import { SpinnerComponent } from '../spinner/spinner.component';
 import { OidcSecurityService, UserDataResult } from 'angular-auth-oidc-client';
-import { catchError, firstValueFrom, Observable, of } from 'rxjs';
-import { HttpHeaders, HttpResponse } from '@angular/common/http';
+import { firstValueFrom, Observable, of } from 'rxjs';
 import { AppConfigService } from '../app-config.service';
 
 const DT_FORMAT = "YYYY-MM-DDTHH:mm";
@@ -90,26 +89,6 @@ export class ManagementViewComponent {
         "BearerAuth": token
       };   
     });
-    // TODO Move into shared source file and make use of that
-    // here and in the maintenance-overview component
-    const currentDate = dayjs();
-    const future = currentDate.add(this.config.maintenancePreviewDays, "d");
-
-    const incidents = (await firstValueFrom(this.incidentService.getIncidents(
-      formatQueryDate(currentDate),
-      formatQueryDate(future)
-    )))?.data;
-
-    this.maintenanceEvents = incidents.filter((incident) => {
-      incident.affects = incident.affects?.filter((affects) => {
-        const maintenanceSeverity = this.config.severities.get('maintenance');
-        const maintenanceSeverityValue = maintenanceSeverity ? maintenanceSeverity.end : 0;
-
-        return affects.severity !== undefined && affects.severity <= maintenanceSeverityValue;
-      });
-
-      return incident.affects !== undefined && incident.affects.length > 0;
-    });
   }
 
   isNewIncident() {
@@ -169,7 +148,7 @@ export class ManagementViewComponent {
     this.editingIncident = {};
   }
 
-  handleResponse(o: Observable<any>, dialog: ElementRef<HTMLDialogElement>): void {
+  handleResponse<T>(o: Observable<T>, dialog: ElementRef<HTMLDialogElement>): void {
     o.subscribe({
       next: (value) => {
         this.editingIncident = {};
@@ -183,6 +162,9 @@ export class ManagementViewComponent {
         console.error(err);
         this.waitSpinnerDialog.nativeElement.close();
       },
+      complete: () => {
+        console.log("complete");
+      }
     });
   }
 

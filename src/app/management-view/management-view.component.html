@@ -42,7 +42,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr ngClass="clickable-row" *ngFor="let event of maintenanceEvents">
+            <tr ngClass="clickable-row" *ngFor="let event of data.maintenanceEvents">
                 <td>{{ event.displayName }}</td>
                 <td class="date-column">{{ util.formatDate(event.beganAt) }}</td>
                 <td class="date-column">{{ util.formatDate(event.endedAt) ?? "Ongoing"}}</td>

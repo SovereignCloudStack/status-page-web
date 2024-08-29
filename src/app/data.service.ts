@@ -4,7 +4,7 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { AppConfigService } from './app-config.service';
 import { BehaviorSubject, Observable, combineLatestWith } from 'rxjs';
 import { DailyStatus } from './model/daily-status';
-import { Component, ComponentService, IdField, ImpactService, ImpactType, Incident, IncidentService, IncidentUpdate, PhaseList, PhaseService, Severity } from '../external/lib/status-page-api/angular-client';
+import { Component, ComponentService, IdField, ImpactService, ImpactType, Incident, IncidentResponseData, IncidentService, IncidentUpdate, PhaseList, PhaseService, Severity } from '../external/lib/status-page-api/angular-client';
 import { ComponentId, formatQueryDate, ImpactId, IncidentId, SHORT_DAY_FORMAT, ShortDayString } from './model/base';
 
 @Injectable({
@@ -26,6 +26,8 @@ export class DataService {
   incidentsByDay!: Map<ShortDayString, [IncidentId, Incident][]>;
   ongoingIncidents!: Map<ShortDayString, [IncidentId, Incident][]>;
   completedIncidents!: Map<ShortDayString, [IncidentId, Incident][]>;
+
+  maintenanceEvents!: IncidentResponseData[];
 
   incidentUpdates!: Map<IncidentId, IncidentUpdate[]>;
 
@@ -60,6 +62,8 @@ export class DataService {
     this.incidentsByDay = new Map();
     this.ongoingIncidents = new Map();
     this.completedIncidents = new Map();
+
+    this.maintenanceEvents = [];
 
     this.incidentUpdates = new Map();
   }
@@ -109,16 +113,23 @@ export class DataService {
       this.incidentsByDay.set(dateStr, []);
     }
 
-    // Start incidents query to complete our data loading
+    // Start incidents query
     const incidents$ = this.incs.getIncidents(
       formatQueryDate(startDate),
       formatQueryDate(currentDate)
     );
 
+    // Query maintenance events to complete our data loading
+    const future = currentDate.add(this.config.maintenancePreviewDays, "d");
+    const maintenance$ = this.incs.getIncidents(
+      formatQueryDate(currentDate),
+      formatQueryDate(future)
+    );
+
     // Set up result handling
     phases$.pipe(
-      combineLatestWith(severities$, impactTypes$, components$, incidents$)
-    ).subscribe(([phases, severities, impacts, components, incidents]) => {
+      combineLatestWith(severities$, impactTypes$, components$, incidents$, maintenance$)
+    ).subscribe(([phases, severities, impacts, components, incidents, maintenanceEvents]) => {
       this.phaseGenerations = phases.data;
       this.severities = severities.data;
       impacts.data.forEach(impact => {
@@ -146,6 +157,17 @@ export class DataService {
           // an incident that has all updates retrieved and one that simply has
           // no updates to retrieve?
         });
+      });
+      // Assign list of maintenance events
+      this.maintenanceEvents = maintenanceEvents.data.filter((mEvent) => {
+        mEvent.affects = mEvent.affects?.filter((affects) => {
+          const maintenanceSeverity = this.config.severities.get('maintenance');
+          const maintenanceSeverityValue = maintenanceSeverity ? maintenanceSeverity.end : 0;
+  
+          return affects.severity !== undefined && affects.severity <= maintenanceSeverityValue;
+        });
+  
+        return mEvent.affects !== undefined && mEvent.affects.length > 0;
       });
 
       // Set up cross references

@@ -81,16 +81,15 @@ export class ManagementViewComponent {
 
   async ngOnInit(): Promise<void> {
     this.security.checkAuth().subscribe(async response => {
+      console.log("checkAuth is running");
       if (!response.isAuthenticated) {
         console.log(`Unauthenticated, potential error: ${response.errorMessage}`);
         this.router.navigate([""]);
       }
       this.userData = this.security.userData;
-      const token = await firstValueFrom(this.security.getAccessToken());
-      this.incidentService.configuration.withCredentials = true;
-      this.incidentService.configuration.credentials = {
-        "BearerAuth": token
-      };   
+      const token = await firstValueFrom(this.security.getAccessToken());this.incidentService.configuration.withCredentials = true;
+      this.incidentService.defaultHeaders = this.incidentService.defaultHeaders.append("Authorization", `Bearer ${token}`);
+      console.log("modified default headers");
     });
   }
 
@@ -158,6 +157,7 @@ export class ManagementViewComponent {
     if (this.inputIncidentEndDate.nativeElement.value) {
       this.editingIncident.endedAt = formatQueryDate(dayjs(this.inputIncidentEndDate.nativeElement.value).utc());
     }
+    console.log(this.editingIncident);
     this.waitSpinnerDialog.nativeElement.showModal();
     this.handleResponse(this.data.createIncident(this.editingIncident), this.incidentDialog);
   }

@@ -1,11 +1,13 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -17,17 +19,12 @@ export class LoginComponent {
     private security: OidcSecurityService
   ) {}
 
-  ngOnInit(): void {
-    this.route.queryParamMap.subscribe(params => {
-      if (!params.has("code")) {
-        console.error("URL is missing 'code' param");
-        this.router.navigate(["notfound"]);
-      }
-      this.security.checkAuth().subscribe(response => {
-        this.security.getAccessToken().subscribe(token => {
-          this.router.navigate([""]);
-        });
-      });
-    })
+  waiting: boolean = true;
+  success: boolean = false;
+
+  async ngOnInit(): Promise<void> {
+    let login = await firstValueFrom(this.security.checkAuth());
+    this.waiting = false;
+    this.success = login.isAuthenticated;
   }
 }

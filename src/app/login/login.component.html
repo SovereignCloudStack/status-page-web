@@ -1,1 +1,3 @@
-<p>You've been authorized! Redirecting to the main page...</p>
+<p *ngIf="waiting">Waiting for authorization...</p>
+<p *ngIf="!waiting && success">You've been authorized! Redirecting to the main page...</p>
+<p *ngIf="!waiting && !success">Authorization failed</p>

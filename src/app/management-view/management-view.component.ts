@@ -10,8 +10,8 @@ import dayjs from 'dayjs';
 import { formatQueryDate } from '../model/base';
 import { SpinnerComponent } from '../spinner/spinner.component';
 import { OidcSecurityService, UserDataResult } from 'angular-auth-oidc-client';
-import { firstValueFrom } from 'rxjs';
-import { HttpHeaders } from '@angular/common/http';
+import { catchError, firstValueFrom, Observable, of } from 'rxjs';
+import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { AppConfigService } from '../app-config.service';
 
 const DT_FORMAT = "YYYY-MM-DDTHH:mm";
@@ -88,9 +88,10 @@ export class ManagementViewComponent {
       this.incidentService.configuration.withCredentials = true;
       this.incidentService.configuration.credentials = {
         "BearerAuth": token
-      };
-      console.log(`Set token in BearerAuth to ${token}`);         
+      };   
     });
+    // TODO Move into shared source file and make use of that
+    // here and in the maintenance-overview component
     const currentDate = dayjs();
     const future = currentDate.add(this.config.maintenancePreviewDays, "d");
 
@@ -147,12 +148,7 @@ export class ManagementViewComponent {
       this.editingIncident.endedAt = formatQueryDate(dayjs(this.inputIncidentEndDate.nativeElement.value).utc());
     }
     this.waitSpinnerDialog.nativeElement.showModal();
-    this.data.createIncident(this.editingIncident).subscribe((response) => {
-      console.log(`Creation attempt of incident was okay: ${response.ok}, gave ID ${response.body}`); 
-      this.editingIncident = {};
-      this.editingIncidentId = "";
-      this.waitSpinnerDialog.nativeElement.close();
-    });
+    this.handleResponse(this.data.createIncident(this.editingIncident), this.incidentDialog);
   }
 
   saveChanges() {
@@ -164,18 +160,30 @@ export class ManagementViewComponent {
       this.editingIncident.endedAt = formatQueryDate(dayjs(this.inputIncidentEndDate.nativeElement.value).utc());
     }
     this.waitSpinnerDialog.nativeElement.showModal();
-    this.data.updateIncident(this.editingIncidentId, this.editingIncident).subscribe((response) => {
-      console.log(`Update attempt of incident ${this.editingIncidentId} was okay: ${response.ok}`); 
-      this.editingIncident = {};
-      this.editingIncidentId = "";
-      this.waitSpinnerDialog.nativeElement.close();
-    });
+    this.handleResponse(this.data.updateIncident(this.editingIncidentId, this.editingIncident), this.incidentDialog);
   }
 
   cancelEditing() {
     this.incidentDialog.nativeElement.close();
     this.editingIncidentId = "";
     this.editingIncident = {};
+  }
+
+  handleResponse(o: Observable<any>, dialog: ElementRef<HTMLDialogElement>): void {
+    o.subscribe({
+      next: (value) => {
+        this.editingIncident = {};
+        this.editingIncidentId = "";
+        // TODO Reload data 
+        dialog.nativeElement.close();
+        this.waitSpinnerDialog.nativeElement.close();
+      },
+      error: (err) => {
+        console.error("API request error'ed out:");
+        console.error(err);
+        this.waitSpinnerDialog.nativeElement.close();
+      },
+    });
   }
 
   openAddAffectedComponentDialog() {

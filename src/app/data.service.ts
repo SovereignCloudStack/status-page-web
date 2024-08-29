@@ -72,12 +72,12 @@ export class DataService {
     return this.impactTypes.get(type)?.displayName ?? "unknown";
   }
 
-  createIncident(incident: Incident): Observable<HttpResponse<IdField>> {
-    return this.incs.createIncident(incident, "response");
+  createIncident(incident: Incident): Observable<IdField> {
+    return this.incs.createIncident(incident);
   }
 
-  updateIncident(id: IncidentId, incident: Incident): Observable<HttpResponse<any>> {
-    return this.incs.updateIncident(id, incident, "response");
+  updateIncident(id: IncidentId, incident: Incident): Observable<any> {
+    return this.incs.updateIncident(id, incident);
   }
 
   private addToMapList<T>(

@@ -110,8 +110,8 @@ You will also have to modify the files of the KinD deployment itself as follows:
 
 - `kubernetes/environments/kind/api/api.env`
   - add `http://localhost:4200` to the `STATUS_PAGE_SERVER_ALLOWED_ORIGINS` variable, if not already in place.
-- `kubernetes/environments/kind/dex/config.yaml`
-  - add the property `allowedOrigins` to the `web` property with a single list entry: `http://localhost:4200`
+- `kubernetes/environments/kind/dex/dex.env`
+  - replace the environment variable `DEX_ALLOWED_ORIGINS` with `http://localhost:4200`
 - `a/kubernetes/environments/kind/web/web.env`
   - replace the value of `STATUS_PAGE_WEB_OIDC_REDIRECT_URI` with `http://localhost:4200/login`
 

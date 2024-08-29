@@ -34,9 +34,6 @@ export function buildAppConfig(jsonConfig: any): ApplicationConfig {
               responseType: 'code',
               silentRenew: true,
               useRefreshToken: true,
-              customParamsCodeRequest: {
-                test: "foobar"
-              }
             });
           },
           deps: [AppConfigService]

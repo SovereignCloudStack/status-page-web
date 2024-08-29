@@ -35,6 +35,8 @@ export class ManagementViewComponent {
   editingIncidentId: string = "";
   editingIncident: Incident = {};
 
+  maintenanceEvent: boolean = false;
+
   inputIsFine: boolean = true;
   errorMessage: string = "";
 
@@ -55,17 +57,18 @@ export class ManagementViewComponent {
   private addComponentDialog!: ElementRef<HTMLDialogElement>;
   @ViewChild("inputAddComponentSelect", {static: true})
   private inputAddComponentSelect!: ElementRef<HTMLSelectElement>;
-  @ViewChild("inputAddComponentType", {static: true})
+  @ViewChild("inputAddComponentType", {static: false})
   private inputAddComponentType!: ElementRef<HTMLSelectElement>;
-  @ViewChild("inputAddComponentSeverity", {static: true})
+  @ViewChild("inputAddComponentSeverity", {static: false})
   private inputAddComponentSeverity!: ElementRef<HTMLInputElement>;
+
+  @ViewChild("maintenanceEventDialog", {static: true})
+  private maintenanceEventDialog!: ElementRef<HTMLDialogElement>;
 
   @ViewChild("waitSpinnerDialog")
   private waitSpinnerDialog!: ElementRef<HTMLDialogElement>;
 
   private userData!: Signal<UserDataResult>;
-
-  protected maintenanceEvents?: Array<IncidentResponseData>;
 
   constructor(
     public data: DataService,
@@ -91,11 +94,15 @@ export class ManagementViewComponent {
     });
   }
 
-  isNewIncident() {
+  isNewIncident(): boolean {
     return this.editingIncidentId == "";
   }
 
-  editNewIncident() {
+  isMaintenanceEvent(): boolean {
+    return this.maintenanceEvent;
+  }
+
+  editNewIncident(): void {
     let incident: Incident = {  
       displayName: "",
       description: "",
@@ -111,14 +118,39 @@ export class ManagementViewComponent {
     this.editExistingIncident("", incident);
   }
 
-  editExistingIncident(incidentId: string, incidentToEdit: Incident) {
+  editNewMaintenanceEvent(): void {
+    console.log("called!");
+    let event: Incident = {  
+      displayName: "",
+      description: "",
+      beganAt: formatQueryDate(dayjs().utc()),
+      endedAt: null,
+      phase: {
+        generation: 1,
+        order: 0
+      },
+      affects: [],
+      updates: []
+    };
+    this.editExistingMaintenanceEvent("", event);
+  }
+
+  editExistingIncident(incidentId: string, incidentToEdit: Incident): void {
     this.editingIncidentId = incidentId;
     this.editingIncident = incidentToEdit;
     this.inputPhaseSelect.nativeElement.selectedIndex = this.editingIncident.phase?.order ?? 0;
     this.incidentDialog.nativeElement.showModal();
   }
 
-  createNewIncident() {
+  editExistingMaintenanceEvent(incidentId: string, incidentToEdit: Incident): void {
+    this.editingIncidentId = incidentId;
+    this.editingIncident = incidentToEdit;
+    this.maintenanceEvent = true;
+    //this.inputPhaseSelect.nativeElement.selectedIndex = this.editingIncident.phase?.order ?? 0;
+    this.maintenanceEventDialog.nativeElement.showModal();
+  }
+
+  createNewIncident(): void {
     // TODO Check for missing fields
     this.editingIncident.displayName = this.inputIncidentName.nativeElement.value;
     this.editingIncident.description = this.inputIncidentDescription.nativeElement.value;
@@ -143,7 +175,12 @@ export class ManagementViewComponent {
   }
 
   cancelEditing() {
-    this.incidentDialog.nativeElement.close();
+    if (this.isMaintenanceEvent()) {
+      this.maintenanceEventDialog.nativeElement.close();
+    } else {
+      this.incidentDialog.nativeElement.close();
+    }
+    this.maintenanceEvent = false;
     this.editingIncidentId = "";
     this.editingIncident = {};
   }
@@ -207,6 +244,17 @@ export class ManagementViewComponent {
     this.inputIsFine = true;
   }
 
+  checkValidDate(dateName: string, event: any) {
+    let dateStr = event.target.value;
+    if (!dateStr) {
+      this.errorMessage = `The ${dateName} cannot be empty`;
+      this.inputIsFine = false;
+      return;
+    }
+    this.errorMessage = "";
+    this.inputIsFine = true;
+  }
+
   addAffectedComponent() {
     if (!this.editingIncident) {
       console.error("How can this be null?");
@@ -216,11 +264,19 @@ export class ManagementViewComponent {
       this.editingIncident.affects = [];
     }
     // TODO Check for missing fields
-    this.editingIncident.affects.push({
-      reference: this.inputAddComponentSelect.nativeElement.value,
-      severity: Math.max(0, Math.min(100, this.inputAddComponentSeverity.nativeElement.valueAsNumber)),
-      type: this.inputAddComponentType.nativeElement.value,
-    });
+    if (!this.isMaintenanceEvent()) {
+      this.editingIncident.affects.push({
+        reference: this.inputAddComponentSelect.nativeElement.value,
+        severity: Math.max(0, Math.min(100, this.inputAddComponentSeverity.nativeElement.valueAsNumber)),
+        type: this.inputAddComponentType.nativeElement.value,
+      });
+    } else {
+      this.editingIncident.affects.push({
+        reference: this.inputAddComponentSelect.nativeElement.value,
+        severity: 0,
+        type: this.inputAddComponentType.nativeElement.value,
+      });
+    }
     this.addComponentDialog.nativeElement.close();
     console.log(this.editingIncident);
   }

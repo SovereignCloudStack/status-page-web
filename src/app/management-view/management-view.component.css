@@ -93,6 +93,10 @@ dialog h1 {
     min-width: 35%;
 }
 
+#maintenance-event-dialog {
+    min-width: 45%;
+}
+
 #wait-spinner-dialog {
     text-align: center;
     padding: 2rem;

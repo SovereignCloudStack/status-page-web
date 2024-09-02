@@ -93,8 +93,8 @@ dialog h1 {
     min-width: 35%;
 }
 
-#maintenance-event-dialog {
-    min-width: 45%;
+#create-update-dialog {
+    min-width: 35%;
 }
 
 #wait-spinner-dialog {

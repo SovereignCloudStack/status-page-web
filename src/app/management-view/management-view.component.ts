@@ -5,12 +5,12 @@ import { DataService } from '../data.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faPenToSquare, faTrashCan, faSquarePlus, faFloppyDisk, faXmarkCircle } from '@fortawesome/free-regular-svg-icons';
 import { UtilService } from '../util.service';
-import { Incident, IncidentResponseData, IncidentService } from '../../external/lib/status-page-api/angular-client';
+import { Incident, IncidentService, IncidentUpdate } from '../../external/lib/status-page-api/angular-client';
 import dayjs from 'dayjs';
 import { formatQueryDate } from '../model/base';
 import { SpinnerComponent } from '../spinner/spinner.component';
 import { OidcSecurityService, UserDataResult } from 'angular-auth-oidc-client';
-import { firstValueFrom, Observable, of } from 'rxjs';
+import { firstValueFrom, Observable } from 'rxjs';
 import { AppConfigService } from '../app-config.service';
 
 const DT_FORMAT = "YYYY-MM-DDTHH:mm";
@@ -39,6 +39,12 @@ export class ManagementViewComponent {
   editingIncidentId: string = "";
   editingIncident: Incident = {};
 
+  editingUpdate: IncidentUpdate = {};
+  // Used as a queue to hold any updates we need to process
+  // when saving our changes to an incident.
+  // Use push to add and shift to extract.
+  updatesToProcess: IncidentUpdate[] = [];
+
   maintenanceEvent: boolean = false;
 
   inputIsFine: boolean = true;
@@ -51,7 +57,7 @@ export class ManagementViewComponent {
   @ViewChild("inputIncidentName", {static: true})
   private inputIncidentName!: ElementRef<HTMLInputElement>;
   @ViewChild("inputIncidentDescription", {static: true})
-  private inputIncidentDescription!: ElementRef<HTMLInputElement>;
+  private inputIncidentDescription!: ElementRef<HTMLTextAreaElement>;
   @ViewChild("inputIncidentStartDate", {static: true})
   private inputIncidentStartDate!: ElementRef<HTMLInputElement>;
   @ViewChild("inputIncidentEndDate", {static: true})
@@ -67,6 +73,13 @@ export class ManagementViewComponent {
   private inputAddComponentType!: ElementRef<HTMLSelectElement>;
   @ViewChild("inputAddComponentSeverity", {static: false})
   private inputAddComponentSeverity!: ElementRef<HTMLInputElement>;
+
+  @ViewChild("createUpdateDialog", {static: true})
+  private addUpdateDialog!: ElementRef<HTMLDialogElement>;
+  @ViewChild("inputUpdateName", {static: true})
+  private inputUpdateName!: ElementRef<HTMLInputElement>;
+  @ViewChild("inputUpdateDescription", {static: true})
+  private inputUpdateDescription!: ElementRef<HTMLTextAreaElement>;
 
   @ViewChild("waitSpinnerDialog")
   private waitSpinnerDialog!: ElementRef<HTMLDialogElement>;
@@ -84,7 +97,6 @@ export class ManagementViewComponent {
 
   async ngOnInit(): Promise<void> {
     this.security.checkAuth().subscribe(async response => {
-      console.log("checkAuth is running");
       if (!response.isAuthenticated) {
         console.log(`Unauthenticated, potential error: ${response.errorMessage}`);
         this.router.navigate([""]);
@@ -92,7 +104,6 @@ export class ManagementViewComponent {
       this.userData = this.security.userData;
       const token = await firstValueFrom(this.security.getAccessToken());this.incidentService.configuration.withCredentials = true;
       this.incidentService.defaultHeaders = this.incidentService.defaultHeaders.append("Authorization", `Bearer ${token}`);
-      console.log("modified default headers");
     });
   }
 
@@ -121,7 +132,6 @@ export class ManagementViewComponent {
   }
 
   editNewMaintenanceEvent(): void {
-    console.log("called!");
     let event: Incident = {  
       displayName: "",
       description: "",
@@ -135,6 +145,15 @@ export class ManagementViewComponent {
       updates: []
     };
     this.editExistingMaintenanceEvent("", event);
+  }
+
+  editNewUpdate(): void {
+    this.editingUpdate = {
+      displayName: "",
+      description: "",
+      createdAt: null,
+    };
+    this.addUpdateDialog.nativeElement.showModal();
   }
 
   editExistingIncident(incidentId: string, incidentToEdit: Incident): void {
@@ -179,6 +198,16 @@ export class ManagementViewComponent {
     this.handleResponse(this.data.createIncident(this.editingIncident), this.incidentDialog);
   }
 
+  enqueueNewUpdate(): void {
+    this.editingUpdate.displayName = this.inputUpdateName.nativeElement.value;
+    this.editingUpdate.description = this.inputUpdateDescription.nativeElement.value;
+    this.editingUpdate.createdAt = formatQueryDate(dayjs().utc());
+    this.updatesToProcess.push(this.editingUpdate);
+    console.log(this.editingUpdate);
+    this.editingUpdate = {};
+    this.addUpdateDialog.nativeElement.close();
+  }
+
   saveChanges() {
     // TODO Check for missing fields
     this.editingIncident.displayName = this.inputIncidentName.nativeElement.value;
@@ -199,6 +228,24 @@ export class ManagementViewComponent {
     }
     this.waitState = WS_PROCESSING;
     this.waitSpinnerDialog.nativeElement.showModal();
+    // Check if we need to process new updates to this incident
+    while (this.updatesToProcess.length > 0) {
+      const update = this.updatesToProcess.shift();
+      if (update) {
+        this.incidentService.createIncidentUpdate(this.editingIncidentId, update).subscribe(
+          {
+            next: value => {
+              console.log(`Received result for update ${update.displayName}: ${JSON.stringify(value)}`);
+            },
+            error: err => {
+              // TODO How to best deal with these errors?
+              console.error(`Request to add update ${update.displayName} for incident ${this.editingIncidentId} error'ed out`);
+              console.error(err);
+            }
+          }
+        );
+      }
+    }
     this.handleResponse(this.data.updateIncident(this.editingIncidentId, this.editingIncident), this.incidentDialog);
   }
 
@@ -244,7 +291,7 @@ export class ManagementViewComponent {
   checkValidIncidentName(event: any) {
     let displayName = event.target.value;
     if (displayName == "") {
-        this.errorMessage = "The incident's display name cannot be empty";
+        this.errorMessage = "The display name cannot be empty";
         this.inputIsFine = false;
         return;
     }
@@ -276,9 +323,9 @@ export class ManagementViewComponent {
     this.inputIsFine = true;
   }
 
-  checkValidDate(dateName: string, event: any) {
+  checkValidDate(dateName: string, necessary: boolean, event: any) {
     let dateStr = event.target.value;
-    if (!dateStr) {
+    if (necessary && !dateStr) {
       this.errorMessage = `The ${dateName} cannot be empty`;
       this.inputIsFine = false;
       return;
@@ -313,8 +360,13 @@ export class ManagementViewComponent {
     console.log(this.editingIncident);
   }
 
-  cancelAddComponent() {
+  cancelAddComponent():void {
     this.addComponentDialog.nativeElement.close();
+  }
+
+  cancelNewUpdate(): void {
+    this.addUpdateDialog.nativeElement.close();
+    this.editingUpdate = {};
   }
 
   currentDateTime(): string {

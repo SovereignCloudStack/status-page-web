@@ -75,11 +75,21 @@
         <textarea rows="4" #inputIncidentDescription id="inputIncidentDescription" name="inputIncidentDescription"
             [value]="editingIncident.description"></textarea>
         <label for="inputIncidentStartDate">Start Date</label>
-        <input type="datetime-local" #inputIncidentStartDate id="inputIncidentStartDate" name="inputIncidentStartDate"
-            value="{{ formatDateTime(editingIncident.beganAt) }}" (change)="checkValidDate('start date', $event)">
+        <input type="datetime-local"
+            #inputIncidentStartDate
+            id="inputIncidentStartDate"
+            name="inputIncidentStartDate"
+            value="{{ formatDateTime(editingIncident.beganAt) }}"
+            (change)="checkValidDate('start date', isMaintenanceEvent(), $event)"
+        >
         <label for="inputIncidentEndDate">End Date</label>
-        <input type="datetime-local" #inputIncidentEndDate id="inputIncidentEndDate" name="inputIncidentEndDate"
-            value="{{ formatDateTime(editingIncident.endedAt) }}">
+        <input type="datetime-local"
+            #inputIncidentEndDate
+            id="inputIncidentEndDate"
+            name="inputIncidentEndDate"
+            value="{{ formatDateTime(editingIncident.endedAt) }}"
+            (change)="checkValidDate('start date', isMaintenanceEvent(), $event)"
+        >
         <label for="inputIncidentPhase">Phase</label>
         <select #inputIncidentPhase id="inputIncidentPhase" name="inputIncidentPhase">
             <option *ngFor="let phase of data.phaseGenerations.phases">{{ phase }}</option>
@@ -102,8 +112,9 @@
                 class="stretch"
             >
                 <option *ngFor="let update of data.incidentUpdates.get(editingIncidentId)">{{ update.displayName }}</option>
+                <option *ngFor="let update of updatesToProcess">{{ update.displayName }}*</option>
             </select>
-            <button type="button"><fa-icon [icon]="iconAddUpdate"></fa-icon></button>
+            <button type="button" (click)="editNewUpdate()"><fa-icon [icon]="iconAddUpdate"></fa-icon></button>
             <button type="button" class="dangerous"><fa-icon [icon]="iconDeleteUpdate"></fa-icon></button>
         </div>
     </form>
@@ -111,15 +122,48 @@
         <p class="error-message">{{ errorMessage }}</p>
     </div>
     <div class="dialog-controls">
-        <button type="button" (click)="saveChanges()" *ngIf="!isNewIncident()" [disabled]="!inputIsFine"><fa-icon
-                [icon]="iconSaveChanges"></fa-icon><span>Save Changes</span></button>
-        <button type="button" (click)="createNewIncident()" *ngIf="isNewIncident()" [disabled]="!inputIsFine"><fa-icon
-                [icon]="iconNewIncident"></fa-icon><span>Create Incident</span></button>
-        <button type="button" (click)="cancelEditing()" class="dangerous" id="cancel-incident"
-            *ngIf="!isNewIncident()"><fa-icon [icon]="iconDiscardChanges"></fa-icon><span>Discard
-                Changes</span></button>
-        <button type="button" (click)="cancelEditing()" class="dangerous" id="cancel-incident"
-            *ngIf="isNewIncident()"><fa-icon [icon]="iconDiscardChanges"></fa-icon><span>Cancel</span></button>
+        <button 
+            type="button" 
+            (click)="saveChanges()"
+            *ngIf="!isNewIncident()"
+            [disabled]="!inputIsFine"
+        >
+            <fa-icon [icon]="iconSaveChanges"></fa-icon><span>Save Changes</span>
+        </button>
+        <button
+            type="button"
+            (click)="createNewIncident()"
+            *ngIf="isNewIncident() && !isMaintenanceEvent()"
+            [disabled]="!inputIsFine"
+        >
+            <fa-icon [icon]="iconNewIncident"></fa-icon><span>Create Incident</span>
+        </button>
+        <button
+            type="button"
+            (click)="createNewMaintenanceEvent()"
+            *ngIf="isNewIncident() && isMaintenanceEvent()"
+            [disabled]="!inputIsFine"
+        >
+            <fa-icon [icon]="iconNewIncident"></fa-icon><span>Create Maintenance Event</span>
+        </button>
+        <button
+            type="button"
+            (click)="cancelEditing()"
+            class="dangerous"
+            id="cancel-incident"
+            *ngIf="!isNewIncident()"
+        >
+            <fa-icon [icon]="iconDiscardChanges"></fa-icon><span>Discard Changes</span>
+        </button>
+        <button
+            type="button"
+            (click)="cancelEditing()"
+            class="dangerous"
+            id="cancel-incident"
+            *ngIf="isNewIncident()"
+        >
+            <fa-icon [icon]="iconDiscardChanges"></fa-icon><span>Cancel</span>
+        </button>
     </div>
 </dialog>
 <dialog #addAffectedComponentDialog id="add-affected-component-dialog">
@@ -146,10 +190,53 @@
         <p class="error-message">{{ errorMessage }}</p>
     </div>
     <div class="dialog-controls">
-        <button type="button" (click)="addAffectedComponent()" [disabled]="!inputIsFine"><fa-icon
-                [icon]="iconSaveChanges"></fa-icon><span>Add Impact</span></button>
-        <button type="button" (click)="cancelAddComponent()" class="dangerous" id="cancel-component"><fa-icon
-                [icon]="iconDiscardChanges"></fa-icon><span>Cancel</span></button>
+        <button
+            type="button"
+            (click)="addAffectedComponent()"
+            [disabled]="!inputIsFine"
+        >
+            <fa-icon [icon]="iconSaveChanges"></fa-icon><span>Add Impact</span>
+        </button>
+        <button
+            type="button"
+            (click)="cancelAddComponent()"
+            class="dangerous"
+            id="cancel-component"
+        >
+            <fa-icon [icon]="iconDiscardChanges"></fa-icon><span>Cancel</span>
+        </button>
+    </div>
+</dialog>
+<dialog #createUpdateDialog id="create-update-dialog">
+    <h1>Add Incident Update</h1>
+    <form>
+        <label for="inputUpdateName">Display Name</label>
+        <input type="text" #inputUpdateName id="inputUpdateName" name="inputUpdateName"
+            [value]="editingUpdate.displayName" (change)="checkValidIncidentName($event)">
+        <label for="inputUpdateDescription">Description</label>
+        <textarea rows="4" #inputUpdateDescription id="inputUpdateDescription" name="inputUpdateDescription"
+            [value]="editingUpdate.description"></textarea>
+    </form>
+    <p>Updates will only be saved upon saving their incident.</p>
+    <div [class]="inputIsFine ? 'hidden-border' : 'danger-border'">
+        <p class="error-message">{{ errorMessage }}</p>
+    </div>
+    <div class="dialog-controls">
+        <button
+            type="button"
+            (click)="enqueueNewUpdate()"
+            [disabled]="!inputIsFine"
+        >
+            <fa-icon [icon]="iconSaveChanges"></fa-icon><span>Add Update</span>
+        </button>
+        <button
+            type="button"
+            (click)="cancelNewUpdate()"
+            class="dangerous"
+            id="cancel-component"
+        >
+            <fa-icon [icon]="iconDiscardChanges"></fa-icon><span>Cancel</span>
+        </button>
     </div>
 </dialog>
 <dialog #waitSpinnerDialog id="wait-spinner-dialog">

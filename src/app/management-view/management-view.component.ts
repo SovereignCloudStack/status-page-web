@@ -7,7 +7,7 @@ import { faPenToSquare, faTrashCan, faSquarePlus, faFloppyDisk, faXmarkCircle } 
 import { UtilService } from '../util.service';
 import { Impact, Incident, IncidentService, IncidentUpdate, IncidentUpdateResponseData } from '../../external/lib/status-page-api/angular-client';
 import dayjs from 'dayjs';
-import { formatQueryDate } from '../model/base';
+import { formatQueryDate, IncidentId } from '../model/base';
 import { SpinnerComponent } from '../spinner/spinner.component';
 import { OidcSecurityService, UserDataResult } from 'angular-auth-oidc-client';
 import { firstValueFrom, Observable } from 'rxjs';
@@ -43,7 +43,8 @@ export class ManagementViewComponent {
   // Used as a queue to hold any updates we need to process
   // when saving our changes to an incident.
   // Use push to add and shift to extract.
-  updatesToProcess: IncidentUpdateResponseData[] = [];
+  newUpdatesToProcess: IncidentUpdateResponseData[] = [];
+  updateDeletionsToProcess: number[] = [];
 
   maintenanceEvent: boolean = false;
 
@@ -66,6 +67,8 @@ export class ManagementViewComponent {
   private inputIncidentPhase!: ElementRef<HTMLSelectElement>;
   @ViewChild("inputIncidentImpact", {static: false})
   private inputIncidentImpact!: ElementRef<HTMLSelectElement>;
+  @ViewChild("inputIncidentUpdate", {static: false})
+  private inputIncidentUpdate!: ElementRef<HTMLSelectElement>;
 
   @ViewChild("addAffectedComponentDialog", {static: true})
   private addComponentDialog!: ElementRef<HTMLDialogElement>;
@@ -82,6 +85,9 @@ export class ManagementViewComponent {
   private inputUpdateName!: ElementRef<HTMLInputElement>;
   @ViewChild("inputUpdateDescription", {static: true})
   private inputUpdateDescription!: ElementRef<HTMLTextAreaElement>;
+
+  @ViewChild("confirmDeletionDialog", {static: true})
+  private confirmDeletionDialog!: ElementRef<HTMLDialogElement>;
 
   @ViewChild("waitSpinnerDialog")
   private waitSpinnerDialog!: ElementRef<HTMLDialogElement>;
@@ -205,8 +211,11 @@ export class ManagementViewComponent {
     this.editingUpdate.description = this.inputUpdateDescription.nativeElement.value;
     this.editingUpdate.createdAt = formatQueryDate(dayjs().utc());
     let update = this.editingUpdate as IncidentUpdateResponseData;
-    update.order = -1;
-    this.updatesToProcess.push(update);
+    // We use a temporary order number to be able to delete updates that have not yet
+    // been saved to the API server. To make it possible to differentiate this order
+    // number from an ordinary one, we use negative numbers.    
+    update.order = -(this.newUpdatesToProcess.length + 1);
+    this.newUpdatesToProcess.push(update);
     console.log(this.editingUpdate);
     this.editingUpdate = {};
     this.addUpdateDialog.nativeElement.close();
@@ -242,9 +251,28 @@ export class ManagementViewComponent {
     this.editingIncident.phase.order = parseInt(this.inputIncidentPhase.nativeElement.value);
     this.waitState = WS_PROCESSING;
     this.waitSpinnerDialog.nativeElement.showModal();
+    // Delete any updates that should be removed
+    console.log(`there are ${this.updateDeletionsToProcess.length} update deletion requests to process`);
+    while(this.updateDeletionsToProcess.length > 0) {
+      const order = this.updateDeletionsToProcess.shift();
+      console.log(`creating deletion request ${order}`);
+      if (order !== undefined) {
+        this.incidentService.deleteIncidentUpdate(this.editingIncidentId, order).subscribe(
+          {
+            next: result => {
+              console.log(`Received result for update deletion ${order}: ${JSON.stringify(result)}`);
+            },
+            error: err => {
+              console.error(`Request to delete update ${order} of incident ${this.editingIncidentId} error'ed out:`);
+              console.error(err);
+            }
+          }
+        );
+      }
+    }
     // Check if we need to process new updates to this incident
-    while (this.updatesToProcess.length > 0) {
-      const update = this.updatesToProcess.shift();
+    while (this.newUpdatesToProcess.length > 0) {
+      const update = this.newUpdatesToProcess.shift();
       if (update) {
         this.incidentService.createIncidentUpdate(this.editingIncidentId, update).subscribe(
           {
@@ -269,11 +297,52 @@ export class ManagementViewComponent {
     this.maintenanceEvent = false;
     this.editingIncidentId = "";
     this.editingIncident = {};
+    this.editingUpdate = {};
+    this.updateDeletionsToProcess = [];
+    this.newUpdatesToProcess = [];
   }
 
   deleteImpact(): void {
     const impactReference = this.inputIncidentImpact.nativeElement.value;
     this.editingIncident.affects = this.editingIncident.affects?.filter(impact => impact.reference !== impactReference);
+  }
+
+  enqueueDeleteUpdate(): void {
+    const order = parseInt(this.inputIncidentUpdate.nativeElement.value);
+    if (order >= 0) {
+      // The update is already on the server, enqueue it.
+      this.updateDeletionsToProcess.push(order);
+      console.log(`Enqueued request to delete update ${order}`);
+    } else {
+      // The update has not yet been send to the server, we can simply
+      // remove it from the queue of updates still to be saved.
+      this.newUpdatesToProcess = this.newUpdatesToProcess.filter(update => update.order !== order);
+      console.log(`Removed new update ${order}`);
+    }
+  }
+
+  prepareDeleteIncident(incidentId: IncidentId, incident: Incident, maintenanceEvent: boolean = false): void {
+    this.editingIncidentId = incidentId;
+    this.editingIncident = incident;
+    if (maintenanceEvent) {
+      this.maintenanceEvent = true;
+    }
+    this.confirmDeletionDialog.nativeElement.showModal();
+  }
+
+  confirmDeleteIncident(): void {
+    this.waitSpinnerDialog.nativeElement.showModal();
+    this.handleResponse(
+      this.incidentService.deleteIncident(this.editingIncidentId),
+      this.confirmDeletionDialog
+    )
+  }
+
+  cancelDeleteIncident(): void {
+    this.confirmDeletionDialog.nativeElement.close();
+    this.editingIncidentId = "";
+    this.editingIncident = {};
+    this.maintenanceEvent = false;
   }
 
   handleResponse<T>(o: Observable<T>, dialog: ElementRef<HTMLDialogElement>): void {
@@ -282,6 +351,7 @@ export class ManagementViewComponent {
       next: (value) => {
         this.editingIncident = {};
         this.editingIncidentId = "";
+        this.maintenanceEvent = false;
         this.waitState = WS_RELOADING;
         // Reload data in DataService
         this.data.reload();

@@ -130,6 +130,18 @@
     initial-value: 	whitesmoke;
 }
 
+@property --hazard-bg-color-light {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: 	whitesmoke;
+}
+
+@property --hazard-bg-color-dark {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: #50c3a5;
+}
+
 @font-face {
     font-family: "Lato";
     font-style: normal;
@@ -182,6 +194,8 @@
     --line-color: #9e9e9e;
     --odd-row-color: #fff;
     --even-row-color: whitesmoke;
+    --hazard-bg-color-light: whitesmoke;
+    --hazard-bg-color-dark: #0f5fe1;
 }
 
 body {

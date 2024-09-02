@@ -94,11 +94,14 @@
                     [icon]="iconAddUpdate"></fa-icon></button>
             <button type="button" class="dangerous"><fa-icon [icon]="iconDeleteUpdate"></fa-icon></button>
         </div>
-        <label>Updates</label>
-        <div class="subform">
-            <select id="inputIncidentUpdate" name="inputIncidentUpdate" class="stretch">
-                <option *ngFor="let update of data.incidentUpdates.get(editingIncidentId)">{{ update.displayName }}
-                </option>
+        <label *ngIf="!isMaintenanceEvent()">Updates</label>
+        <div class="subform" *ngIf="!isMaintenanceEvent()">
+            <select 
+                id="inputIncidentUpdate"
+                name="inputIncidentUpdate"
+                class="stretch"
+            >
+                <option *ngFor="let update of data.incidentUpdates.get(editingIncidentId)">{{ update.displayName }}</option>
             </select>
             <button type="button"><fa-icon [icon]="iconAddUpdate"></fa-icon></button>
             <button type="button" class="dangerous"><fa-icon [icon]="iconDeleteUpdate"></fa-icon></button>
@@ -149,56 +152,7 @@
                 [icon]="iconDiscardChanges"></fa-icon><span>Cancel</span></button>
     </div>
 </dialog>
-<dialog #maintenanceEventDialog id="maintenance-event-dialog">
-    <span id="edited-maintenance-id" *ngIf="!isNewIncident()">{{ editingIncidentId }}</span>
-    <h1 *ngIf="!isNewIncident()">Editing <em>{{ this.editingIncident.displayName }}</em></h1>
-    <h1 *ngIf="isNewIncident()">Creating new Maintenance Event</h1>
-    <form>
-        <label for="inputMaintenanceName">Display Name</label>
-        <input type="text" #inputMaintenanceName id="inputMaintenanceName" name="inputMaintenanceName"
-            [value]="editingIncident.displayName" (change)="checkValidIncidentName($event)">
-        <label for="inputMaintenanceDescription">Description</label>
-        <textarea rows="4" #inputMaintenanceDescription id="inputMaintenanceDescription"
-            name="inputMaintenanceDescription" [value]="editingIncident.description"></textarea>
-        <label for="inputMaintenanceStartDate">Start Date</label>
-        <input type="datetime-local" #inputMaintenanceStartDate id="inputMaintenanceStartDate"
-            name="inputMaintenanceStartDate" value="{{ formatDateTime(editingIncident.beganAt) }}"
-            (change)="checkValidDate('start date', $event)">
-        <label for="inputMaintenanceEndDate">End Date</label>
-        <input type="datetime-local" #inputMaintenanceEndDate id="inputMaintenanceEndDate"
-            name="inputMaintenanceEndDate" value="{{ formatDateTime(editingIncident.endedAt) }}"
-            (change)="checkValidDate('end date', $event)">
-        <label for="inputMaintenancePhase">Phase</label>
-        <select #inputMaintenancePhase id="inputMaintenancePhase" name="inputMaintenancePhase">
-            <option *ngFor="let phase of data.phaseGenerations.phases">{{ phase }}</option>
-        </select>
-        <label>Impacted Components</label>
-        <div class="subform">
-            <select id="inputMaintenanceImpact" name="inputMaintenanceImpact" class="stretch">
-                <option *ngFor="let impact of editingIncident.affects" value="{{ impact.reference }}">{{
-                    util.componentName(impact.reference) }} (Sev. {{ impact.severity }})</option>
-            </select>
-            <button type="button" (click)="openAddAffectedComponentDialog()"><fa-icon
-                    [icon]="iconAddUpdate"></fa-icon></button>
-            <button type="button" class="dangerous"><fa-icon [icon]="iconDeleteUpdate"></fa-icon></button>
-        </div>
-    </form>
-    <div [class]="inputIsFine ? 'hidden-border' : 'danger-border'">
-        <p class="error-message">{{ errorMessage }}</p>
-    </div>
-    <div class="dialog-controls">
-        <button type="button" (click)="saveChanges()" *ngIf="!isNewIncident()" [disabled]="!inputIsFine"><fa-icon
-                [icon]="iconSaveChanges"></fa-icon><span>Save Changes</span></button>
-        <button type="button" (click)="createNewIncident()" *ngIf="isNewIncident()" [disabled]="!inputIsFine"><fa-icon
-                [icon]="iconNewIncident"></fa-icon><span>Create Incident</span></button>
-        <button type="button" (click)="cancelEditing()" class="dangerous" id="cancel-maintenance"
-            *ngIf="!isNewIncident()"><fa-icon [icon]="iconDiscardChanges"></fa-icon><span>Discard
-                Changes</span></button>
-        <button type="button" (click)="cancelEditing()" class="dangerous" id="cancel-maintenance"
-            *ngIf="isNewIncident()"><fa-icon [icon]="iconDiscardChanges"></fa-icon><span>Cancel</span></button>
-    </div>
-</dialog>
 <dialog #waitSpinnerDialog id="wait-spinner-dialog">
     <app-spinner></app-spinner>
-    <p>Processing request...</p>
+    <p>{{ waitState }}</p>
 </dialog>

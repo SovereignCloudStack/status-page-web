@@ -15,6 +15,10 @@ import { AppConfigService } from '../app-config.service';
 
 const DT_FORMAT = "YYYY-MM-DDTHH:mm";
 
+const WS_NONE = "This should never be visible";
+const WS_PROCESSING = "Processing request...";
+const WS_RELOADING = "Reloading data...";
+
 @Component({
   selector: 'app-management-view',
   standalone: true,
@@ -40,6 +44,8 @@ export class ManagementViewComponent {
   inputIsFine: boolean = true;
   errorMessage: string = "";
 
+  waitState: string = "";
+
   @ViewChild("incidentDialog", {static: true})
   private incidentDialog!: ElementRef<HTMLDialogElement>;
   @ViewChild("inputIncidentName", {static: true})
@@ -61,9 +67,6 @@ export class ManagementViewComponent {
   private inputAddComponentType!: ElementRef<HTMLSelectElement>;
   @ViewChild("inputAddComponentSeverity", {static: false})
   private inputAddComponentSeverity!: ElementRef<HTMLInputElement>;
-
-  @ViewChild("maintenanceEventDialog", {static: true})
-  private maintenanceEventDialog!: ElementRef<HTMLDialogElement>;
 
   @ViewChild("waitSpinnerDialog")
   private waitSpinnerDialog!: ElementRef<HTMLDialogElement>;
@@ -145,8 +148,8 @@ export class ManagementViewComponent {
     this.editingIncidentId = incidentId;
     this.editingIncident = incidentToEdit;
     this.maintenanceEvent = true;
-    //this.inputPhaseSelect.nativeElement.selectedIndex = this.editingIncident.phase?.order ?? 0;
-    this.maintenanceEventDialog.nativeElement.showModal();
+    this.inputPhaseSelect.nativeElement.selectedIndex = this.editingIncident.phase?.order ?? 0;
+    this.incidentDialog.nativeElement.showModal();
   }
 
   createNewIncident(): void {
@@ -158,6 +161,20 @@ export class ManagementViewComponent {
       this.editingIncident.endedAt = formatQueryDate(dayjs(this.inputIncidentEndDate.nativeElement.value).utc());
     }
     console.log(this.editingIncident);
+    this.waitState = WS_PROCESSING;
+    this.waitSpinnerDialog.nativeElement.showModal();
+    this.handleResponse(this.data.createIncident(this.editingIncident), this.incidentDialog);
+  }
+
+  createNewMaintenanceEvent(): void {
+    this.editingIncident.displayName = this.inputIncidentName.nativeElement.value;
+    this.editingIncident.description = this.inputIncidentDescription.nativeElement.value;
+    this.editingIncident.beganAt = formatQueryDate(dayjs(this.inputIncidentStartDate.nativeElement.value).utc());
+    if (this.inputIncidentEndDate.nativeElement.value) {
+      this.editingIncident.endedAt = formatQueryDate(dayjs(this.inputIncidentEndDate.nativeElement.value).utc());
+    }
+    console.log(this.editingIncident);
+    this.waitState = WS_PROCESSING;
     this.waitSpinnerDialog.nativeElement.showModal();
     this.handleResponse(this.data.createIncident(this.editingIncident), this.incidentDialog);
   }
@@ -167,19 +184,26 @@ export class ManagementViewComponent {
     this.editingIncident.displayName = this.inputIncidentName.nativeElement.value;
     this.editingIncident.description = this.inputIncidentDescription.nativeElement.value;
     this.editingIncident.beganAt = formatQueryDate(dayjs(this.inputIncidentStartDate.nativeElement.value).utc());
-    if (this.inputIncidentEndDate.nativeElement.value) {
-      this.editingIncident.endedAt = formatQueryDate(dayjs(this.inputIncidentEndDate.nativeElement.value).utc());
+    if (!this.maintenanceEvent) {
+      if (this.inputIncidentEndDate.nativeElement.value) {
+        this.editingIncident.endedAt = formatQueryDate(dayjs(this.inputIncidentEndDate.nativeElement.value).utc());
+      } else {
+        this.editingIncident.endedAt = null;
+      }
+    } else {
+      if (this.inputIncidentEndDate.nativeElement.value) {
+        this.editingIncident.endedAt = formatQueryDate(dayjs(this.inputIncidentEndDate.nativeElement.value).utc());
+      } else {
+        // TODO Error state, maintenance events need an end date
+      }
     }
+    this.waitState = WS_PROCESSING;
     this.waitSpinnerDialog.nativeElement.showModal();
     this.handleResponse(this.data.updateIncident(this.editingIncidentId, this.editingIncident), this.incidentDialog);
   }
 
   cancelEditing() {
-    if (this.isMaintenanceEvent()) {
-      this.maintenanceEventDialog.nativeElement.close();
-    } else {
-      this.incidentDialog.nativeElement.close();
-    }
+    this.incidentDialog.nativeElement.close();
     this.maintenanceEvent = false;
     this.editingIncidentId = "";
     this.editingIncident = {};
@@ -190,9 +214,17 @@ export class ManagementViewComponent {
       next: (value) => {
         this.editingIncident = {};
         this.editingIncidentId = "";
-        // TODO Reload data 
-        dialog.nativeElement.close();
-        this.waitSpinnerDialog.nativeElement.close();
+        this.waitState = WS_RELOADING;
+        // Reload data in DataService
+        this.data.reload();
+        this.data.loadingFinished.subscribe(loaded => {
+          if (loaded) {
+            // Data is available again, close the dialog and the wait spinner
+            dialog.nativeElement.close();
+            this.waitSpinnerDialog.nativeElement.close();
+            this.waitState = WS_NONE;
+          }
+        })
       },
       error: (err) => {
         console.error("API request error'ed out:");

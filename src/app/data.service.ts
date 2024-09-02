@@ -94,6 +94,19 @@ export class DataService {
     map.set(key, list);
   }
 
+  reload(): void {
+    // Remove any authorization content from the IncidentService's
+    // headers, as this can cause a 401 - Unauthorized error on
+    // GET requests.
+    this.incs.defaultHeaders = this.incs.defaultHeaders.delete("Authorization");
+    // Set load state to false to signal that our data cannot be used right now
+    this._loadingFinished.next(false);
+    // Clean up present state
+    this.prepareLoading();
+    // Load data - this will set load state back to true once done
+    this.loadData();
+  }
+
   private loadData(): void {
     // Start requests for most data types from API server
     const phases$ = this.phas.getPhaseList();

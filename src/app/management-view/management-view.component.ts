@@ -110,7 +110,8 @@ export class ManagementViewComponent {
         this.router.navigate([""]);
       }
       this.userData = this.security.userData;
-      const token = await firstValueFrom(this.security.getAccessToken());this.incidentService.configuration.withCredentials = true;
+      const token = await firstValueFrom(this.security.getAccessToken());
+      this.incidentService.configuration.withCredentials = true;
       this.incidentService.defaultHeaders = this.incidentService.defaultHeaders.append("Authorization", `Bearer ${token}`);
     });
   }

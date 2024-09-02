@@ -138,7 +138,7 @@ dialog form div.subform {
 div.subform button {
     border: 1px var(--btn-color) solid;
     padding: .25em .5em;
-    margin: 0 .25rem;
+    margin: 0 0;
     font-size: 1.25rem;
 }
 
@@ -154,7 +154,7 @@ div.subform button {
     font-weight: bold;
     font-size: 1.0rem;
     background-color: var(--main-bg-color);
-    margin-left: 1rem;
+    margin-left: 0;
 }
 
 .dialog-controls button:hover {

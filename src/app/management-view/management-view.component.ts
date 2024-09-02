@@ -5,7 +5,7 @@ import { DataService } from '../data.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faPenToSquare, faTrashCan, faSquarePlus, faFloppyDisk, faXmarkCircle } from '@fortawesome/free-regular-svg-icons';
 import { UtilService } from '../util.service';
-import { Incident, IncidentService, IncidentUpdate } from '../../external/lib/status-page-api/angular-client';
+import { Impact, Incident, IncidentService, IncidentUpdate, IncidentUpdateResponseData } from '../../external/lib/status-page-api/angular-client';
 import dayjs from 'dayjs';
 import { formatQueryDate } from '../model/base';
 import { SpinnerComponent } from '../spinner/spinner.component';
@@ -43,7 +43,7 @@ export class ManagementViewComponent {
   // Used as a queue to hold any updates we need to process
   // when saving our changes to an incident.
   // Use push to add and shift to extract.
-  updatesToProcess: IncidentUpdate[] = [];
+  updatesToProcess: IncidentUpdateResponseData[] = [];
 
   maintenanceEvent: boolean = false;
 
@@ -63,7 +63,9 @@ export class ManagementViewComponent {
   @ViewChild("inputIncidentEndDate", {static: true})
   private inputIncidentEndDate!: ElementRef<HTMLInputElement>;
   @ViewChild("inputIncidentPhase", {static: true})
-  private inputPhaseSelect!: ElementRef<HTMLSelectElement>;
+  private inputIncidentPhase!: ElementRef<HTMLSelectElement>;
+  @ViewChild("inputIncidentImpact", {static: false})
+  private inputIncidentImpact!: ElementRef<HTMLSelectElement>;
 
   @ViewChild("addAffectedComponentDialog", {static: true})
   private addComponentDialog!: ElementRef<HTMLDialogElement>;
@@ -159,7 +161,7 @@ export class ManagementViewComponent {
   editExistingIncident(incidentId: string, incidentToEdit: Incident): void {
     this.editingIncidentId = incidentId;
     this.editingIncident = incidentToEdit;
-    this.inputPhaseSelect.nativeElement.selectedIndex = this.editingIncident.phase?.order ?? 0;
+    this.inputIncidentPhase.nativeElement.selectedIndex = this.editingIncident.phase?.order ?? 0;
     this.incidentDialog.nativeElement.showModal();
   }
 
@@ -167,7 +169,7 @@ export class ManagementViewComponent {
     this.editingIncidentId = incidentId;
     this.editingIncident = incidentToEdit;
     this.maintenanceEvent = true;
-    this.inputPhaseSelect.nativeElement.selectedIndex = this.editingIncident.phase?.order ?? 0;
+    this.inputIncidentPhase.nativeElement.selectedIndex = this.editingIncident.phase?.order ?? 0;
     this.incidentDialog.nativeElement.showModal();
   }
 
@@ -202,7 +204,9 @@ export class ManagementViewComponent {
     this.editingUpdate.displayName = this.inputUpdateName.nativeElement.value;
     this.editingUpdate.description = this.inputUpdateDescription.nativeElement.value;
     this.editingUpdate.createdAt = formatQueryDate(dayjs().utc());
-    this.updatesToProcess.push(this.editingUpdate);
+    let update = this.editingUpdate as IncidentUpdateResponseData;
+    update.order = -1;
+    this.updatesToProcess.push(update);
     console.log(this.editingUpdate);
     this.editingUpdate = {};
     this.addUpdateDialog.nativeElement.close();
@@ -223,9 +227,19 @@ export class ManagementViewComponent {
       if (this.inputIncidentEndDate.nativeElement.value) {
         this.editingIncident.endedAt = formatQueryDate(dayjs(this.inputIncidentEndDate.nativeElement.value).utc());
       } else {
-        // TODO Error state, maintenance events need an end date
+        // Error state, maintenance events need an end date
+        this.inputIsFine = false;
+        this.errorMessage = "A maintenance event must have an end date";
+        return;
       }
     }
+    if (!this.editingIncident.phase) {
+      this.editingIncident.phase = {
+        generation: 1,
+        order: 0
+      };
+    }
+    this.editingIncident.phase.order = parseInt(this.inputIncidentPhase.nativeElement.value);
     this.waitState = WS_PROCESSING;
     this.waitSpinnerDialog.nativeElement.showModal();
     // Check if we need to process new updates to this incident
@@ -236,6 +250,7 @@ export class ManagementViewComponent {
           {
             next: value => {
               console.log(`Received result for update ${update.displayName}: ${JSON.stringify(value)}`);
+              update.order = value["order"];
             },
             error: err => {
               // TODO How to best deal with these errors?
@@ -256,7 +271,13 @@ export class ManagementViewComponent {
     this.editingIncident = {};
   }
 
+  deleteImpact(): void {
+    const impactReference = this.inputIncidentImpact.nativeElement.value;
+    this.editingIncident.affects = this.editingIncident.affects?.filter(impact => impact.reference !== impactReference);
+  }
+
   handleResponse<T>(o: Observable<T>, dialog: ElementRef<HTMLDialogElement>): void {
+    console.log(this.editingIncident);
     o.subscribe({
       next: (value) => {
         this.editingIncident = {};

@@ -92,17 +92,17 @@
         >
         <label for="inputIncidentPhase">Phase</label>
         <select #inputIncidentPhase id="inputIncidentPhase" name="inputIncidentPhase">
-            <option *ngFor="let phase of data.phaseGenerations.phases">{{ phase }}</option>
+            <option *ngFor="let phase of data.phaseGenerations.phases" value="{{ data.phaseGenerations.phases.indexOf(phase) }}">{{ phase }}</option>
         </select>
         <label>Impacted Components</label>
         <div class="subform">
-            <select id="inputIncidentImpact" name="inputIncidentImpact" class="stretch">
+            <select #inputIncidentImpact id="inputIncidentImpact" name="inputIncidentImpact" class="stretch">
                 <option *ngFor="let impact of editingIncident.affects" value="{{ impact.reference }}">{{
                     util.componentName(impact.reference) }} (Sev. {{ impact.severity }})</option>
             </select>
             <button type="button" (click)="openAddAffectedComponentDialog()"><fa-icon
                     [icon]="iconAddUpdate"></fa-icon></button>
-            <button type="button" class="dangerous"><fa-icon [icon]="iconDeleteUpdate"></fa-icon></button>
+            <button type="button" (click)="deleteImpact()" class="dangerous"><fa-icon [icon]="iconDeleteUpdate"></fa-icon></button>
         </div>
         <label *ngIf="!isMaintenanceEvent()">Updates</label>
         <div class="subform" *ngIf="!isMaintenanceEvent()">
@@ -111,8 +111,8 @@
                 name="inputIncidentUpdate"
                 class="stretch"
             >
-                <option *ngFor="let update of data.incidentUpdates.get(editingIncidentId)">{{ update.displayName }}</option>
-                <option *ngFor="let update of updatesToProcess">{{ update.displayName }}*</option>
+                <option *ngFor="let update of data.incidentUpdates.get(editingIncidentId)" value="{{ update.order }}">{{ update.displayName }}</option>
+                <option *ngFor="let update of updatesToProcess" value="{{ -(updatesToProcess.indexOf(update) + 1) }}">{{ update.displayName }}*</option>
             </select>
             <button type="button" (click)="editNewUpdate()"><fa-icon [icon]="iconAddUpdate"></fa-icon></button>
             <button type="button" class="dangerous"><fa-icon [icon]="iconDeleteUpdate"></fa-icon></button>

@@ -187,7 +187,6 @@ export class ManagementViewComponent {
     if (this.inputIncidentEndDate.nativeElement.value) {
       this.editingIncident.endedAt = formatQueryDate(dayjs(this.inputIncidentEndDate.nativeElement.value).utc());
     }
-    console.log(this.editingIncident);
     this.waitState = WS_PROCESSING;
     this.waitSpinnerDialog.nativeElement.showModal();
     this.handleResponse(this.data.createIncident(this.editingIncident), this.incidentDialog);
@@ -200,7 +199,6 @@ export class ManagementViewComponent {
     if (this.inputIncidentEndDate.nativeElement.value) {
       this.editingIncident.endedAt = formatQueryDate(dayjs(this.inputIncidentEndDate.nativeElement.value).utc());
     }
-    console.log(this.editingIncident);
     this.waitState = WS_PROCESSING;
     this.waitSpinnerDialog.nativeElement.showModal();
     this.handleResponse(this.data.createIncident(this.editingIncident), this.incidentDialog);
@@ -216,7 +214,6 @@ export class ManagementViewComponent {
     // number from an ordinary one, we use negative numbers.    
     update.order = -(this.newUpdatesToProcess.length + 1);
     this.newUpdatesToProcess.push(update);
-    console.log(this.editingUpdate);
     this.editingUpdate = {};
     this.addUpdateDialog.nativeElement.close();
   }
@@ -252,15 +249,12 @@ export class ManagementViewComponent {
     this.waitState = WS_PROCESSING;
     this.waitSpinnerDialog.nativeElement.showModal();
     // Delete any updates that should be removed
-    console.log(`there are ${this.updateDeletionsToProcess.length} update deletion requests to process`);
     while(this.updateDeletionsToProcess.length > 0) {
       const order = this.updateDeletionsToProcess.shift();
-      console.log(`creating deletion request ${order}`);
       if (order !== undefined) {
         this.incidentService.deleteIncidentUpdate(this.editingIncidentId, order).subscribe(
           {
             next: result => {
-              console.log(`Received result for update deletion ${order}: ${JSON.stringify(result)}`);
             },
             error: err => {
               console.error(`Request to delete update ${order} of incident ${this.editingIncidentId} error'ed out:`);
@@ -277,7 +271,6 @@ export class ManagementViewComponent {
         this.incidentService.createIncidentUpdate(this.editingIncidentId, update).subscribe(
           {
             next: value => {
-              console.log(`Received result for update ${update.displayName}: ${JSON.stringify(value)}`);
               update.order = value["order"];
             },
             error: err => {
@@ -312,12 +305,10 @@ export class ManagementViewComponent {
     if (order >= 0) {
       // The update is already on the server, enqueue it.
       this.updateDeletionsToProcess.push(order);
-      console.log(`Enqueued request to delete update ${order}`);
     } else {
       // The update has not yet been send to the server, we can simply
       // remove it from the queue of updates still to be saved.
       this.newUpdatesToProcess = this.newUpdatesToProcess.filter(update => update.order !== order);
-      console.log(`Removed new update ${order}`);
     }
   }
 
@@ -346,7 +337,6 @@ export class ManagementViewComponent {
   }
 
   handleResponse<T>(o: Observable<T>, dialog: ElementRef<HTMLDialogElement>): void {
-    console.log(this.editingIncident);
     o.subscribe({
       next: (value) => {
         this.editingIncident = {};
@@ -370,7 +360,6 @@ export class ManagementViewComponent {
         this.waitSpinnerDialog.nativeElement.close();
       },
       complete: () => {
-        console.log("complete");
       }
     });
   }
@@ -448,7 +437,6 @@ export class ManagementViewComponent {
       });
     }
     this.addComponentDialog.nativeElement.close();
-    console.log(this.editingIncident);
   }
 
   cancelAddComponent():void {

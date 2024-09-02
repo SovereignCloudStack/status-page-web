@@ -77,7 +77,7 @@ You will find a configuration file named `config.json` in the `src/assets` direc
 }
 ```
 
-If you use a development enfironment in which there is only one API server with a static URL you already know, you can replace the API server URL with it. Either way, you will need to adapt the severity mapping to your setup. For an explanation of severity values, refer to [this documentation page](https://docs.scs.community/standards/scs-0402-v1-status-page-openapi-spec-decision#severity).
+If you use a development environment in which there is only one API server with a static URL you already know, you can replace the API server URL with it. Either way, you will need to adapt the severity mapping to your setup. For an explanation of severity values, refer to [this documentation page](https://docs.scs.community/standards/scs-0402-v1-status-page-openapi-spec-decision#severity).
 
 **Please note that the configuration file may still be subject to changes over the course of the preview stage.**
 

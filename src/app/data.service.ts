@@ -156,12 +156,23 @@ export class DataService {
       });
       incidents.data.forEach(incident => {
         this.incidents.set(incident.id, incident);
-        const incidentDate = dayjs(incident.beganAt).format(SHORT_DAY_FORMAT);
-        this.incidentsByDay.get(incidentDate)?.push([incident.id, incident]);
+        // Use string.split to remove the time component, as we only care
+        // about the day's date.
+        const incidentDate = dayjs(incident.beganAt?.split("T")[0]);
+        const incidentDateStr = incidentDate.format(SHORT_DAY_FORMAT);
+        // Add incident to all days it was active for. If it is still ongoing,
+        // add it to all days until today.
+        const finalDate = incident.endedAt ? dayjs(incident.endedAt.split("T")[0]) : currentDate;
+        const incidentActiveDays = finalDate.diff(incidentDate, "days");
+        for (let i = 0; i <= incidentActiveDays; i++) {
+          const activeDate = incidentDate.add(i, "days").format(SHORT_DAY_FORMAT);
+          this.incidentsByDay.get(activeDate)?.push([incident.id, incident]);
+        }
+        // Is this incident complete or is it still ongoing?
         if (incident.endedAt) {
-          this.addToMapList(this.completedIncidents, [incident.id, incident], incidentDate);
+          this.addToMapList(this.completedIncidents, [incident.id, incident], incidentDateStr);
         } else {
-          this.addToMapList(this.ongoingIncidents, [incident.id, incident], incidentDate);
+          this.addToMapList(this.ongoingIncidents, [incident.id, incident], incidentDateStr);
         }
         // Query the updates for this incident, too.
         const updates$ = this.incs.getIncidentUpdates(incident.id);

@@ -3,9 +3,9 @@ import dayjs from 'dayjs';
 import { HttpClient } from '@angular/common/http';
 import { AppConfigService } from './app-config.service';
 import { BehaviorSubject, Observable, combineLatestWith } from 'rxjs';
-import { DailyStatus } from './model/frontend/daily-status';
-import { Component, ComponentService, ImpactService, ImpactType, Incident, IncidentService, IncidentUpdate, PhaseList, PhaseService, Severity } from '../external/lib/status-page-api/angular-client';
-import { ComponentId, ImpactId, IncidentId, SHORT_DAY_FORMAT, ShortDayString } from './model/base';
+import { DailyStatus } from './model/daily-status';
+import { Component, ComponentService, IdField, ImpactService, ImpactType, Incident, IncidentResponseData, IncidentService, IncidentUpdate, IncidentUpdateResponseData, PhaseList, PhaseService, Severity } from '../external/lib/status-page-api/angular-client';
+import { ComponentId, formatQueryDate, ImpactId, IncidentId, SHORT_DAY_FORMAT, ShortDayString } from './model/base';
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +27,9 @@ export class DataService {
   ongoingIncidents!: Map<ShortDayString, [IncidentId, Incident][]>;
   completedIncidents!: Map<ShortDayString, [IncidentId, Incident][]>;
 
-  incidentUpdates!: Map<IncidentId, IncidentUpdate[]>;
+  maintenanceEvents!: IncidentResponseData[];
+
+  incidentUpdates!: Map<IncidentId, IncidentUpdateResponseData[]>;
 
   private _loadingFinished!: BehaviorSubject<boolean>;
 
@@ -37,10 +39,17 @@ export class DataService {
     private comps: ComponentService,
     private incs: IncidentService,
     private phas: PhaseService,
-    private imps: ImpactService
+    private imps: ImpactService,
   ) {
     this.currentDay = dayjs().format(SHORT_DAY_FORMAT);
 
+    this._loadingFinished = new BehaviorSubject(false);
+
+    this.prepareLoading();
+    this.loadData();
+  }
+
+  private prepareLoading() {
     this.phaseGenerations = { phases: [] };
     this.severities = [];
     this.impactTypes = new Map();
@@ -54,11 +63,9 @@ export class DataService {
     this.ongoingIncidents = new Map();
     this.completedIncidents = new Map();
 
+    this.maintenanceEvents = [];
+
     this.incidentUpdates = new Map();
-
-    this._loadingFinished = new BehaviorSubject(false);
-
-    this.loadData();
   }
 
   get loadingFinished(): Observable<boolean> {
@@ -67,6 +74,14 @@ export class DataService {
 
   impactTypeName(type: string): string {
     return this.impactTypes.get(type)?.displayName ?? "unknown";
+  }
+
+  createIncident(incident: Incident): Observable<IdField> {
+    return this.incs.createIncident(incident);
+  }
+
+  updateIncident(id: IncidentId, incident: Incident): Observable<any> {
+    return this.incs.updateIncident(id, incident);
   }
 
   private addToMapList<T>(
@@ -79,8 +94,22 @@ export class DataService {
     map.set(key, list);
   }
 
+  reload(): void {
+    // Remove any authorization content from the IncidentService's
+    // headers, as this can cause a 401 - Unauthorized error on
+    // GET requests.
+    // The authorization header will be reestablished by the management
+    // component's subscription to checkAuth().
+    this.incs.defaultHeaders = this.incs.defaultHeaders.delete("Authorization");
+    // Set load state to false to signal that our data cannot be used right now
+    this._loadingFinished.next(false);
+    // Clean up present state
+    this.prepareLoading();
+    // Load data - this will set load state back to true once done
+    this.loadData();
+  }
+
   private loadData(): void {
-    // TODO Implement test data loading or just remove that feature
     // Start requests for most data types from API server
     const phases$ = this.phas.getPhaseList();
     const severities$ = this.imps.getSeverities();
@@ -99,16 +128,23 @@ export class DataService {
       this.incidentsByDay.set(dateStr, []);
     }
 
-    // Start incidents query to complete our data loading
+    // Start incidents query
     const incidents$ = this.incs.getIncidents(
-      this.config.formatQueryDate(startDate),
-      this.config.formatQueryDate(currentDate)
+      formatQueryDate(startDate),
+      formatQueryDate(currentDate)
+    );
+
+    // Query maintenance events to complete our data loading
+    const future = currentDate.add(this.config.maintenancePreviewDays, "d");
+    const maintenance$ = this.incs.getIncidents(
+      formatQueryDate(currentDate),
+      formatQueryDate(future)
     );
 
     // Set up result handling
     phases$.pipe(
-      combineLatestWith(severities$, impactTypes$, components$, incidents$)
-    ).subscribe(([phases, severities, impacts, components, incidents]) => {
+      combineLatestWith(severities$, impactTypes$, components$, incidents$, maintenance$)
+    ).subscribe(([phases, severities, impacts, components, incidents, maintenanceEvents]) => {
       this.phaseGenerations = phases.data;
       this.severities = severities.data;
       impacts.data.forEach(impact => {
@@ -120,12 +156,23 @@ export class DataService {
       });
       incidents.data.forEach(incident => {
         this.incidents.set(incident.id, incident);
-        const incidentDate = dayjs(incident.beganAt).format(SHORT_DAY_FORMAT);
-        this.incidentsByDay.get(incidentDate)?.push([incident.id, incident]);
+        // Use string.split to remove the time component, as we only care
+        // about the day's date.
+        const incidentDate = dayjs(incident.beganAt?.split("T")[0]);
+        const incidentDateStr = incidentDate.format(SHORT_DAY_FORMAT);
+        // Add incident to all days it was active for. If it is still ongoing,
+        // add it to all days until today.
+        const finalDate = incident.endedAt ? dayjs(incident.endedAt.split("T")[0]) : currentDate;
+        const incidentActiveDays = finalDate.diff(incidentDate, "days");
+        for (let i = 0; i <= incidentActiveDays; i++) {
+          const activeDate = incidentDate.add(i, "days").format(SHORT_DAY_FORMAT);
+          this.incidentsByDay.get(activeDate)?.push([incident.id, incident]);
+        }
+        // Is this incident complete or is it still ongoing?
         if (incident.endedAt) {
-          this.addToMapList(this.completedIncidents, [incident.id, incident], incidentDate);
+          this.addToMapList(this.completedIncidents, [incident.id, incident], incidentDateStr);
         } else {
-          this.addToMapList(this.ongoingIncidents, [incident.id, incident], incidentDate);
+          this.addToMapList(this.ongoingIncidents, [incident.id, incident], incidentDateStr);
         }
         // Query the updates for this incident, too.
         const updates$ = this.incs.getIncidentUpdates(incident.id);
@@ -136,6 +183,17 @@ export class DataService {
           // an incident that has all updates retrieved and one that simply has
           // no updates to retrieve?
         });
+      });
+      // Assign list of maintenance events
+      this.maintenanceEvents = maintenanceEvents.data.filter((mEvent) => {
+        mEvent.affects = mEvent.affects?.filter((affects) => {
+          const maintenanceSeverity = this.config.severities.get('maintenance');
+          const maintenanceSeverityValue = maintenanceSeverity ? maintenanceSeverity.end : 0;
+  
+          return affects.severity !== undefined && affects.severity <= maintenanceSeverityValue;
+        });
+  
+        return mEvent.affects !== undefined && mEvent.affects.length > 0;
       });
 
       // Set up cross references

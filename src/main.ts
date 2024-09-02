@@ -17,5 +17,3 @@ fetch("/assets/config.json")
     bootstrapApplication(AppComponent, buildAppConfig(json))
     .catch((err) => console.error(err));
   });
-
-

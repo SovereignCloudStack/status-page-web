@@ -2,7 +2,7 @@ import { Component as AComponent, Input } from '@angular/core';
 import { Component } from '../../external/lib/status-page-api/angular-client'; 
 import { CommonModule, KeyValue } from '@angular/common';
 import { CallbackPipe } from '../callback.pipe';
-import { DailyStatus } from '../model/frontend/daily-status';
+import { DailyStatus } from '../model/daily-status';
 import { UserSettingsService } from '../user-settings.service';
 import { RouterModule } from '@angular/router';
 import { UtilService } from '../util.service';

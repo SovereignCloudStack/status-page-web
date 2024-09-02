@@ -1,7 +1,7 @@
-<section *ngIf="maintenanceEvents && maintenanceEvents.length && maintenanceEvents.length > 0" class="maintenance-overview">
+<section *ngIf="data.maintenanceEvents.length > 0" class="maintenance-overview">
   <h2>Planned Maintenance</h2>
 
-  <article *ngFor="let event of maintenanceEvents" class="maintenance-entry">
+  <article *ngFor="let event of data.maintenanceEvents" class="maintenance-entry">
     <div class="maintenance-header">
       <h3>{{event.displayName}}</h3>
       <p >From <em>{{event.beganAt | date: "YYYY-MM-DD\THH:mm:ss\Z": config.dateFormat}}</em> to {{event.endedAt | date: "YYYY-MM-DD\THH:mm:ss\Z": config.dateFormat}}</p>
@@ -13,7 +13,7 @@
     <ul *ngIf="event.affects">
       <ng-container *ngFor="let impact of event.affects">
         <li *ngIf="impact.reference">
-          {{dataService.components.get(impact.reference)?.displayName}}
+          {{data.components.get(impact.reference)?.displayName}}
         </li>
       </ng-container>
     </ul>

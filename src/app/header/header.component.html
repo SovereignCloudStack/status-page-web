@@ -6,7 +6,7 @@
     <div>
         <span id="accessibility-options">
             <input *ngIf="userSettings.showUserSettings" id="colorBlindMode" type="checkbox" [(ngModel)]="userSettings.useColorblindColors" />
-            <label for="colorBlindMode">Colors for colorblind</label>
+            <label *ngIf="userSettings.showUserSettings" for="colorBlindMode">Colors for colorblind</label>
         </span>
         <!--<a *ngIf="userSettings.showUserSettings" href="#accessibility-options">Skip to accessibility options</a>-->
         <span *ngIf="userSettings.showUserSettings">

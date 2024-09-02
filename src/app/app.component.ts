@@ -35,7 +35,7 @@ export class AppComponent implements OnInit {
   ) {
     // Only enable about section as well as accessibility and view options when we 
     // show the default view, aka the actual status data. We don't really need them 
-    // for the incident, imprint or cookie policy pages.
+    // for the incident, management, imprint or cookie policy pages.
     // TODO This solution is a bit hacky. Check if we can instead move the about and
     // settings sections into the outlet and just show it on the correct routes.
     router.events.forEach((e) => {
@@ -49,7 +49,6 @@ export class AppComponent implements OnInit {
         }
       }
     });
-    // TODO Set status API server URL here?
   }
 
   get showAboutSection(): boolean {

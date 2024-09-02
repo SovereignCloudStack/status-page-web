@@ -1,32 +1,32 @@
 {
     "apiServerUrl": "${STATUS_PAGE_WEB_API_URL}",
-    "redirectUri": "",
-    "dexId": "",
-    "dexUri": "dex.test:8080",
+    "redirectUrl": "${STATUS_PAGE_WEB_OIDC_REDIRECT_URI}",
+    "dexUrl": "${STATUS_PAGE_DEX_URL}",
+    "dexId": "${STATUS_PAGE_WEB_OIDC_ID}",
     "noOfDays": 90,
     "dateFormat": "YYYY-MM-DD HH:mm:ss z",
     "longDateFormat": "dddd, Do MMMM YYYY, HH:mm:ss z",
     "severities": {
-        "operational": {
-            "start": 0,
-            "end": 25,
-            "color": "#50c3a5",
-            "colorblind": "#8ce05d"
-        },
         "maintenance": {
-            "start": 26,
-            "end": 50,
+            "start": 0,
+            "end": 0,
             "color": "#50c3a5",
             "colorblind": "#e1be6a"
         },
+        "operational": {
+            "start": 1,
+            "end": 33,
+            "color": "#50c3a5",
+            "colorblind": "#8ce05d"
+        },
         "limited": {
-            "start": 51,
-            "end": 75,
+            "start": 34,
+            "end": 66,
             "color": "#f5c451",
             "colorblind": "#5d3a9b"
         },
         "broken": {
-            "start": 76,
+            "start": 67,
             "end": 100,
             "color": "#ee6a5f",
             "colorblind": "#d62c13"

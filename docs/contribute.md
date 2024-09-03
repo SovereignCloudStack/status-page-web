@@ -10,6 +10,6 @@ Now you should follow [the Quickstart guide](https://docs.scs.community/docs/ope
 
 You can now copy the configuration file template and set the `apiServerUrl` and `dexUrl` properties to `http://api.localhost:8080` and `http://dex.localhost:8080`, respectively. Set your `dexId` to `status-page-web` and the `redirectUrl` to `http://localhost:4200/login`.
 
-You are now ready to run `npm install` to retrieve all dependencies. Afterwards, you can start the application locally by running `ng serve`. The status page will be available under `localhost:4200`.
+You are now ready to run `npm install` to retrieve all dependencies. Afterwards, you can start the application locally by running `npx ng serve`. The status page will be available under [http://localhost:4200](http://localhost:4200).
 
 This repo also contains [Devcontainer files for Visual Studio Code](https://code.visualstudio.com/docs/devcontainers/containers) and we suggest using this to quickly set up your development environment.

@@ -55,7 +55,7 @@ export class AppConfigService {
 
   private config: Config = new Config();
 
-  constructor(@Inject(CONFIG_JSON) private json: any) {
+  constructor(@Inject(CONFIG_JSON) private json: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
     // The parsed JSON object has the severity entries as object properties.
     // Convert them into the map format we expect.
     json.severities = new Map(Object.entries(json.severities ?? []));
@@ -107,4 +107,4 @@ export class AppConfigService {
   }
 }
 
-export const CONFIG_JSON: InjectionToken<any> = new InjectionToken("CONFIG_JSON");
+export const CONFIG_JSON: InjectionToken<any> = new InjectionToken("CONFIG_JSON"); // eslint-disable-line @typescript-eslint/no-explicit-any

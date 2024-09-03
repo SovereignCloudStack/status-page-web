@@ -369,9 +369,9 @@ export class ManagementViewComponent implements OnInit{
     this.addComponentDialog.nativeElement.showModal();
   }
 
-  checkValidIncidentName(event: any) {
-    let displayName = event.target.value;
-    if (displayName == "") {
+  checkValidIncidentName(event: Event) {
+    const incidentDisplayNameInput = event.target as HTMLInputElement;
+    if (incidentDisplayNameInput.value == "") {
         this.errorMessage = "The display name cannot be empty";
         this.inputIsFine = false;
         return;
@@ -380,11 +380,11 @@ export class ManagementViewComponent implements OnInit{
     this.inputIsFine = true;
   }
 
-  checkValidReference(event: any) {
-    let reference = event.target.value;
-    for (let impact of this.editingIncident.affects ?? []) {
-      if (impact.reference == reference) {
-        this.errorMessage = `The incident already impacts the component ${this.util.componentName(reference)}`;
+  checkValidReference(event: Event) {
+    const referenceSelect = event.target as HTMLSelectElement;
+    for (const impact of this.editingIncident.affects ?? []) {
+      if (impact.reference == referenceSelect.value) {
+        this.errorMessage = `The incident already impacts the component ${this.util.componentName(referenceSelect.value)}`;
         this.inputIsFine = false;
         return;
       }
@@ -393,9 +393,9 @@ export class ManagementViewComponent implements OnInit{
     this.inputIsFine = true;
   }
 
-  checkValidSeverity(event: any) {
-    let severity = event.target.valueAsNumber;
-    if (severity < 0 || severity > 100) {
+  checkValidSeverity(event: Event) {
+    const severityInput = event.target as HTMLInputElement;
+    if (severityInput.valueAsNumber < 0 || severityInput.valueAsNumber > 100) {
       this.errorMessage = "The severity must be a value between 0 and 100";
       this.inputIsFine = false;
       return;
@@ -404,9 +404,9 @@ export class ManagementViewComponent implements OnInit{
     this.inputIsFine = true;
   }
 
-  checkValidDate(dateName: string, necessary: boolean, event: any) {
-    let dateStr = event.target.value;
-    if (necessary && !dateStr) {
+  checkValidDate(dateName: string, necessary: boolean, event: Event) {
+    const dateInput = event.target as HTMLInputElement
+    if (necessary && !dateInput.value) {
       this.errorMessage = `The ${dateName} cannot be empty`;
       this.inputIsFine = false;
       return;

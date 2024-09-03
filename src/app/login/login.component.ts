@@ -12,6 +12,8 @@ import { firstValueFrom } from 'rxjs';
   styleUrl: './login.component.css'
 })
 export class LoginComponent implements OnInit, OnDestroy {
+  public redirectTimeout: number = 3000;
+  private redirectTimeoutID?: number
 
   constructor(
     private router: Router,
@@ -22,12 +24,17 @@ export class LoginComponent implements OnInit, OnDestroy {
   success: boolean = false;
 
   async ngOnInit(): Promise<void> {
-    let login = await firstValueFrom(this.security.checkAuth());
+    const login = await firstValueFrom(this.security.checkAuth());
     this.waiting = false;
     this.success = login.isAuthenticated;
     if (this.success) {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      this.router.navigate([""]);
+      this.redirectTimeoutID = window.setTimeout(() => {
+        this.router.navigate([""]);
+      }, this.redirectTimeout);
     }
+  }
+
+  ngOnDestroy(): void {
+    window.clearTimeout(this.redirectTimeoutID);
   }
 }

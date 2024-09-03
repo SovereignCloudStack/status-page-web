@@ -1,9 +1,9 @@
 <a [routerLink]="['/']">&lt;&lt; back to the overview</a>
 <h1>Manage Incidents</h1>
 <div id="controls">
-    <button type="button" autofocus (click)="editNewIncident()"><fa-icon [icon]="iconNewIncident"></fa-icon><span>New
+    <button type="button" (click)="editNewIncident()"><fa-icon [icon]="iconNewIncident"></fa-icon><span>New
             Incident</span></button>
-    <button type="button" autofocus (click)="editNewMaintenanceEvent()"><fa-icon
+    <button type="button" (click)="editNewMaintenanceEvent()"><fa-icon
             [icon]="iconNewIncident"></fa-icon><span>New Maintenance Event</span></button>
 </div>
 <div id="incident-list">
@@ -63,14 +63,14 @@
                 <td class="date-column">{{ util.formatDate(event.endedAt) }}</td>
                 <td class="id-column" title="{{ event.id }}">{{ event.id.split("-")[0] }}</td>
                 <td class="control-column">
-                    <button 
+                    <button
                         type="button"
                         title="Edit this maintenance event"
                         (click)="editExistingMaintenanceEvent(event.id, event)"
                     >
                         <fa-icon [icon]="iconEdit"></fa-icon>
                     </button>
-                    <button 
+                    <button
                         ngClass="dangerous"
                         type="button"
                         title="Delete this maintenance event"
@@ -108,13 +108,13 @@
             id="inputIncidentEndDate"
             name="inputIncidentEndDate"
             value="{{ formatDateTime(editingIncident.endedAt) }}"
-            (change)="checkValidDate('start date', isMaintenanceEvent(), $event)"
+            (change)="checkValidDate('end date', isMaintenanceEvent(), $event)"
         >
         <label for="inputIncidentPhase">Phase</label>
         <select #inputIncidentPhase id="inputIncidentPhase" name="inputIncidentPhase">
             <option *ngFor="let phase of data.phaseGenerations.phases" value="{{ data.phaseGenerations.phases.indexOf(phase) }}">{{ phase }}</option>
         </select>
-        <label>Impacted Components</label>
+        <label for="inputIncidentImpact">Impacted Components</label>
         <div class="subform">
             <select
                 #inputIncidentImpact
@@ -133,7 +133,7 @@
                     [icon]="iconAddUpdate"></fa-icon></button>
             <button type="button" (click)="deleteImpact()" class="dangerous"><fa-icon [icon]="iconDeleteUpdate"></fa-icon></button>
         </div>
-        <label *ngIf="!isMaintenanceEvent()">Updates</label>
+        <label for="inputIncidentUpdate" *ngIf="!isMaintenanceEvent()">Updates</label>
         <div class="subform" *ngIf="!isMaintenanceEvent()">
             <select
                 #inputIncidentUpdate
@@ -141,7 +141,7 @@
                 name="inputIncidentUpdate"
                 class="stretch"
             >
-                <option 
+                <option
                     *ngFor="let update of data.incidentUpdates.get(editingIncidentId)"
                     value="{{ update.order }}"
                 >
@@ -162,8 +162,8 @@
         <p class="error-message">{{ errorMessage }}</p>
     </div>
     <div class="dialog-controls">
-        <button 
-            type="button" 
+        <button
+            type="button"
             (click)="saveChanges()"
             *ngIf="!isNewIncident()"
             [disabled]="!inputIsFine"
@@ -211,7 +211,7 @@
     <form>
         <label for="inputAddComponentSelect">Component</label>
         <select #inputAddComponentSelect id="inputAddComponentSelect" name="inputAddComponentSelect"
-            (change)="checkValidReference($event)" (focus)="checkValidReference($event)" autofocus>
+            (change)="checkValidReference($event)" (focus)="checkValidReference($event)">
             <option *ngFor="let component of data.components | keyvalue" value="{{ component.key }}">{{
                 component.value.displayName }} - {{ component.key }}</option>
         </select>

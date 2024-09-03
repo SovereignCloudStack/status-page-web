@@ -23,4 +23,10 @@ export class FooterComponent {
   login(): void {
     this.oidcSecurityService.authorize();
   }
+
+  handleKeyPress(e:KeyboardEvent) {
+    if (e.key == "Enter") {
+      this.login();
+    }
+  }
 }

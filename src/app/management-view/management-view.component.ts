@@ -255,7 +255,7 @@ export class ManagementViewComponent implements OnInit{
       if (order !== undefined) {
         this.incidentService.deleteIncidentUpdate(this.editingIncidentId, order).subscribe(
           {
-            next: result => {
+            next: () => {
             },
             error: err => {
               console.error(`Request to delete update ${order} of incident ${this.editingIncidentId} error'ed out:`);
@@ -339,7 +339,7 @@ export class ManagementViewComponent implements OnInit{
 
   handleResponse<T>(o: Observable<T>, dialog: ElementRef<HTMLDialogElement>): void {
     o.subscribe({
-      next: (value) => {
+      next: () => {
         this.editingIncident = {};
         this.editingIncidentId = "";
         this.maintenanceEvent = false;

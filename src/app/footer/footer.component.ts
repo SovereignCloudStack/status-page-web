@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { UserSettingsService } from '../user-settings.service';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 
 @Component({
@@ -18,7 +18,7 @@ export class FooterComponent {
   protected readonly userData = this.oidcSecurityService.userData;
   protected readonly authenticated = this.oidcSecurityService.authenticated;
 
-  constructor(public userSettings: UserSettingsService, private router: Router) {}
+  constructor(public userSettings: UserSettingsService) {}
 
   login(): void {
     this.oidcSecurityService.authorize();

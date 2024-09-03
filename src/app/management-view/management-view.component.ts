@@ -5,7 +5,7 @@ import { DataService } from '../data.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faPenToSquare, faTrashCan, faSquarePlus, faFloppyDisk, faXmarkCircle } from '@fortawesome/free-regular-svg-icons';
 import { UtilService } from '../util.service';
-import { Impact, Incident, IncidentService, IncidentUpdate, IncidentUpdateResponseData } from '../../external/lib/status-page-api/angular-client';
+import { Incident, IncidentService, IncidentUpdate, IncidentUpdateResponseData } from '../../external/lib/status-page-api/angular-client';
 import dayjs from 'dayjs';
 import { formatQueryDate, IncidentId } from '../model/base';
 import { SpinnerComponent } from '../spinner/spinner.component';

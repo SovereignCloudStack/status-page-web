@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { firstValueFrom } from 'rxjs';
 
@@ -14,7 +14,6 @@ import { firstValueFrom } from 'rxjs';
 export class LoginComponent {
 
   constructor(
-    private route: ActivatedRoute,
     private router: Router,
     private security: OidcSecurityService
   ) {}

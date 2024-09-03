@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, Signal, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, Signal, ViewChild } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { DataService } from '../data.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -26,7 +26,7 @@ const WS_RELOADING = "Reloading data...";
   templateUrl: './management-view.component.html',
   styleUrl: './management-view.component.css'
 })
-export class ManagementViewComponent {
+export class ManagementViewComponent implements OnInit{
 
   iconEdit = faPenToSquare;
   iconDelete = faTrashCan;

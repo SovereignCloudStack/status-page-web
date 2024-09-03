@@ -87,12 +87,13 @@
     <span id="edited-incident-id" *ngIf="!isNewIncident()">{{ editingIncidentId }}</span>
     <h1 *ngIf="!isNewIncident()">Editing <em>{{ this.editingIncident.displayName }}</em></h1>
     <h1 *ngIf="isNewIncident()">Creating new Incident</h1>
-    <form>
+    <form (keydown.enter)="$event.preventDefault()" (keydown.shift.enter)="$event.preventDefault()">
         <label for="inputIncidentName">Display Name</label>
         <input type="text" #inputIncidentName id="inputIncidentName" name="inputIncidentName"
             [value]="editingIncident.displayName" (change)="checkValidIncidentName($event)">
         <label for="inputIncidentDescription">Description</label>
         <textarea rows="4" #inputIncidentDescription id="inputIncidentDescription" name="inputIncidentDescription"
+            (keydown.enter)="$event.stopPropagation()"
             [value]="editingIncident.description"></textarea>
         <label for="inputIncidentStartDate">Start Date</label>
         <input type="datetime-local"
@@ -208,7 +209,7 @@
 </dialog>
 <dialog #addAffectedComponentDialog id="add-affected-component-dialog">
     <h1>Add Affected Component</h1>
-    <form>
+    <form (keydown.enter)="$event.preventDefault()" (keydown.shift.enter)="$event.preventDefault()">
         <label for="inputAddComponentSelect">Component</label>
         <select #inputAddComponentSelect id="inputAddComponentSelect" name="inputAddComponentSelect"
             (change)="checkValidReference($event)" (focus)="checkValidReference($event)">
@@ -249,12 +250,13 @@
 </dialog>
 <dialog #createUpdateDialog id="create-update-dialog">
     <h1>Add Incident Update</h1>
-    <form>
+    <form (keydown.enter)="$event.preventDefault()" (keydown.shift.enter)="$event.preventDefault()">
         <label for="inputUpdateName">Display Name</label>
         <input type="text" #inputUpdateName id="inputUpdateName" name="inputUpdateName"
             [value]="editingUpdate.displayName" (change)="checkValidIncidentName($event)">
         <label for="inputUpdateDescription">Description</label>
         <textarea rows="4" #inputUpdateDescription id="inputUpdateDescription" name="inputUpdateDescription"
+            (keydown.enter)="$event.stopPropagation()"
             [value]="editingUpdate.description"></textarea>
     </form>
     <p>Updates will only be saved upon saving their incident.</p>

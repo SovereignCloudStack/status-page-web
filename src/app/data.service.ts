@@ -80,7 +80,7 @@ export class DataService {
     return this.incs.createIncident(incident);
   }
 
-  updateIncident(id: IncidentId, incident: Incident): Observable<any> {
+  updateIncident(id: IncidentId, incident: Incident): Observable<void> {
     return this.incs.updateIncident(id, incident);
   }
 

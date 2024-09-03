@@ -1,6 +1,6 @@
 # Configuration
 
-The SPA expects a configuration file called `config.json` to be present in the `src/assets` folder. The very same folder also contains a template for this configuration file, called `config.tmpl.json`.
+The SPA expects a configuration file called `config.json` to be present in the `src/assets` folder. The very same folder also contains a template for this configuration file, called `config.tmpl.json`. The resulting configuration, in the static build of the SPA, will be located at `dist/scs-statuspage/browser/assets`.
 
 ## Configuration File
 
@@ -62,4 +62,3 @@ The `severities` map contains one entry for each severity level specified in the
 
 - **Format:** A format string using the [format specifiers](https://day.js.org/docs/en/display/format) provided by [Day.js](https://day.js.org/), including the ones provided by the `AdvancedFormat` plugin.
 - **Color:** A string containing a color value, specified using CSS notation. Allows for color names, hex values using a leading `#` or the `rgb(...)` syntax.
-- **JSON:** A JSON sub-object.

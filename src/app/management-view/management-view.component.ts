@@ -112,7 +112,7 @@ export class ManagementViewComponent implements OnInit{
       this.userData = this.security.userData;
       const token = await firstValueFrom(this.security.getAccessToken());
       this.incidentService.configuration.withCredentials = true;
-      this.incidentService.defaultHeaders = this.incidentService.defaultHeaders.append("Authorization", `Bearer ${token}`);
+      this.incidentService.defaultHeaders = this.incidentService.defaultHeaders.set("Authorization", `Bearer ${token}`);
     });
   }
 

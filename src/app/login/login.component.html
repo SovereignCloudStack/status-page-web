@@ -1,4 +1,7 @@
 <a [routerLink]="['/']">&lt;&lt; back to the overview</a>
 <p *ngIf="waiting">Waiting for authorization...</p>
-<p *ngIf="!waiting && success">You've been authorized! Redirecting to the main page...</p>
+<ng-container *ngIf="!waiting && success">
+  <p>You've been authorized! Redirecting to the main page in {{ redirectTimeout / 1000 }}s...</p>
+  <p>If you're not redirected click <a [routerLink]="['/']">here</a></p>
+</ng-container>
 <p *ngIf="!waiting && !success">Authorization failed</p>

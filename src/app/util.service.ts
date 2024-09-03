@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AppConfigService } from './app-config.service';
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import { DailyStatus } from './model/daily-status';
 import { UserSettingsService } from './user-settings.service';
 import { Incident, IncidentUpdate } from '../external/lib/status-page-api/angular-client';
@@ -103,8 +103,8 @@ export class UtilService {
   }
 
   isCompleted(incident: Incident): boolean {
-    return incident.beganAt !== undefined 
-      && incident.beganAt !== null 
+    return incident.beganAt !== undefined
+      && incident.beganAt !== null
       && incident.endedAt !== undefined
       && incident.endedAt !== null;
   }
@@ -133,7 +133,7 @@ export class UtilService {
 
   componentName(componentId?: ComponentId): string {
     if (componentId !== undefined) {
-      let component = this.dataService.components.get(componentId);
+      const component = this.dataService.components.get(componentId);
       if (component) {
         return component.displayName ?? "component missing name";
       }

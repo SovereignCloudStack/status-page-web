@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { AppConfigService } from './app-config.service';
 import { BehaviorSubject, Observable, combineLatestWith } from 'rxjs';
 import { DailyStatus } from './model/daily-status';
-import { Component, ComponentService, IdField, ImpactService, ImpactType, Incident, IncidentResponseData, IncidentService, IncidentUpdate, IncidentUpdateResponseData, PhaseList, PhaseService, Severity } from '../external/lib/status-page-api/angular-client';
+import { Component, ComponentService, IdField, ImpactService, ImpactType, Incident, IncidentResponseData, IncidentService, IncidentUpdateResponseData, PhaseList, PhaseService, Severity } from '../external/lib/status-page-api/angular-client';
 import { ComponentId, formatQueryDate, ImpactId, IncidentId, SHORT_DAY_FORMAT, ShortDayString } from './model/base';
 
 @Injectable({
@@ -80,7 +80,7 @@ export class DataService {
     return this.incs.createIncident(incident);
   }
 
-  updateIncident(id: IncidentId, incident: Incident): Observable<any> {
+  updateIncident(id: IncidentId, incident: Incident): Observable<void> {
     return this.incs.updateIncident(id, incident);
   }
 
@@ -189,10 +189,10 @@ export class DataService {
         mEvent.affects = mEvent.affects?.filter((affects) => {
           const maintenanceSeverity = this.config.severities.get('maintenance');
           const maintenanceSeverityValue = maintenanceSeverity ? maintenanceSeverity.end : 0;
-  
+
           return affects.severity !== undefined && affects.severity <= maintenanceSeverityValue;
         });
-  
+
         return mEvent.affects !== undefined && mEvent.affects.length > 0;
       });
 

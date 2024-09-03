@@ -1,11 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, Signal, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, Signal, ViewChild } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { DataService } from '../data.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faPenToSquare, faTrashCan, faSquarePlus, faFloppyDisk, faXmarkCircle } from '@fortawesome/free-regular-svg-icons';
 import { UtilService } from '../util.service';
-import { Impact, Incident, IncidentService, IncidentUpdate, IncidentUpdateResponseData } from '../../external/lib/status-page-api/angular-client';
+import { Incident, IncidentService, IncidentUpdate, IncidentUpdateResponseData } from '../../external/lib/status-page-api/angular-client';
 import dayjs from 'dayjs';
 import { formatQueryDate, IncidentId } from '../model/base';
 import { SpinnerComponent } from '../spinner/spinner.component';
@@ -26,7 +26,7 @@ const WS_RELOADING = "Reloading data...";
   templateUrl: './management-view.component.html',
   styleUrl: './management-view.component.css'
 })
-export class ManagementViewComponent {
+export class ManagementViewComponent implements OnInit{
 
   iconEdit = faPenToSquare;
   iconDelete = faTrashCan;
@@ -125,7 +125,7 @@ export class ManagementViewComponent {
   }
 
   editNewIncident(): void {
-    let incident: Incident = {  
+    const incident: Incident = {
       displayName: "",
       description: "",
       beganAt: formatQueryDate(dayjs().utc()),
@@ -141,7 +141,7 @@ export class ManagementViewComponent {
   }
 
   editNewMaintenanceEvent(): void {
-    let event: Incident = {  
+    const event: Incident = {
       displayName: "",
       description: "",
       beganAt: formatQueryDate(dayjs().utc()),
@@ -209,10 +209,10 @@ export class ManagementViewComponent {
     this.editingUpdate.displayName = this.inputUpdateName.nativeElement.value;
     this.editingUpdate.description = this.inputUpdateDescription.nativeElement.value;
     this.editingUpdate.createdAt = formatQueryDate(dayjs().utc());
-    let update = this.editingUpdate as IncidentUpdateResponseData;
+    const update = this.editingUpdate as IncidentUpdateResponseData;
     // We use a temporary order number to be able to delete updates that have not yet
     // been saved to the API server. To make it possible to differentiate this order
-    // number from an ordinary one, we use negative numbers.    
+    // number from an ordinary one, we use negative numbers.
     update.order = -(this.newUpdatesToProcess.length + 1);
     this.newUpdatesToProcess.push(update);
     this.editingUpdate = {};
@@ -255,7 +255,7 @@ export class ManagementViewComponent {
       if (order !== undefined) {
         this.incidentService.deleteIncidentUpdate(this.editingIncidentId, order).subscribe(
           {
-            next: result => {
+            next: () => {
             },
             error: err => {
               console.error(`Request to delete update ${order} of incident ${this.editingIncidentId} error'ed out:`);
@@ -339,7 +339,7 @@ export class ManagementViewComponent {
 
   handleResponse<T>(o: Observable<T>, dialog: ElementRef<HTMLDialogElement>): void {
     o.subscribe({
-      next: (value) => {
+      next: () => {
         this.editingIncident = {};
         this.editingIncidentId = "";
         this.maintenanceEvent = false;
@@ -369,9 +369,9 @@ export class ManagementViewComponent {
     this.addComponentDialog.nativeElement.showModal();
   }
 
-  checkValidIncidentName(event: any) {
-    let displayName = event.target.value;
-    if (displayName == "") {
+  checkValidIncidentName(event: Event) {
+    const incidentDisplayNameInput = event.target as HTMLInputElement;
+    if (incidentDisplayNameInput.value == "") {
         this.errorMessage = "The display name cannot be empty";
         this.inputIsFine = false;
         return;
@@ -380,11 +380,11 @@ export class ManagementViewComponent {
     this.inputIsFine = true;
   }
 
-  checkValidReference(event: any) {
-    let reference = event.target.value;
-    for (let impact of this.editingIncident.affects ?? []) {
-      if (impact.reference == reference) {
-        this.errorMessage = `The incident already impacts the component ${this.util.componentName(reference)}`;
+  checkValidReference(event: Event) {
+    const referenceSelect = event.target as HTMLSelectElement;
+    for (const impact of this.editingIncident.affects ?? []) {
+      if (impact.reference == referenceSelect.value) {
+        this.errorMessage = `The incident already impacts the component ${this.util.componentName(referenceSelect.value)}`;
         this.inputIsFine = false;
         return;
       }
@@ -393,9 +393,9 @@ export class ManagementViewComponent {
     this.inputIsFine = true;
   }
 
-  checkValidSeverity(event: any) {
-    let severity = event.target.valueAsNumber;
-    if (severity < 0 || severity > 100) {
+  checkValidSeverity(event: Event) {
+    const severityInput = event.target as HTMLInputElement;
+    if (severityInput.valueAsNumber < 0 || severityInput.valueAsNumber > 100) {
       this.errorMessage = "The severity must be a value between 0 and 100";
       this.inputIsFine = false;
       return;
@@ -404,9 +404,9 @@ export class ManagementViewComponent {
     this.inputIsFine = true;
   }
 
-  checkValidDate(dateName: string, necessary: boolean, event: any) {
-    let dateStr = event.target.value;
-    if (necessary && !dateStr) {
+  checkValidDate(dateName: string, necessary: boolean, event: Event) {
+    const dateInput = event.target as HTMLInputElement
+    if (necessary && !dateInput.value) {
       this.errorMessage = `The ${dateName} cannot be empty`;
       this.inputIsFine = false;
       return;
@@ -450,7 +450,7 @@ export class ManagementViewComponent {
   }
 
   currentDateTime(): string {
-    let dt = dayjs().local();
+    const dt = dayjs().local();
     return dt.format(DT_FORMAT);
   }
 

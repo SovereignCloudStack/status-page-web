@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { firstValueFrom } from 'rxjs';
 
@@ -11,10 +11,11 @@ import { firstValueFrom } from 'rxjs';
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit, OnDestroy {
+  public redirectTimeout: number = 3000;
+  private redirectTimeoutID?: number
 
   constructor(
-    private route: ActivatedRoute,
     private router: Router,
     private security: OidcSecurityService
   ) {}
@@ -23,12 +24,17 @@ export class LoginComponent {
   success: boolean = false;
 
   async ngOnInit(): Promise<void> {
-    let login = await firstValueFrom(this.security.checkAuth());
+    const login = await firstValueFrom(this.security.checkAuth());
     this.waiting = false;
     this.success = login.isAuthenticated;
     if (this.success) {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      this.router.navigate([""]);
+      this.redirectTimeoutID = window.setTimeout(() => {
+        this.router.navigate([""]);
+      }, this.redirectTimeout);
     }
+  }
+
+  ngOnDestroy(): void {
+    window.clearTimeout(this.redirectTimeoutID);
   }
 }

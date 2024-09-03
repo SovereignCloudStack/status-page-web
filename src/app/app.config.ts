@@ -7,9 +7,9 @@ import { Configuration } from '../external/lib/status-page-api/angular-client';
 import { AppConfigService, CONFIG_JSON } from './app-config.service';
 import { authInterceptor, LogLevel, provideAuth, StsConfigLoader, StsConfigStaticLoader } from 'angular-auth-oidc-client';
 
-export function buildAppConfig(jsonConfig: any): ApplicationConfig {
+export function buildAppConfig(jsonConfig: any): ApplicationConfig { // eslint-disable-line @typescript-eslint/no-explicit-any
   return {
-    providers: [      
+    providers: [
       provideHttpClient(withInterceptors([authInterceptor()])),
       {
         provide: CONFIG_JSON,

@@ -188,6 +188,13 @@ export class ManagementViewComponent implements OnInit{
     if (this.inputIncidentEndDate.nativeElement.value) {
       this.editingIncident.endedAt = formatQueryDate(dayjs(this.inputIncidentEndDate.nativeElement.value).utc());
     }
+    if (!this.editingIncident.phase) {
+      this.editingIncident.phase = {
+        generation: 1,
+        order: 0
+      };
+    }
+    this.editingIncident.phase.order = parseInt(this.inputIncidentPhase.nativeElement.value) ?? 0;
     this.waitState = WS_PROCESSING;
     this.waitSpinnerDialog.nativeElement.showModal();
     this.handleResponse(this.data.createIncident(this.editingIncident), this.incidentDialog);

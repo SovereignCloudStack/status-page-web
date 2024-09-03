@@ -125,7 +125,7 @@ export class ManagementViewComponent implements OnInit{
   }
 
   editNewIncident(): void {
-    let incident: Incident = {  
+    const incident: Incident = {
       displayName: "",
       description: "",
       beganAt: formatQueryDate(dayjs().utc()),
@@ -141,7 +141,7 @@ export class ManagementViewComponent implements OnInit{
   }
 
   editNewMaintenanceEvent(): void {
-    let event: Incident = {  
+    const event: Incident = {
       displayName: "",
       description: "",
       beganAt: formatQueryDate(dayjs().utc()),
@@ -209,10 +209,10 @@ export class ManagementViewComponent implements OnInit{
     this.editingUpdate.displayName = this.inputUpdateName.nativeElement.value;
     this.editingUpdate.description = this.inputUpdateDescription.nativeElement.value;
     this.editingUpdate.createdAt = formatQueryDate(dayjs().utc());
-    let update = this.editingUpdate as IncidentUpdateResponseData;
+    const update = this.editingUpdate as IncidentUpdateResponseData;
     // We use a temporary order number to be able to delete updates that have not yet
     // been saved to the API server. To make it possible to differentiate this order
-    // number from an ordinary one, we use negative numbers.    
+    // number from an ordinary one, we use negative numbers.
     update.order = -(this.newUpdatesToProcess.length + 1);
     this.newUpdatesToProcess.push(update);
     this.editingUpdate = {};
@@ -450,7 +450,7 @@ export class ManagementViewComponent implements OnInit{
   }
 
   currentDateTime(): string {
-    let dt = dayjs().local();
+    const dt = dayjs().local();
     return dt.format(DT_FORMAT);
   }
 

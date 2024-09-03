@@ -133,7 +133,7 @@ export class UtilService {
 
   componentName(componentId?: ComponentId): string {
     if (componentId !== undefined) {
-      let component = this.dataService.components.get(componentId);
+      const component = this.dataService.components.get(componentId);
       if (component) {
         return component.displayName ?? "component missing name";
       }

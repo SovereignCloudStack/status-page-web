@@ -32,6 +32,7 @@
             "colorblind": "#d62c13"
         }
     },
+    "dayDefaultSeverity": 1,
     "unknownColor": "lightsteelblue",
     "aboutText": "${STATUS_PAGE_WEB_ABOUT_TEXT}",
     "maintenancePreviewDays": ${STATUS_PAGE_WEB_MAINTENANCE_PREVIEW_DAYS}

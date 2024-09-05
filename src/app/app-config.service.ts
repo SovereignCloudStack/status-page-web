@@ -16,6 +16,7 @@ class Config {
   dateFormat: string = "YYYY-MM-DD HH:mm:ss z";
   longDateFormat: string = "dddd, Do MMMM YYYY, HH:mm:ss z";
   severities: Map<string, Severity> = new Map();
+  dayDefaultSeverity: number = 1;
   unknownColor: string = "lightsteelblue";
   aboutText: string = "";
   maintenancePreviewDays: number = 30;
@@ -76,6 +77,10 @@ export class AppConfigService {
 
   get severities(): Map<string, Severity> {
     return this.config.severities;
+  }
+
+  get dayDefaultSeverity(): number {
+    return this.config.dayDefaultSeverity;
   }
 
   get unknownColor(): string {

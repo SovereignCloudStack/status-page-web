@@ -70,6 +70,8 @@ You will find a configuration file named `config.json` in the `src/assets` direc
             "colorblind": "#d62c13"
         }
     },
+    // Severity value used for days where no incidents occurred
+    "dayDefaultSeverity": 1,
     // Backup color in case an unmapped severity value has been found
     "unknownColor": "lightsteelblue",
     // A short text to be displayed above the components

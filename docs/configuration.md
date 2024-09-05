@@ -16,9 +16,10 @@ The following table explains all settings available in the configuration file. E
 | dateFormat             | The format to use for dates displayed.                        | Format | "YYYY-MM-DD HH:mm:ss z"          |
 | longDateFormat         | Long format for dates, including day names.                   | Format | "dddd, Do MMMM YYYY, HH:mm:ss z" |
 | severities             | Maps severities to colors to use.                             | Object | see below                        |
+| dayDefaultSeverity     | Severity value used for days where no incidents occured       | Number | 1
 | unknownColor           | Color to use for unknown severity values.                     | Color  | "lightsteelblue"                 |
 | aboutText              | Short text that appears in the "About" section.               | String | empty                            |
-| maintenancePreviewDays | Number of days in the future to check for maintenance events. | number | 30                               |
+| maintenancePreviewDays | Number of days in the future to check for maintenance events. | Number | 30                               |
 
 The `severities` map contains one entry for each severity level specified in the API server. The default configuration included in the template file looks like this:
 

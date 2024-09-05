@@ -106,7 +106,7 @@ export class ManagementViewComponent implements OnInit{
   async ngOnInit(): Promise<void> {
     this.security.checkAuth().subscribe(async response => {
       if (!response.isAuthenticated) {
-        console.log(`Unauthenticated, potential error: ${response.errorMessage}`);
+        console.error(`Unauthenticated, potential error: ${response.errorMessage}`);
         this.router.navigate([""]);
       }
       this.userData = this.security.userData;

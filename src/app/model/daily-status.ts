@@ -9,9 +9,11 @@ export class DailyStatus {
     private _topLevelIncident?: [IncidentId, Incident] = undefined;
     private _topLevelImpact?: Impact = undefined;
 
-    private _severity: number = 0;
+    // We use a severity value of 1 as default. It is returned when no incidents have been 
+    // added to this day. 
+    private _severity: number = 1;
 
-    constructor(day: ShortDayString | Dayjs) {
+    constructor(day: ShortDayString | Dayjs, defaultSeverity: number) {
         if (day instanceof dayjs) {
             this.day = day.format(SHORT_DAY_FORMAT);
         } else {

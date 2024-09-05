@@ -22,7 +22,6 @@ export function buildAppConfig(jsonConfig: any): ApplicationConfig { // eslint-d
             return new StsConfigStaticLoader({
               triggerAuthorizationResultEvent: true,
               postLoginRoute: '/home',
-              forbiddenRoute: '/forbidden',
               unauthorizedRoute: '/unauthorized',
               logLevel: LogLevel.Warn,
               historyCleanupOff: true,

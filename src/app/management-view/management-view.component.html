@@ -85,8 +85,10 @@
 </div>
 <dialog #incidentDialog id="incident-dialog">
     <span id="edited-incident-id" *ngIf="!isNewIncident()">{{ editingIncidentId }}</span>
-    <h1 *ngIf="!isNewIncident()">Editing <em>{{ this.editingIncident.displayName }}</em></h1>
-    <h1 *ngIf="isNewIncident()">Creating new Incident</h1>
+    <h1 *ngIf="!isMaintenanceEvent() && !isNewIncident()">Editing <em>{{ this.editingIncident.displayName }}</em></h1>
+    <h1 *ngIf="!isMaintenanceEvent() && isNewIncident()">Creating new Incident</h1>
+    <h1 *ngIf="isMaintenanceEvent() && isNewIncident()">Creating new Maintenance Event</h1>
+    <h1 *ngIf="isMaintenanceEvent() && !isNewIncident()">Editing <em>{{ this.editingIncident.displayName }}</em></h1>
     <form (keydown.enter)="$event.preventDefault()" (keydown.shift.enter)="$event.preventDefault()">
         <label for="inputIncidentName">Display Name</label>
         <input type="text" #inputIncidentName id="inputIncidentName" name="inputIncidentName"
@@ -134,8 +136,9 @@
                     [icon]="iconAddUpdate"></fa-icon></button>
             <button type="button" (click)="deleteImpact()" class="dangerous"><fa-icon [icon]="iconDeleteUpdate"></fa-icon></button>
         </div>
-        <label for="inputIncidentUpdate" *ngIf="!isMaintenanceEvent()">Updates</label>
-        <div class="subform" *ngIf="!isMaintenanceEvent()">
+        <p class="stretch" *ngIf="isNewIncident()">Updates can be added once the incident has been created.</p>
+        <label for="inputIncidentUpdate" *ngIf="!isMaintenanceEvent() && !isNewIncident()">Updates</label>
+        <div class="subform" *ngIf="!isMaintenanceEvent() && !isNewIncident()">
             <select
                 #inputIncidentUpdate
                 id="inputIncidentUpdate"

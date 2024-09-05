@@ -9,9 +9,8 @@ import { Incident, IncidentService, IncidentUpdate, IncidentUpdateResponseData }
 import dayjs from 'dayjs';
 import { formatQueryDate, IncidentId } from '../model/base';
 import { SpinnerComponent } from '../spinner/spinner.component';
-import { OidcSecurityService, UserDataResult } from 'angular-auth-oidc-client';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { firstValueFrom, Observable } from 'rxjs';
-import { AppConfigService } from '../app-config.service';
 
 const DT_FORMAT = "YYYY-MM-DDTHH:mm";
 
@@ -92,12 +91,9 @@ export class ManagementViewComponent implements OnInit{
   @ViewChild("waitSpinnerDialog")
   private waitSpinnerDialog!: ElementRef<HTMLDialogElement>;
 
-  private userData!: Signal<UserDataResult>;
-
   constructor(
     public data: DataService,
     public util: UtilService,
-    private config: AppConfigService,
     private security: OidcSecurityService,
     private router: Router,
     private incidentService: IncidentService
@@ -109,7 +105,6 @@ export class ManagementViewComponent implements OnInit{
         console.log(`Unauthenticated, potential error: ${response.errorMessage}`);
         this.router.navigate([""]);
       }
-      this.userData = this.security.userData;
       const token = await firstValueFrom(this.security.getAccessToken());
       this.incidentService.configuration.withCredentials = true;
       this.incidentService.defaultHeaders = this.incidentService.defaultHeaders.set("Authorization", `Bearer ${token}`);

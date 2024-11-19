@@ -141,6 +141,16 @@ export class DataService {
       formatQueryDate(future)
     );
 
+    // This set contains the IDs of all incidents for which we are still
+    // waiting on the list of IncidentUpdates. We use this to make sure 
+    // we only mark the data as completely loaded once all of those have
+    // been processed.
+    let incidentsWaitingForUpdates = new Set<IncidentId>();
+    // We must check if both, components and incident updates, are done loading.
+    // These two booleans are used to track this.
+    let updatesDone: boolean = false;
+    let componentsDone: boolean = false;
+
     // Set up result handling
     phases$.pipe(
       combineLatestWith(severities$, impactTypes$, components$, incidents$, maintenance$)
@@ -175,13 +185,18 @@ export class DataService {
           this.addToMapList(this.ongoingIncidents, [incident.id, incident], incidentDateStr);
         }
         // Query the updates for this incident, too.
+        incidentsWaitingForUpdates.add(incident.id);
         const updates$ = this.incs.getIncidentUpdates(incident.id);
         updates$.subscribe(answer => {
           const list = this.incidentUpdates.get(incident.id) ?? [];
           this.incidentUpdates.set(incident.id, list.concat(answer.data));
-          // TODO Mark this one as loaded? So that we can differentiate between
-          // an incident that has all updates retrieved and one that simply has
-          // no updates to retrieve?
+          incidentsWaitingForUpdates.delete(incident.id);
+          if (incidentsWaitingForUpdates.size === 0) {
+            updatesDone = true;
+            if (updatesDone && componentsDone) {
+              this._loadingFinished.next(true);
+            }
+          }
         });
       });
       // Assign list of maintenance events
@@ -215,8 +230,12 @@ export class DataService {
         // Calculate availability of this component
         this.calculateAvailability(componentId);
       });
-      // We are now fully loaded and can display the data
-      this._loadingFinished.next(true);
+      // Check if we are now fully loaded and can display the data
+      componentsDone = true;
+      console.log(`componentsDone: ${componentsDone} | updatesDone: ${updatesDone}`);
+      if (componentsDone && updatesDone) {
+        this._loadingFinished.next(true);
+      }
     });
   }
 

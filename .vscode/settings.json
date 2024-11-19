@@ -1,3 +1,10 @@
 {
-    "git.alwaysSignOff": true
+    "git.alwaysSignOff": true,
+    "terminal.integrated.defaultProfile.linux": "distrobox",
+    "terminal.integrated.profiles.linux": {
+        "distrobox": {
+            "path": "/usr/bin/flatpak-spawn",
+            "args": [ "--host", "distrobox", "enter", "vscode-terminal" ]
+        }
+    }
 }

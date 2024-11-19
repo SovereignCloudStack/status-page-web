@@ -3,7 +3,6 @@ import { Component, ElementRef, OnInit, Signal, ViewChild } from '@angular/core'
 import { Router, RouterModule } from '@angular/router';
 import { DataService } from '../data.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faPenToSquare, faTrashCan, faSquarePlus, faFloppyDisk, faXmarkCircle } from '@fortawesome/free-regular-svg-icons';
 import { UtilService } from '../util.service';
 import { Incident, IncidentService, IncidentUpdate, IncidentUpdateResponseData } from '../../external/lib/status-page-api/angular-client';
 import dayjs from 'dayjs';
@@ -12,6 +11,7 @@ import { SpinnerComponent } from '../spinner/spinner.component';
 import { OidcSecurityService, UserDataResult } from 'angular-auth-oidc-client';
 import { firstValueFrom, Observable } from 'rxjs';
 import { AppConfigService } from '../app-config.service';
+import { IconProviderService } from '../icon-provider.service';
 
 const DT_FORMAT = "YYYY-MM-DDTHH:mm";
 
@@ -27,14 +27,6 @@ const WS_RELOADING = "Reloading data...";
   styleUrl: './management-view.component.css'
 })
 export class ManagementViewComponent implements OnInit{
-
-  iconEdit = faPenToSquare;
-  iconDelete = faTrashCan;
-  iconNewIncident = faSquarePlus;
-  iconSaveChanges = faFloppyDisk;
-  iconDiscardChanges = faXmarkCircle;
-  iconAddUpdate = faSquarePlus;
-  iconDeleteUpdate = faTrashCan;
 
   editingIncidentId: string = "";
   editingIncident: Incident = {};
@@ -97,6 +89,7 @@ export class ManagementViewComponent implements OnInit{
   constructor(
     public data: DataService,
     public util: UtilService,
+    public ip: IconProviderService,
     private config: AppConfigService,
     private security: OidcSecurityService,
     private router: Router,

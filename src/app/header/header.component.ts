@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { UserSettingsService } from '../user-settings.service';
+import { UserSettingsService } from '../services/user-settings.service';
 import { FormsModule } from '@angular/forms';
 
 @Component({

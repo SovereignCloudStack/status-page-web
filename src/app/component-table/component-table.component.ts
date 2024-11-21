@@ -3,10 +3,10 @@ import { Component } from '../../external/lib/status-page-api/angular-client';
 import { CommonModule, KeyValue } from '@angular/common';
 import { CallbackPipe } from '../callback.pipe';
 import { DailyStatus } from '../model/daily-status';
-import { UserSettingsService } from '../user-settings.service';
+import { UserSettingsService } from '../services/user-settings.service';
 import { RouterModule } from '@angular/router';
-import { UtilService } from '../util.service';
-import { AppConfigService } from '../app-config.service';
+import { UtilService } from '../services/util.service';
+import { AppConfigService } from '../services/app-config.service';
 import { ComponentId } from '../model/base';
 
 @AComponent({

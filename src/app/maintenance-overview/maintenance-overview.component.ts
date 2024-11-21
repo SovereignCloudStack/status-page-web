@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AppConfigService } from '../app-config.service';
-import { DataService } from '../data.service';
+import { AppConfigService } from '../services/app-config.service';
+import { DataService } from '../services/data.service';
 import { DatePipe } from '../date.pipe';
 
 @Component({

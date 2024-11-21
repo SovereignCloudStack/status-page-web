@@ -3,11 +3,11 @@ import { CommonModule } from '@angular/common';
 import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
-import { UserSettingsService } from './user-settings.service';
-import { DataService } from './data.service';
+import { UserSettingsService } from './services/user-settings.service';
+import { DataService } from './services/data.service';
 import { SpinnerComponent } from './spinner/spinner.component';
 import { ApiModule } from '../external/lib/status-page-api/angular-client';
-import { AppConfigService } from './app-config.service';
+import { AppConfigService } from './services/app-config.service';
 
 @Component({
   selector: 'app-root',

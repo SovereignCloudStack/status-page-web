@@ -1,18 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { DataService } from '../data.service';
+import { DataService } from '../../services/data.service';
 import { CommonModule, NgFor } from '@angular/common';
-import { UtilService } from '../util.service';
-import { ReversePipe } from '../reverse.pipe';
-import { Incident, Impact, IncidentUpdate, IncidentService } from '../../external/lib/status-page-api/angular-client';
-import { IncidentId } from '../model/base';
+import { UtilService } from '../../services/util.service';
+import { ReversePipe } from '../../reverse.pipe';
+import { Incident, Impact, IncidentService, IncidentUpdateResponseData } from '../../../external/lib/status-page-api/angular-client';
+import { ImpactId, IncidentId } from '../../model/base';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { firstValueFrom } from 'rxjs';
-import { IconProviderService } from '../icon-provider.service';
+import { IconProviderService } from '../../services/icon-provider.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { SpinnerComponent } from '../spinner/spinner.component';
-import { EditMode } from '../model/editmode'
-import { incidentBeganAt, incidentDescription, incidentEndedAt, incidentName, Result, ResultId } from '../model/checks';
+import { SpinnerComponent } from '../../spinner/spinner.component';
+import { EditMode } from '../../model/editmode'
+import { incidentBeganAt, incidentDescription, incidentEndedAt, incidentName, Result, ResultId } from '../../model/checks';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -26,7 +26,10 @@ export class IncidentDetailsViewComponent implements OnInit {
 
   incidentId!: IncidentId;
   incident!: Incident;
-  incidentUpdates!: IncidentUpdate[];
+  incidentUpdates!: IncidentUpdateResponseData[];
+
+  pendingImpacts: ImpactId[] = [];
+  pendingUpdates: number[] = [];
 
   userAuthenticated: boolean = false;
 

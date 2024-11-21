@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { AppConfigService } from './app-config.service';
 import dayjs from 'dayjs';
-import { DailyStatus } from './model/daily-status';
+import { DailyStatus } from '../model/daily-status';
 import { UserSettingsService } from './user-settings.service';
-import { Incident, IncidentUpdate } from '../external/lib/status-page-api/angular-client';
+import { Incident, IncidentUpdate } from '../../external/lib/status-page-api/angular-client';
 import { DataService } from './data.service';
-import { ComponentId, IncidentId, Severity, ShortDayString } from './model/base';
+import { ComponentId, IncidentId, Severity, ShortDayString } from '../model/base';
 
 @Injectable({
   providedIn: 'root'

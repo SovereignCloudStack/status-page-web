@@ -4,7 +4,7 @@ import { provideRouter, withEnabledBlockingInitialNavigation } from '@angular/ro
 import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { Configuration } from '../external/lib/status-page-api/angular-client';
-import { AppConfigService, CONFIG_JSON } from './app-config.service';
+import { AppConfigService, CONFIG_JSON } from './services/app-config.service';
 import { authInterceptor, LogLevel, provideAuth, StsConfigLoader, StsConfigStaticLoader } from 'angular-auth-oidc-client';
 
 export function buildAppConfig(jsonConfig: any): ApplicationConfig { // eslint-disable-line @typescript-eslint/no-explicit-any

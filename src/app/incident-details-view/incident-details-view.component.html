@@ -1,27 +1,89 @@
-<a [routerLink]="['/']">&lt;&lt; back to the overview</a>
-<h1><span class="incident-status">{{ util.phaseName(incident.phase?.order) }}</span> {{ incident.displayName }}</h1>
+<div id="top">
+    <a id="back-link" [routerLink]="['/']">&lt;&lt; back to the overview</a>
+    <div *ngIf="userAuthenticated">
+        <button type="button" *ngIf="edit.view" (click)="edit.switchMode()"><fa-icon [icon]="ip.edit"></fa-icon><span>Edit</span></button>
+        <button type="button" *ngIf="edit.editing" (click)="edit.switchMode()"><fa-icon [icon]="ip.saveChanges"></fa-icon><span>Save Changes</span></button>
+        <button type="button" class="dangerous" *ngIf="edit.editing" (click)="edit.switchMode()"><fa-icon [icon]="ip.discardChanges"></fa-icon><span>Discard Changes</span></button>
+    </div>
+</div>
+<div id="error-box" [class.hidden]="!currentErrors.size">
+    <ul>
+        <li *ngFor="let err of currentErrors | keyvalue">{{ err.key }}: {{ err.value.message }}</li>
+    </ul>
+</div>
+<h1 *ngIf="edit.view">
+    <span class="incident-status">{{ util.phaseName(incident.phase?.order) }}</span> {{ incident.displayName }}
+</h1>
+<div *ngIf="edit.editing">
+    <select>
+        <option *ngFor="let phase of data.phaseGenerations.phases" value="{{ incident.phase?.order }}">{{ phase }}</option>
+    </select>
+    <input type="text" [(ngModel)]="incident.displayName" (change)="runChecks()">
+</div>
 <div id="incident-dates">
-    <span class="faint">{{ df(incident.beganAt) }}</span>
-    <span class="faint" *ngIf="incident.endedAt"> → {{ df(incident.endedAt) }}</span>
+    <div *ngIf="edit.view">
+        <span class="faint">{{ df(incident.beganAt) }}</span>
+        <span class="faint" *ngIf="incident.endedAt"> → {{ df(incident.endedAt) }}</span>
+    </div>
+    <div *ngIf="edit.editing">
+        <input type="datetime-local" [(ngModel)]="incident.beganAt" (change)="runChecks()">
+        <input type="datetime-local" [(ngModel)]="incident.endedAt" (change)="runChecks()">
+        <button class="inline-button dangerous" type="button"><fa-icon [icon]="ip.discardChanges"></fa-icon><span>Remove End Date</span></button>
+    </div>
 </div>
 <div id="description">
     <h2>Description</h2>
-    <p>
+    <p *ngIf="edit.view">
         {{ incident.description }}
     </p>
+    <textarea 
+        *ngIf="edit.editing"
+        rows="6" 
+        #incidentDescription 
+        id="incidentDescription" 
+        name="incidentDescription"
+        (keydown.enter)="$event.stopPropagation()"
+        [(ngModel)]="incident.description"
+        (change)="runChecks()">
+    </textarea>
 </div>
 <div id="affects" *ngIf="(incident.affects?.length ?? 0) > 0">
-    <h2>Affected components</h2>
+    <h2 style="display:inline-block">Affected components</h2>
+    <button *ngIf="edit.editing" class="inline-button"><fa-icon [icon]="ip.newElement"></fa-icon></button>
     <ul>
-        <li *ngFor="let impact of incident.affects"><span>{{ componentName(impact) }}</span><span class="faint"> | Severity: {{ impactSeverity(impact) }}</span><span class="faint"> | Category: {{ impactType(impact) }}</span></li>
+        <li *ngFor="let impact of incident.affects">
+            <span>{{ componentName(impact) }}</span>
+            <span class="faint"> | Severity: {{ impactSeverity(impact) }}</span>
+            <span class="faint"> | Category: {{ impactType(impact) }}</span>
+            <span *ngIf="edit.editing">
+                <button class="inline-button" type="button">
+                    <fa-icon [icon]="ip.edit"></fa-icon>
+                </button>
+                <button class="inline-button dangerous" type="button">
+                    <fa-icon [icon]="ip.delete"></fa-icon>
+                </button>
+            </span>
+        </li>
     </ul>
 </div>
 <div id="updates" *ngIf="incidentUpdates.length > 0">
-    <h2>Updates</h2>
+    <h2 style="display:inline-block">Updates</h2>
+    <button *ngIf="edit.editing" class="inline-button"><fa-icon [icon]="ip.newElement"></fa-icon></button>
     <div *ngFor="let update of incidentUpdates | reverse">
         <h3>{{ update.displayName }}</h3><span class="faint"> - {{ dfl(update.createdAt) }}</span>
+        <span *ngIf="edit.editing">
+            <button class="inline-button" type="button">
+                <fa-icon [icon]="ip.edit"></fa-icon>
+            </button>
+            <button class="inline-button dangerous" type="button">
+                <fa-icon [icon]="ip.delete"></fa-icon>
+            </button>
+        </span>
         <p>
             {{ update.description }}
         </p>
     </div>
+</div>
+<div *ngIf="incidentUpdates.length === 0">
+    <p>Incident updates are empty?</p>
 </div>

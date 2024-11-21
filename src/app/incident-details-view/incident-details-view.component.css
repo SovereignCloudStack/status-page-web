@@ -9,6 +9,98 @@ h3 {
     display: inline-block;
 }
 
+input {
+    margin-top: 1rem;
+    margin-left: .5rem;
+    border: 2px var(--line-color) solid;
+    border-radius: var(--btn-border-radius);
+    padding: .15rem;
+}
+
+input:first-of-type {
+    margin-left: 0;
+}
+
+#top {
+    vertical-align: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+a#back-link {
+    margin: auto 1rem auto 0;
+}
+
+button fa-icon + span {
+    margin-left: .5rem;
+}
+
+button {
+    border: 2px var(--btn-color) solid;
+    border-radius: var(--btn-border-radius);
+    padding: .5em .75em;
+    color: var(--btn-color);
+    font-weight: bold;
+    font-size: 1.0rem;
+    background-color: var(--main-bg-color);
+    margin-right: 1rem;
+}
+
+button:last-of-type {
+    margin-right: 0;
+}
+
+button:hover {
+    color: var(--main-bg-color);
+    background-color: var(--btn-color);
+    cursor: pointer;
+}
+
+button.inline-button {
+    padding: .1rem .2rem;
+    margin-left: .5rem;
+    margin-right: 0;
+    min-width: 1.75rem;
+}
+
+button.inline-button:last-of-type {
+    margin-right: .5rem;
+}
+
+button.dangerous {
+    border-color: var(--broken-color) !important;
+    background-color: var(--main-bg-color) !important;
+    color: var(--broken-color) !important;
+}
+
+button.dangerous:hover {
+    background-color: var(--broken-color) !important;
+    color: var(--main-bg-color) !important;
+}
+
+select {
+    border: 2px var(--btn-color) solid;
+    border-radius: var(--btn-border-radius);
+    padding: .5em .75em;
+    color: var(--btn-color);
+    font-weight: bold;
+    font-size: 1.0rem;
+    background-color: var(--main-bg-color);
+    margin-right: 1rem;
+}
+
+select:hover {
+    color: var(--main-bg-color);
+    background-color: var(--btn-color);
+    cursor: pointer;
+}
+
+textarea#incidentDescription {
+    min-width: 50%;
+    display: block;
+}
+
 #affects ul {
     margin: .25rem 0rem;
     list-style-type: square;
@@ -37,4 +129,13 @@ h3 {
 
 .faint {
     color: var(--faint-text-color);
+}
+
+div#error-box {
+    margin: 1rem 0;
+    width: 100%;
+    border: 2px var(--broken-color) solid;
+    border-radius: var(--btn-border-radius);
+    background-color: var(--broken-bg-color);
+    color: var(--main-bg-color);
 }

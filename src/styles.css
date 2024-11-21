@@ -88,6 +88,12 @@
     initial-value: #ee6a5f;
 }
 
+@property --broken-bg-color {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: #ff9d8f;
+}
+
 @property --maintenance-color {
     syntax: "<color>";
     inherits: false;
@@ -187,6 +193,7 @@
     --fine-color: #50c3a5;
     --limited-color: #f5c451;
     --broken-color: #ee6a5f;
+    --broken-bg-color: #ff9d8f;
     --maintenance-color: #0089c4;
     --unknown-color: lightsteelblue;
     --border-color: #e9ecef;

@@ -1,16 +1,24 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { DataService } from '../data.service';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgFor } from '@angular/common';
 import { UtilService } from '../util.service';
 import { ReversePipe } from '../reverse.pipe';
-import { Incident, Impact, IncidentUpdate } from '../../external/lib/status-page-api/angular-client';
+import { Incident, Impact, IncidentUpdate, IncidentService } from '../../external/lib/status-page-api/angular-client';
 import { IncidentId } from '../model/base';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { firstValueFrom } from 'rxjs';
+import { IconProviderService } from '../icon-provider.service';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { SpinnerComponent } from '../spinner/spinner.component';
+import { EditMode } from '../model/editmode'
+import { incidentBeganAt, incidentDescription, incidentEndedAt, incidentName, Result, ResultId } from '../model/checks';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-incident-view',
   standalone: true,
-  imports: [CommonModule, RouterModule, ReversePipe],
+  imports: [CommonModule, RouterModule, ReversePipe, FontAwesomeModule, SpinnerComponent, FormsModule],
   templateUrl: './incident-details-view.component.html',
   styleUrl: './incident-details-view.component.css'
 })
@@ -20,12 +28,26 @@ export class IncidentDetailsViewComponent implements OnInit {
   incident!: Incident;
   incidentUpdates!: IncidentUpdate[];
 
+  userAuthenticated: boolean = false;
+
+  edit: EditMode;
+
+  currentErrors: Map<ResultId, Result>;
+
+  displayName: string = "";
+
   constructor(
+    public data: DataService,
+    public util: UtilService,
+    public ip: IconProviderService,
     private route: ActivatedRoute,
     private router: Router,
-    private data: DataService,
-    public util: UtilService
-  ) {}
+    private security: OidcSecurityService,
+    private incidentService: IncidentService
+  ) {
+    this.edit = new EditMode();
+    this.currentErrors = new Map();
+  }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
@@ -41,7 +63,17 @@ export class IncidentDetailsViewComponent implements OnInit {
         this.incidentId = id;
         this.incident = this.data.incidents.get(id)!;
         this.incidentUpdates = this.data.incidentUpdates.get(this.incidentId) ?? [];
-      });
+      }
+    );
+    // Check if the user is authenticated
+    this.security.checkAuth().subscribe(async response => {
+      this.userAuthenticated = response.isAuthenticated;
+      if (this.userAuthenticated) {
+        const token = await firstValueFrom(this.security.getAccessToken());
+        this.incidentService.configuration.withCredentials = true;
+        this.incidentService.defaultHeaders = this.incidentService.defaultHeaders.set("Authorization", `Bearer ${token}`);
+      }
+    });
   }
 
   componentName(impact: Impact): string {
@@ -74,6 +106,22 @@ export class IncidentDetailsViewComponent implements OnInit {
       return "";
     }
     return `${this.util.severityName(impact.severity)} (${impact.severity})`;
+  }
+
+  runChecks() {
+    this.checkError(incidentName);
+    this.checkError(incidentDescription);
+    this.checkError(incidentBeganAt);
+    this.checkError(incidentEndedAt);
+  }
+
+  checkError(checkFunction: (incident: Incident) => Result) {
+    const result = checkFunction(this.incident);
+    if (result.ok) {
+      this.currentErrors.delete(result.id);
+    } else {
+      this.currentErrors.set(result.id, result);
+    }
   }
 
   df = this.util.formatDate.bind(this.util)

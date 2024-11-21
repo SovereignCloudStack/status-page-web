@@ -232,7 +232,6 @@ export class DataService {
       });
       // Check if we are now fully loaded and can display the data
       componentsDone = true;
-      console.log(`componentsDone: ${componentsDone} | updatesDone: ${updatesDone}`);
       if (componentsDone && updatesDone) {
         this._loadingFinished.next(true);
       }

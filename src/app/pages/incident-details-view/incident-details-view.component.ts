@@ -3,17 +3,18 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { DataService } from '../../services/data.service';
 import { CommonModule, NgFor } from '@angular/common';
 import { UtilService } from '../../services/util.service';
-import { ReversePipe } from '../../reverse.pipe';
+import { ReversePipe } from '../../pipes/reverse.pipe';
 import { Incident, Impact, IncidentService, IncidentUpdateResponseData } from '../../../external/lib/status-page-api/angular-client';
 import { ImpactId, IncidentId } from '../../model/base';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { firstValueFrom } from 'rxjs';
 import { IconProviderService } from '../../services/icon-provider.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { SpinnerComponent } from '../../spinner/spinner.component';
+import { SpinnerComponent } from '../../components/spinner/spinner.component';
 import { EditMode } from '../../model/editmode'
-import { incidentBeganAt, incidentDescription, incidentEndedAt, incidentName, Result, ResultId } from '../../model/checks';
+import { incidentBeganAt, incidentDescription, incidentEndedAt, incidentName } from '../../model/checks';
 import { FormsModule } from '@angular/forms';
+import { Result, ResultId } from '../../model/result';
 
 @Component({
   selector: 'app-incident-view',

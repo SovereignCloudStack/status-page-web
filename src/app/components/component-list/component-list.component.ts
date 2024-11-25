@@ -1,11 +1,11 @@
 import { Component as AComponent, Input } from '@angular/core';
-import { Component } from '../../external/lib/status-page-api/angular-client'; 
+import { Component } from '../../../external/lib/status-page-api/angular-client'; 
 import { CommonModule } from '@angular/common';
-import { AppConfigService } from '../services/app-config.service';
-import { UtilService } from '../services/util.service';
-import { DailyStatus } from '../model/daily-status';
+import { AppConfigService } from '../../services/app-config.service';
+import { UtilService } from '../../services/util.service';
+import { DailyStatus } from '../../model/daily-status';
 import dayjs from 'dayjs';
-import { ComponentId } from '../model/base';
+import { ComponentId } from '../../model/base';
 
 @AComponent({
   selector: 'app-component-list',

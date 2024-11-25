@@ -1,13 +1,13 @@
 import { Component as AComponent, Input } from '@angular/core';
-import { Component } from '../../external/lib/status-page-api/angular-client'; 
+import { Component } from '../../../external/lib/status-page-api/angular-client'; 
 import { CommonModule, KeyValue } from '@angular/common';
-import { CallbackPipe } from '../callback.pipe';
-import { DailyStatus } from '../model/daily-status';
-import { UserSettingsService } from '../services/user-settings.service';
+import { CallbackPipe } from '../../pipes/callback.pipe';
+import { DailyStatus } from '../../model/daily-status';
+import { UserSettingsService } from '../../services/user-settings.service';
 import { RouterModule } from '@angular/router';
-import { UtilService } from '../services/util.service';
-import { AppConfigService } from '../services/app-config.service';
-import { ComponentId } from '../model/base';
+import { UtilService } from '../../services/util.service';
+import { AppConfigService } from '../../services/app-config.service';
+import { ComponentId } from '../../model/base';
 
 @AComponent({
   selector: 'app-component-table',

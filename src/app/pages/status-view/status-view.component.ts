@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { SpinnerComponent } from '../../spinner/spinner.component';
+import { SpinnerComponent } from '../../components/spinner/spinner.component';
 import { DataService } from '../../services/data.service';
-import { IncidentLogComponent } from '../../incident-log/incident-log.component';
-import { ComponentListComponent } from '../../component-list/component-list.component';
+import { IncidentLogComponent } from '../../components/incident-log/incident-log.component';
+import { ComponentListComponent } from '../../components/component-list/component-list.component';
 import { UserSettingsService } from '../../services/user-settings.service';
-import { ComponentTableComponent } from '../../component-table/component-table.component';
-import { MaintenanceOverviewComponent } from '../../maintenance-overview/maintenance-overview.component';
+import { ComponentTableComponent } from '../../components/component-table/component-table.component';
+import { MaintenanceOverviewComponent } from '../../components/maintenance-overview/maintenance-overview.component';
 
 @Component({
   selector: 'app-status-view',

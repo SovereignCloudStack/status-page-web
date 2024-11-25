@@ -7,7 +7,7 @@ import { UtilService } from '../../services/util.service';
 import { Incident, IncidentService, IncidentUpdate, IncidentUpdateResponseData } from '../../../external/lib/status-page-api/angular-client';
 import dayjs from 'dayjs';
 import { formatQueryDate, IncidentId } from '../../model/base';
-import { SpinnerComponent } from '../../spinner/spinner.component';
+import { SpinnerComponent } from '../../components/spinner/spinner.component';
 import { OidcSecurityService, UserDataResult } from 'angular-auth-oidc-client';
 import { firstValueFrom, Observable } from 'rxjs';
 import { AppConfigService } from '../../services/app-config.service';

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AppConfigService } from '../services/app-config.service';
-import { DataService } from '../services/data.service';
-import { DatePipe } from '../date.pipe';
+import { AppConfigService } from '../../services/app-config.service';
+import { DataService } from '../../services/data.service';
+import { DatePipe } from '../../pipes/date.pipe';
 
 @Component({
   selector: 'app-maintenance-overview',

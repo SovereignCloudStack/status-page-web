@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { DataService } from '../services/data.service';
+import { DataService } from '../../services/data.service';
 import { IncidentLogListComponent } from '../incident-log-list/incident-log-list.component';
 
 @Component({

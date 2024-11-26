@@ -19,6 +19,9 @@ export class EditBarButtonsComponent {
   @Input()
   edit!: EditMode;
 
+  @Input()
+  showDeleteButton: boolean = true;
+
   constructor(
     public ip: IconProviderService
   ) {}

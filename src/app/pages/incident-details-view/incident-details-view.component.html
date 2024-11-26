@@ -1,16 +1,8 @@
 <div id="top">
     <a id="back-link" [routerLink]="['/']">&lt;&lt; back to the overview</a>
-    <div *ngIf="userAuthenticated">
-        <button type="button" *ngIf="edit.view" (click)="edit.switchMode()"><fa-icon [icon]="ip.edit"></fa-icon><span>Edit</span></button>
-        <button type="button" *ngIf="edit.editing" (click)="edit.switchMode()"><fa-icon [icon]="ip.saveChanges"></fa-icon><span>Save Changes</span></button>
-        <button type="button" class="dangerous" *ngIf="edit.editing" (click)="edit.switchMode()"><fa-icon [icon]="ip.discardChanges"></fa-icon><span>Discard Changes</span></button>
-    </div>
+    <app-edit-bar-buttons [userAuthenticated]="userAuthenticated" [edit]="edit" [allowSaving]="currentErrors.size === 0" [deleteBtnText]="'Delete Incident'"></app-edit-bar-buttons>
 </div>
-<div id="error-box" [class.hidden]="!currentErrors.size">
-    <ul>
-        <li *ngFor="let err of currentErrors | keyvalue">{{ err.key }}: {{ err.value.message }}</li>
-    </ul>
-</div>
+<app-error-box [errors]="currentErrors"></app-error-box>
 <h1 *ngIf="edit.view">
     <span class="incident-status">{{ util.phaseName(incident.phase?.order) }}</span> {{ incident.displayName }}
 </h1>
@@ -26,9 +18,9 @@
         <span class="faint" *ngIf="incident.endedAt"> → {{ df(incident.endedAt) }}</span>
     </div>
     <div *ngIf="edit.editing">
-        <input type="datetime-local" [(ngModel)]="incident.beganAt" (change)="runChecks()">
-        <input type="datetime-local" [(ngModel)]="incident.endedAt" (change)="runChecks()">
-        <button class="inline-button dangerous" type="button"><fa-icon [icon]="ip.discardChanges"></fa-icon><span>Remove End Date</span></button>
+        <input type="datetime-local" [(ngModel)]="startDate" (change)="runChecks()">
+        <input type="datetime-local" [(ngModel)]="endDate"  [min]="startDate" (change)="runChecks()"><span></span>
+        <button class="inline-button discard" type="button" [disabled]="endDate === ''" (click)="endDate = ''"><fa-icon [icon]="ip.discardChanges"></fa-icon><span>Remove End Date</span></button>
     </div>
 </div>
 <div id="description">

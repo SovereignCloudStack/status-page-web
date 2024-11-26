@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { DataService } from '../../services/data.service';
-import { CommonModule, NgFor } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { UtilService } from '../../services/util.service';
 import { ReversePipe } from '../../pipes/reverse.pipe';
 import { Incident, Impact, IncidentService, IncidentUpdateResponseData } from '../../../external/lib/status-page-api/angular-client';
@@ -11,15 +11,18 @@ import { firstValueFrom } from 'rxjs';
 import { IconProviderService } from '../../services/icon-provider.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SpinnerComponent } from '../../components/spinner/spinner.component';
-import { EditMode } from '../../model/editmode'
-import { incidentBeganAt, incidentDescription, incidentEndedAt, incidentName } from '../../model/checks';
+import { EditMode } from '../../util/editmode'
+import { incidentBeganAt, incidentDescription, incidentEndedAt, incidentName } from '../../util/checks';
 import { FormsModule } from '@angular/forms';
-import { Result, ResultId } from '../../model/result';
+import { Result, ResultId } from '../../util/result';
+import { ErrorBoxComponent } from "../../components/error-box/error-box.component";
+import { EditBarButtonsComponent } from "../../components/edit-bar-buttons/edit-bar-buttons.component";
+import { incidentDateToUi, uiToIncidentDate } from '../../util/util';
 
 @Component({
   selector: 'app-incident-view',
   standalone: true,
-  imports: [CommonModule, RouterModule, ReversePipe, FontAwesomeModule, SpinnerComponent, FormsModule],
+  imports: [CommonModule, RouterModule, ReversePipe, FontAwesomeModule, SpinnerComponent, FormsModule, ErrorBoxComponent, EditBarButtonsComponent],
   templateUrl: './incident-details-view.component.html',
   styleUrl: './incident-details-view.component.css'
 })
@@ -38,7 +41,8 @@ export class IncidentDetailsViewComponent implements OnInit {
 
   currentErrors: Map<ResultId, Result>;
 
-  displayName: string = "";
+  startDate: string = "";
+  endDate: string = "";
 
   constructor(
     public data: DataService,
@@ -50,6 +54,7 @@ export class IncidentDetailsViewComponent implements OnInit {
     private incidentService: IncidentService
   ) {
     this.edit = new EditMode();
+    this.edit.leaveEditFunction = this.dispatchEditLeave.bind(this);
     this.currentErrors = new Map();
   }
 
@@ -67,6 +72,8 @@ export class IncidentDetailsViewComponent implements OnInit {
         this.incidentId = id;
         this.incident = this.data.incidents.get(id)!;
         this.incidentUpdates = this.data.incidentUpdates.get(this.incidentId) ?? [];
+        this.resetStartDate();
+        this.resetEndDate();
       }
     );
     // Check if the user is authenticated
@@ -115,8 +122,14 @@ export class IncidentDetailsViewComponent implements OnInit {
   runChecks() {
     this.checkError(incidentName);
     this.checkError(incidentDescription);
+    const originalStart = this.incident.beganAt;
+    const originalEnd = this.incident.endedAt;
+    this.incident.beganAt = uiToIncidentDate(this.startDate);
+    this.incident.endedAt = uiToIncidentDate(this.endDate);
     this.checkError(incidentBeganAt);
     this.checkError(incidentEndedAt);
+    this.incident.beganAt = originalStart;
+    this.incident.endedAt = originalEnd;
   }
 
   checkError(checkFunction: (incident: Incident) => Result) {
@@ -126,6 +139,51 @@ export class IncidentDetailsViewComponent implements OnInit {
     } else {
       this.currentErrors.set(result.id, result);
     }
+  }
+
+  private dispatchEditLeave(label?: string) {
+    if (!label) {
+      console.error("Got an edit mode leave event without label");
+      return;
+    }
+    switch(label) {
+      case "save": {
+        this.saveChanges();
+        break;
+      }
+      case "discard": {
+        this.discardChanges();
+        break;
+      }
+      case "delete": {
+        this.deleteIncident();
+        break;
+      }
+      default: {
+        console.error(`Got an edit mode leave event with unknown label: ${label}`);
+      }
+    }
+  }
+
+  private saveChanges(): void {
+    // TODO Format dates accordingly before sending to API
+  }
+
+  private discardChanges(): void {
+    this.resetStartDate();
+    this.resetEndDate();
+  }
+
+  private deleteIncident(): void {
+
+  }
+
+  private resetStartDate(): void {
+    this.startDate = incidentDateToUi(this.incident.beganAt);
+  }
+
+  private resetEndDate(): void {
+    this.endDate = incidentDateToUi(this.incident.endedAt);
   }
 
   df = this.util.formatDate.bind(this.util)

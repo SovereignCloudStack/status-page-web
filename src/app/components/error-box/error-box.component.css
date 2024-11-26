@@ -1,0 +1,8 @@
+div#error-box {
+    margin: 1rem 0;
+    width: 100%;
+    border: 2px var(--broken-color) solid;
+    border-radius: var(--btn-border-radius);
+    background-color: var(--broken-bg-color);
+    color: var(--main-bg-color);
+}

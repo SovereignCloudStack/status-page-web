@@ -27,7 +27,10 @@ export function incidentBeganAt(incident: Incident): Result {
 }
 
 export function incidentEndedAt(incident: Incident): Result {
-    if (incident.endedAt) {
+    if (incident.endedAt && incident.endedAt !== "") {
+        if (incident.endedAt === "Invalid Date") {
+            return new Result(ID_INCIDENT_ENDED, "The end date is invalid. Are you missing the time?");
+        }
         const begin = dayjs(incident.beganAt).utc();
         const end = dayjs(incident.endedAt).utc();
         if (begin.isAfter(end)) {

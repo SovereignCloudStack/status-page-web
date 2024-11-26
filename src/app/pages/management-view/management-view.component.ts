@@ -6,12 +6,13 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { UtilService } from '../../services/util.service';
 import { Incident, IncidentService, IncidentUpdate, IncidentUpdateResponseData } from '../../../external/lib/status-page-api/angular-client';
 import dayjs from 'dayjs';
-import { formatQueryDate, IncidentId } from '../../model/base';
+import { IncidentId } from '../../model/base';
 import { SpinnerComponent } from '../../components/spinner/spinner.component';
 import { OidcSecurityService, UserDataResult } from 'angular-auth-oidc-client';
 import { firstValueFrom, Observable } from 'rxjs';
 import { AppConfigService } from '../../services/app-config.service';
 import { IconProviderService } from '../../services/icon-provider.service';
+import { formatQueryDate } from '../../util/util';
 
 const DT_FORMAT = "YYYY-MM-DDTHH:mm";
 

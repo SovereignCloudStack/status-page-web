@@ -5,7 +5,8 @@ import { AppConfigService } from './app-config.service';
 import { BehaviorSubject, Observable, combineLatestWith } from 'rxjs';
 import { DailyStatus } from '../model/daily-status';
 import { Component, ComponentService, IdField, ImpactService, ImpactType, Incident, IncidentResponseData, IncidentService, IncidentUpdateResponseData, PhaseList, PhaseService, Severity } from '../../external/lib/status-page-api/angular-client';
-import { ComponentId, formatQueryDate, ImpactId, IncidentId, SHORT_DAY_FORMAT, ShortDayString } from '../model/base';
+import { ComponentId, ImpactId, IncidentId, SHORT_DAY_FORMAT, ShortDayString } from '../model/base';
+import { formatQueryDate } from '../util/util';
 
 @Injectable({
   providedIn: 'root'

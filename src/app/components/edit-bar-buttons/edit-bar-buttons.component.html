@@ -1,6 +1,6 @@
 <div *ngIf="userAuthenticated">
     <button type="button" *ngIf="edit.view" (click)="edit.switchMode()"><fa-icon [icon]="ip.edit"></fa-icon><span>Edit</span></button>
     <button type="button" *ngIf="edit.editing" (click)="edit.switchMode('save')"><fa-icon [icon]="ip.saveChanges"></fa-icon><span>Save Changes</span></button>
-    <button type="button" class="dangerous" *ngIf="edit.editing" (click)="edit.switchMode('discard')"><fa-icon [icon]="ip.discardChanges"></fa-icon><span>Discard Changes</span></button>
     <button type="button" class="dangerous" *ngIf="edit.editing && showDeleteButton" (click)="edit.switchMode('delete')"><fa-icon [icon]="ip.delete"></fa-icon><span>Delete</span></button>
+    <button type="button" class="dangerous" *ngIf="edit.editing" (click)="edit.switchMode('discard')"><fa-icon [icon]="ip.discardChanges"></fa-icon><span>Discard Changes</span></button>
 </div>

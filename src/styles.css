@@ -341,3 +341,50 @@ a:hover {
 .disabled {
     color: var(--faint-text-color);
 }
+
+button fa-icon + span {
+    margin-left: .5rem;
+}
+
+button {
+    border: 2px var(--btn-color) solid;
+    border-radius: var(--btn-border-radius);
+    padding: .5em .75em;
+    color: var(--btn-color);
+    font-weight: bold;
+    font-size: 1.0rem;
+    background-color: var(--main-bg-color);
+    margin-right: 1rem;
+}
+
+button:last-of-type {
+    margin-right: 0;
+}
+
+button:hover {
+    color: var(--main-bg-color);
+    background-color: var(--btn-color);
+    cursor: pointer;
+}
+
+button.inline-button {
+    padding: .1rem .2rem;
+    margin-left: .5rem;
+    margin-right: 0;
+    min-width: 1.75rem;
+}
+
+button.inline-button:last-of-type {
+    margin-right: .5rem;
+}
+
+button.dangerous {
+    border-color: var(--broken-color) !important;
+    background-color: var(--main-bg-color) !important;
+    color: var(--broken-color) !important;
+}
+
+button.dangerous:hover {
+    background-color: var(--broken-color) !important;
+    color: var(--main-bg-color) !important;
+}

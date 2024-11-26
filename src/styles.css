@@ -70,6 +70,24 @@
     initial-value: #4a84e1;
 }
 
+@property --btn-disabled-color {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: #9e9e9e;
+}
+
+@property --btn-discard-color {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: #50c3a5;
+}
+
+@property --btn-danger-color {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: #ee6a5f;
+}
+
 @property --fine-color {
     syntax: "<color>";
     inherits: false;
@@ -190,6 +208,9 @@
     --faint-text-color: #9e9e9e;
     --btn-color: #0f5fe1;
     --btn-color-hover: #4a84e1;
+    --btn-disabled-color: #9e9e9e;
+    --btn-discard-color: #f5c451;
+    --btn-danger-color: #ee6a5f;
     --fine-color: #50c3a5;
     --limited-color: #f5c451;
     --broken-color: #ee6a5f;
@@ -357,6 +378,17 @@ button {
     margin-right: 1rem;
 }
 
+button:disabled {
+    border-color: var(--btn-disabled-color) !important;
+    color: var(--btn-disabled-color) !important;
+}
+
+button:disabled:hover {
+    cursor: not-allowed;
+    background-color: var(--btn-disabled-color) !important;
+    color: var(--main-bg-color) !important;
+}
+
 button:last-of-type {
     margin-right: 0;
 }
@@ -378,13 +410,24 @@ button.inline-button:last-of-type {
     margin-right: .5rem;
 }
 
+button.discard {
+    border-color: var(--btn-discard-color);
+    background-color: var(--main-bg-color);
+    color: var(--btn-discard-color);
+}
+
+button.discard:hover {
+    background-color: var(--btn-discard-color);
+    color: var(--main-bg-color);
+}
+
 button.dangerous {
-    border-color: var(--broken-color) !important;
-    background-color: var(--main-bg-color) !important;
-    color: var(--broken-color) !important;
+    border-color: var(--btn-danger-color);
+    background-color: var(--main-bg-color);
+    color: var(--btn-danger-color);
 }
 
 button.dangerous:hover {
-    background-color: var(--broken-color) !important;
-    color: var(--main-bg-color) !important;
+    background-color: var(--btn-danger-color);
+    color: var(--main-bg-color);
 }

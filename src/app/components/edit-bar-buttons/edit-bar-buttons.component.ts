@@ -22,6 +22,18 @@ export class EditBarButtonsComponent {
   @Input()
   showDeleteButton: boolean = true;
 
+  @Input()
+  allowSaving: boolean = false;
+
+  @Input()
+  editBtnText: string = "Edit";
+  @Input()
+  saveBtnText: string = "Save Changes";
+  @Input()
+  discardBtnText: string = "Discard Changes";
+  @Input()
+  deleteBtnText: string = "Delete";
+
   constructor(
     public ip: IconProviderService
   ) {}

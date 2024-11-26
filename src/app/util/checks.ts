@@ -1,45 +1,11 @@
 import dayjs from "dayjs";
 import { Incident } from "../../external/lib/status-page-api/angular-client";
-
-export type ResultId = string;
+import { Result, ResultId } from "./result";
 
 const ID_INCIDENT_NAME: ResultId = "Display Name";
 const ID_INCIDENT_DESCR: ResultId = "Description";
 const ID_INCIDENT_BEGAN: ResultId = "Began At";
 const ID_INCIDENT_ENDED: ResultId = "Ended At";
-
-
-export class Result {
-
-    private resultId: ResultId;
-    private errorMessage?: string = undefined;
-
-    constructor(id: ResultId, msg?: string) {
-        this.resultId = id;
-        if (msg !== undefined && msg !== null && msg.length > 0) {
-            this.errorMessage = msg;
-        }
-    }
-
-    get id(): ResultId {
-        return this.resultId;
-    }
-
-    get ok(): boolean {
-        return this.errorMessage === undefined;
-    }
-
-    get error(): boolean {
-        return this.errorMessage !== undefined;
-    }
-
-    get message(): string {
-        if (this.errorMessage === undefined) {
-            throw new Error("Cannot retrieve the error message on an ok result");
-        }
-        return this.errorMessage;
-    }
-}
 
 export function incidentName(incident: Incident): Result {
     if (incident.displayName !== undefined && incident.displayName !== null && incident.displayName.length > 0) {

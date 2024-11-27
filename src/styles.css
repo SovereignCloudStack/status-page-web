@@ -94,6 +94,12 @@
     initial-value: #bbb;
 }
 
+@property --btn-shadow-size {
+    syntax: "<dimension>";
+    inherits: true;
+    initial-value: 2px;
+}
+
 @property --fine-color {
     syntax: "<color>";
     inherits: false;
@@ -208,6 +214,7 @@
     --list-border-radius: 6px;
     --btn-border-radius: 6px;
     --bar-border-radius: 6px;
+    --btn-shadow-size: 2px;
     --main-bg-color: #fff;
     --main-text-color: #68717a;
     --title-text-color: #000000;
@@ -383,7 +390,7 @@ button {
     font-size: 1.0rem;
     background-color: var(--main-bg-color);
     margin-right: 1rem;
-    box-shadow: 2px 2px var(--btn-shadow-color);
+    box-shadow: var(--btn-shadow-size) var(--btn-shadow-size) var(--btn-shadow-color);
 }
 
 button:disabled {

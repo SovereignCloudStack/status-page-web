@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { UtilService } from '../../services/util.service';
 import { ReversePipe } from '../../pipes/reverse.pipe';
 import { Incident, Impact, IncidentService, IncidentUpdateResponseData } from '../../../external/lib/status-page-api/angular-client';
-import { ImpactId, IncidentId } from '../../model/base';
+import { ComponentId, IncidentId } from '../../model/base';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { firstValueFrom } from 'rxjs';
 import { IconProviderService } from '../../services/icon-provider.service';
@@ -32,8 +32,13 @@ export class IncidentDetailsViewComponent implements OnInit {
   incident!: Incident;
   incidentUpdates!: IncidentUpdateResponseData[];
 
-  pendingImpacts: ImpactId[] = [];
-  pendingUpdates: number[] = [];
+  incidentCopy: Incident = {};
+
+  pendingImpacts: Set<ComponentId> = new Set();
+  pendingUpdates: Set<number> = new Set();
+
+  impactsToDelete: Set<ComponentId> = new Set();
+  updatesToDelete: Set<number> = new Set();
 
   userAuthenticated: boolean = false;
 
@@ -65,6 +70,7 @@ export class IncidentDetailsViewComponent implements OnInit {
           return;
         }
         const id = params.get("id")!;
+        // TODO Handle special case for new incidents
         if (!this.data.incidents.has(id)) {
           this.router.navigate(["notfound"]);
           return;
@@ -72,6 +78,15 @@ export class IncidentDetailsViewComponent implements OnInit {
         this.incidentId = id;
         this.incident = this.data.incidents.get(id)!;
         this.incidentUpdates = this.data.incidentUpdates.get(this.incidentId) ?? [];
+        // We create a copy of all the incident's values we might change so that
+        // we can properly restore them in case the user discards any changes.
+        this.incidentCopy = {
+          displayName: this.incident.displayName,
+          description: this.incident.description,
+          beganAt: this.incident.beganAt,
+          endedAt: this.incident.endedAt,
+          phase: this.incident.phase
+        };
         this.resetStartDate();
         this.resetEndDate();
       }
@@ -166,24 +181,68 @@ export class IncidentDetailsViewComponent implements OnInit {
   }
 
   private saveChanges(): void {
-    // TODO Format dates accordingly before sending to API
+    // We start by making sure everything is in order, just to be sure.
+    this.runChecks();
+    // Format dates accordingly before sending to API
+    this.incident.beganAt = uiToIncidentDate(this.startDate);
+    if (this.endDate !== "") {
+      this.incident.endedAt = uiToIncidentDate(this.endDate);
+    } else {
+      this.incident.endedAt = null;
+    }
+    // TODO Call API to save changes.
   }
 
   private discardChanges(): void {
+    this.pendingImpacts.clear();
+    this.pendingUpdates.clear();
+    // TODO Clear out the actual pending objects
+    this.impactsToDelete.clear();
+    this.updatesToDelete.clear();
+    this.incident.displayName = this.incidentCopy.displayName;
+    this.incident.description = this.incidentCopy.description;
+    this.incident.beganAt = this.incidentCopy.beganAt;
+    this.incident.endedAt = this.incidentCopy.endedAt;
+    this.incident.phase = this.incidentCopy.phase;
     this.resetStartDate();
     this.resetEndDate();
+    this.currentErrors.clear();
   }
 
   private deleteIncident(): void {
-
+    // TODO
   }
 
-  private resetStartDate(): void {
+  resetStartDate(): void {
     this.startDate = incidentDateToUi(this.incident.beganAt);
   }
 
-  private resetEndDate(): void {
+  resetEndDate(): void {
     this.endDate = incidentDateToUi(this.incident.endedAt);
+  }
+
+  markImpactForDeletion(id?: ComponentId): void {
+    if (!id) {
+      console.error("Received a call to markImpactForDeletion without an id");
+      return;
+    }
+    this.impactsToDelete.add(id);
+  }
+
+  unmarkImpactForDeletion(id?: ComponentId): void {
+    if (!id) {
+      console.error("Received a call to unmarkImpactForDeletion without an id");
+      return;
+    }
+    this.impactsToDelete.delete(id);
+  }
+
+  markUpdateForDeletion(order: number): void {
+    this.updatesToDelete.add(order);
+  }
+
+  unmarkUpdateForDeletion(order: number): void {
+    this.updatesToDelete.delete(order);
   }
 
   df = this.util.formatDate.bind(this.util)

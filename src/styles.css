@@ -294,6 +294,10 @@ a {
     text-decoration: none;
 }
 
+.struck {
+    text-decoration: line-through;
+}
+
 a:hover {
     text-decoration: underline;
 }

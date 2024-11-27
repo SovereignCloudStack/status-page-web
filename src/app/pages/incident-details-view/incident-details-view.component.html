@@ -43,8 +43,8 @@
     <h2 style="display:inline-block">Affected components</h2>
     <button *ngIf="edit.editing" class="inline-button"><fa-icon [icon]="ip.newElement"></fa-icon></button>
     <ul>
-        <li *ngFor="let impact of incident.affects">
-            <span>{{ componentName(impact) }}</span>
+        <li *ngFor="let impact of incident.affects?.concat(impactsToAdd)">
+            <span [class.struck]="impactsToDelete.has(impact.reference ?? '')">{{ componentName(impact) }}</span>
             <span class="faint"> | Severity: {{ impactSeverity(impact) }}</span>
             <span class="faint"> | Category: {{ impactType(impact) }}</span>
             <span *ngIf="edit.editing">
@@ -58,6 +58,7 @@
                     <fa-icon [icon]="ip.discardChanges"></fa-icon>
                 </button>
                 <span *ngIf="impactsToDelete.has(impact.reference ?? '')">Pending Deletion</span>
+                <span *ngIf="pendingImpacts.has(impact.reference ?? '')">Pending Save</span>
             </span>
         </li>
     </ul>
@@ -65,8 +66,8 @@
 <div id="updates" *ngIf="incidentUpdates.length > 0">
     <h2 style="display:inline-block">Updates</h2>
     <button *ngIf="edit.editing" class="inline-button"><fa-icon [icon]="ip.newElement"></fa-icon></button>
-    <div *ngFor="let update of incidentUpdates | reverse">
-        <h3>{{ update.displayName }}</h3><span class="faint"> - {{ dfl(update.createdAt) }}</span>
+    <div *ngFor="let update of incidentUpdates.concat(updatesToAdd) | reverse">
+        <h3 [class.struck]="updatesToDelete.has(update.order)">{{ update.displayName }}</h3><span class="faint"> - {{ dfl(update.createdAt) }}</span>
         <span *ngIf="edit.editing">
             <button class="inline-button" type="button">
                 <fa-icon [icon]="ip.edit"></fa-icon>

@@ -4,7 +4,7 @@ import { DataService } from '../../services/data.service';
 import { CommonModule } from '@angular/common';
 import { UtilService } from '../../services/util.service';
 import { ReversePipe } from '../../pipes/reverse.pipe';
-import { Incident, Impact, IncidentService, IncidentUpdateResponseData } from '../../../external/lib/status-page-api/angular-client';
+import { Incident, Impact, IncidentService, IncidentUpdateResponseData, IncidentUpdate } from '../../../external/lib/status-page-api/angular-client';
 import { ComponentId, IncidentId } from '../../model/base';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { firstValueFrom } from 'rxjs';
@@ -34,8 +34,19 @@ export class IncidentDetailsViewComponent implements OnInit {
 
   incidentCopy: Incident = {};
 
+  // These sets only include some form of ID we can use to
+  // differentiate impacts/updates from each other. The actual
+  // pending objects are stored in impactsToAdd/updatesToAdd.
+  // Why? Because we can now quickly check if in the UI if
+  // an impact or update is pending by calling the Set.has
+  // method on the appropriate set. Furthermore, we can create
+  // an overall array for iteration in the UI by using the 
+  // spread operator.
   pendingImpacts: Set<ComponentId> = new Set();
   pendingUpdates: Set<number> = new Set();
+
+  impactsToAdd: Impact[] = [];
+  updatesToAdd: IncidentUpdateResponseData[] = [];
 
   impactsToDelete: Set<ComponentId> = new Set();
   updatesToDelete: Set<number> = new Set();
@@ -61,6 +72,21 @@ export class IncidentDetailsViewComponent implements OnInit {
     this.edit = new EditMode();
     this.edit.leaveEditFunction = this.dispatchEditLeave.bind(this);
     this.currentErrors = new Map();
+
+    // TODO Remove test data
+    this.impactsToAdd.push({
+      reference: "a27ff65b-2485-46a1-b63c-e8727c5cc81e",
+      severity: 99,
+      type: "7a556d8e-23e8-4d1b-8831-11cb82ba4a7f"
+    });
+    this.pendingImpacts.add("a27ff65b-2485-46a1-b63c-e8727c5cc81e");
+
+    this.impactsToAdd.push({
+      reference: "2d8972db-3b25-4837-a1dc-e54006b3ac9d",
+      severity: 0,
+      type: "07e2213d-d518-4900-aa7b-f874ec20c575"
+    });
+    this.pendingImpacts.add("2d8972db-3b25-4837-a1dc-e54006b3ac9d");
   }
 
   ngOnInit(): void {
@@ -127,8 +153,8 @@ export class IncidentDetailsViewComponent implements OnInit {
   }
 
   impactSeverity(impact: Impact): string {
-    if (!impact.severity) {
-      console.error(`Found impact without severity value on incident ID ${this.incidentId}`);
+    if (impact.severity === undefined || impact.severity === null) {
+      console.error(`Found impact without severity value on incident ID ${this.incidentId}\nReference: ${impact.reference} Type: ${impact.type}`);
       return "";
     }
     return `${this.util.severityName(impact.severity)} (${impact.severity})`;
@@ -226,7 +252,18 @@ export class IncidentDetailsViewComponent implements OnInit {
       console.error("Received a call to markImpactForDeletion without an id");
       return;
     }
-    this.impactsToDelete.add(id);
+    if (this.pendingImpacts.has(id)) {
+      this.pendingImpacts.delete(id);
+      let index: number = 0;
+      for (; index < this.impactsToAdd.length; index++) {
+        if (this.impactsToAdd[index].reference === id) {
+          break;
+        }
+      }
+      this.impactsToAdd.splice(index, 1);
+    } else {
+      this.impactsToDelete.add(id);
+    }
   }
 
   unmarkImpactForDeletion(id?: ComponentId): void {
@@ -238,7 +275,19 @@ export class IncidentDetailsViewComponent implements OnInit {
   }
 
   markUpdateForDeletion(order: number): void {
-    this.updatesToDelete.add(order);
+    // TODO What about updating the order property of all remaining pending updates?
+    if (this.pendingUpdates.has(order)) {
+      this.pendingUpdates.delete(order);
+      let index: number = 0;
+      for (; index < this.updatesToAdd.length; index++) {
+        if (this.updatesToAdd[index].order === order) {
+          break;
+        }
+      }
+      this.updatesToAdd.splice(index, 1);
+    } else {
+      this.updatesToDelete.add(order);
+    }
   }
 
   unmarkUpdateForDeletion(order: number): void {

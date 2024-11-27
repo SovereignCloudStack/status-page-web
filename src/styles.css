@@ -88,6 +88,12 @@
     initial-value: #ee6a5f;
 }
 
+@property --btn-shadow-color {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: #bbb;
+}
+
 @property --fine-color {
     syntax: "<color>";
     inherits: false;
@@ -211,6 +217,7 @@
     --btn-disabled-color: #9e9e9e;
     --btn-discard-color: #f5c451;
     --btn-danger-color: #ee6a5f;
+    --btn-shadow-color: #bbb;
     --fine-color: #50c3a5;
     --limited-color: #f5c451;
     --broken-color: #ee6a5f;
@@ -376,6 +383,7 @@ button {
     font-size: 1.0rem;
     background-color: var(--main-bg-color);
     margin-right: 1rem;
+    box-shadow: 2px 2px var(--btn-shadow-color);
 }
 
 button:disabled {

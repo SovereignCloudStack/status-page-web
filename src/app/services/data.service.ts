@@ -5,7 +5,7 @@ import { AppConfigService } from './app-config.service';
 import { BehaviorSubject, Observable, combineLatestWith } from 'rxjs';
 import { DailyStatus } from '../model/daily-status';
 import { Component, ComponentService, IdField, ImpactService, ImpactType, Incident, IncidentResponseData, IncidentService, IncidentUpdateResponseData, PhaseList, PhaseService, Severity } from '../../external/lib/status-page-api/angular-client';
-import { ComponentId, ImpactId, IncidentId, SHORT_DAY_FORMAT, ShortDayString } from '../model/base';
+import { ComponentId, ImpactTypeId, IncidentId, SHORT_DAY_FORMAT, ShortDayString } from '../model/base';
 import { formatQueryDate } from '../util/util';
 
 @Injectable({
@@ -17,7 +17,7 @@ export class DataService {
 
   phaseGenerations!: PhaseList;
   severities!: Severity[];
-  impactTypes!: Map<ImpactId, ImpactType>;
+  impactTypes!: Map<ImpactTypeId, ImpactType>;
 
   components!: Map<ComponentId, Component>;
   componentAvailability!: Map<ComponentId, number>;
@@ -243,7 +243,7 @@ export class DataService {
     const statusList = this.componentStatusByDay.get(component);
     if (!statusList) {
       // TODO Error properly
-      console.log("Found a component with missing daily status list?");
+      console.warn("Found a component with missing daily status list?");
       return;
     }
     let daysWithIncidents = 0;

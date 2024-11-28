@@ -1,11 +1,14 @@
 import dayjs from "dayjs";
-import { Incident } from "../../external/lib/status-page-api/angular-client";
+import { Impact, Incident } from "../../external/lib/status-page-api/angular-client";
 import { Result, ResultId } from "./result";
 
 const ID_INCIDENT_NAME: ResultId = "Display Name";
 const ID_INCIDENT_DESCR: ResultId = "Description";
 const ID_INCIDENT_BEGAN: ResultId = "Began At";
 const ID_INCIDENT_ENDED: ResultId = "Ended At";
+
+const ID_IMPACT_REFERENCE: ResultId = "Reference";
+const ID_IMPACT_TYPE: ResultId = "Impact Type";
 
 export function incidentName(incident: Incident): Result {
     if (incident.displayName !== undefined && incident.displayName !== null && incident.displayName.length > 0) {
@@ -38,4 +41,23 @@ export function incidentEndedAt(incident: Incident): Result {
         }
     } 
     return new Result(ID_INCIDENT_ENDED);
+}
+
+export function impactReference(impact: Impact, existing: Impact[]): Result {
+    if (!impact.reference) {
+        return new Result(ID_IMPACT_REFERENCE, "An impact needs to reference a component.")
+    }
+    for (let i of existing) {
+        if (i.reference === impact.reference) {
+            return new Result(ID_IMPACT_REFERENCE, "This component is already affected by this incident.");
+        }
+    }
+    return new Result(ID_IMPACT_REFERENCE);
+}
+
+export function impactType(impact: Impact): Result {
+    if (!impact.type) {
+        return new Result(ID_IMPACT_TYPE, "An impact needs to have an impact type selected");
+    }
+    return new Result(ID_IMPACT_TYPE)
 }

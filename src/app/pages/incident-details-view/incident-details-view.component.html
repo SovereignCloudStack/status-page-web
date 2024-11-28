@@ -44,7 +44,7 @@
 </div>
 <div id="affects" *ngIf="(incident.affects?.length ?? 0) > 0">
     <h2 style="display:inline-block">Affected components</h2>
-    <button *ngIf="edit.editing" class="inline-button"><fa-icon [icon]="ip.newElement"></fa-icon></button>
+    <button *ngIf="edit.editing" class="inline-button" (click)="editImpactDialog.openDialog()"><fa-icon [icon]="ip.newElement"></fa-icon></button>
     <ul>
         <li *ngFor="let impact of incident.affects?.concat(impactsToAdd)">
             <span [class.struck]="impactsToDelete.has(impact.reference ?? '')">{{ componentName(impact) }}</span>
@@ -94,3 +94,4 @@
         No updates yet.
     </div>
 </div>
+<app-edit-impact-dialog #editImpactDialog [existingImpacts]="impactsToAdd.concat(incident.affects ?? [])" (finish)="addNewImpact($event)"></app-edit-impact-dialog>

@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { DataService } from '../../services/data.service';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgComponentOutlet } from '@angular/common';
 import { UtilService } from '../../services/util.service';
 import { ReversePipe } from '../../pipes/reverse.pipe';
 import { Incident, Impact, IncidentService, IncidentUpdateResponseData, IncidentUpdate } from '../../../external/lib/status-page-api/angular-client';
@@ -19,11 +19,13 @@ import { ErrorBoxComponent } from "../../components/error-box/error-box.componen
 import { EditBarButtonsComponent } from "../../components/edit-bar-buttons/edit-bar-buttons.component";
 import { createIncident, incidentDateToUi, uiToIncidentDate } from '../../util/util';
 import dayjs from 'dayjs';
+import { EditImpactDialogComponent } from '../../dialogs/edit-impact-dialog/edit-impact-dialog.component';
+import { EditUpdateDialogComponent } from '../../dialogs/edit-update-dialog/edit-update-dialog.component';
 
 @Component({
   selector: 'app-incident-view',
   standalone: true,
-  imports: [CommonModule, RouterModule, ReversePipe, FontAwesomeModule, SpinnerComponent, FormsModule, ErrorBoxComponent, EditBarButtonsComponent],
+  imports: [CommonModule, RouterModule, ReversePipe, FontAwesomeModule, NgComponentOutlet, SpinnerComponent, FormsModule, ErrorBoxComponent, EditBarButtonsComponent, EditImpactDialogComponent],
   templateUrl: './incident-details-view.component.html',
   styleUrl: './incident-details-view.component.css'
 })
@@ -65,6 +67,9 @@ export class IncidentDetailsViewComponent implements OnInit {
 
   newIncident: boolean = false;
   maintenanceEvent: boolean = false;
+
+  @ViewChild("editImpactDialog", {static: true})
+  private editImpactDialog!: ElementRef<EditImpactDialogComponent>;
 
   constructor(
     public data: DataService,

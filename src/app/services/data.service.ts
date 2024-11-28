@@ -85,6 +85,24 @@ export class DataService {
     return this.incs.updateIncident(id, incident);
   }
 
+  hasMaintenanceEvent(id: IncidentId): boolean {
+    for (let event of this.maintenanceEvents) {
+      if (event.id === id) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  getMaintenanceEvent(id: IncidentId): Incident | null {
+    for (let event of this.maintenanceEvents) {
+      if (event.id === id) {
+        return event;
+      }
+    }
+    return null;
+  }
+
   private addToMapList<T>(
     map: Map<string, T[]>,
     value: T,

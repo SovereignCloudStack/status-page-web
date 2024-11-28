@@ -17,7 +17,8 @@ import { FormsModule } from '@angular/forms';
 import { Result, ResultId } from '../../util/result';
 import { ErrorBoxComponent } from "../../components/error-box/error-box.component";
 import { EditBarButtonsComponent } from "../../components/edit-bar-buttons/edit-bar-buttons.component";
-import { incidentDateToUi, uiToIncidentDate } from '../../util/util';
+import { createIncident, incidentDateToUi, uiToIncidentDate } from '../../util/util';
+import dayjs from 'dayjs';
 
 @Component({
   selector: 'app-incident-view',
@@ -32,6 +33,8 @@ export class IncidentDetailsViewComponent implements OnInit {
   incident!: Incident;
   incidentUpdates!: IncidentUpdateResponseData[];
 
+  // We create a copy of all the incident's values we might change so that
+  // we can properly restore them in case the user discards any changes.
   incidentCopy: Incident = {};
 
   // These sets only include some form of ID we can use to
@@ -59,6 +62,9 @@ export class IncidentDetailsViewComponent implements OnInit {
 
   startDate: string = "";
   endDate: string = "";
+
+  newIncident: boolean = false;
+  maintenanceEvent: boolean = false;
 
   constructor(
     public data: DataService,
@@ -96,23 +102,40 @@ export class IncidentDetailsViewComponent implements OnInit {
           return;
         }
         const id = params.get("id")!;
-        // TODO Handle special case for new incidents
-        if (!this.data.incidents.has(id)) {
-          this.router.navigate(["notfound"]);
-          return;
+        if (id === "new") {
+          this.incidentId = "";
+          this.newIncident = true;
+          const began = dayjs().utc();
+          this.incident = createIncident(began);
+          this.incidentCopy = createIncident(began);
+          this.incidentUpdates = [];
+        } else {
+          if (this.data.incidents.has(id)) {
+            this.incidentId = id;
+            this.incident = this.data.incidents.get(id)!;
+            // Updates only supported for normal incidents
+            this.incidentUpdates = this.data.incidentUpdates.get(this.incidentId) ?? [];
+          } else if (this.data.hasMaintenanceEvent(id)) {
+            this.incidentId = id;
+            this.incident = this.data.getMaintenanceEvent(id)!;
+            this.incidentUpdates = [];
+            this.maintenanceEvent = true;
+          } else {
+            this.router.navigate(["notfound"]);
+            return;
+          }
+          
+          this.incidentCopy = {
+            displayName: this.incident.displayName,
+            description: this.incident.description,
+            beganAt: this.incident.beganAt,
+            endedAt: this.incident.endedAt,
+            phase: {
+              generation: this.incident.phase?.generation ?? 1,
+              order: this.incident.phase?.order ?? 0
+            }
+          };
         }
-        this.incidentId = id;
-        this.incident = this.data.incidents.get(id)!;
-        this.incidentUpdates = this.data.incidentUpdates.get(this.incidentId) ?? [];
-        // We create a copy of all the incident's values we might change so that
-        // we can properly restore them in case the user discards any changes.
-        this.incidentCopy = {
-          displayName: this.incident.displayName,
-          description: this.incident.description,
-          beganAt: this.incident.beganAt,
-          endedAt: this.incident.endedAt,
-          phase: this.incident.phase
-        };
         this.resetStartDate();
         this.resetEndDate();
       }
@@ -216,6 +239,7 @@ export class IncidentDetailsViewComponent implements OnInit {
     } else {
       this.incident.endedAt = null;
     }
+    this.incident.affects = [...this.incident.affects ?? [], ...this.impactsToAdd];
     // TODO Call API to save changes.
   }
 
@@ -245,6 +269,38 @@ export class IncidentDetailsViewComponent implements OnInit {
 
   resetEndDate(): void {
     this.endDate = incidentDateToUi(this.incident.endedAt);
+  }
+
+  // Differs from resetEndDate by also calling runChecks. This is meant to be
+  // used by the UI to remove the end date and mark the incident as still ongoing.
+  // Running the checks is necessary to make sure any errors relating to the end
+  // date are being cleared and we might not be in a state to properly do this when
+  // calling resetEndDate in the init method, henceforth this additional method.
+  removeEndDate(): void {
+    this.resetStartDate();
+    this.runChecks();
+  }
+
+  addNewImpact(impact: Impact): void {
+    if (!impact.reference) {
+      console.error("An Impact needs to reference a component");
+      return;
+    }
+    if (this.pendingImpacts.has(impact.reference)) {
+      console.error(`Attempt to add impact with the reference ${impact.reference} a second time`);
+      return;
+    }
+    this.pendingImpacts.add(impact.reference);
+    this.impactsToAdd.push(impact);
+  }
+
+  addNewUpdate(update: IncidentUpdateResponseData): void {
+    if (this.pendingUpdates.has(update.order)) {
+      console.error(`Attempt to add update with order ${update.order} a second time`);
+      return;
+    }
+    this.pendingUpdates.add(update.order);
+    this.updatesToAdd.push(update);
   }
 
   markImpactForDeletion(id?: ComponentId): void {
@@ -292,6 +348,30 @@ export class IncidentDetailsViewComponent implements OnInit {
 
   unmarkUpdateForDeletion(order: number): void {
     this.updatesToDelete.delete(order);
+  }
+
+  // Getter and setter for use by the HTML select element for the phase.
+  get incidentPhase(): number {
+    return this.incident.phase?.order ?? 0;
+  }
+
+  set incidentPhase(phaseStr: string) {
+    const phase = parseInt(phaseStr);
+    if (!this.incident.phase) {
+      this.incident.phase = {
+        generation: 1,
+        order: phase
+      }
+    } else {
+      this.incident.phase.order = phase;
+    }
+  }
+
+  get incidentType(): string {
+    if (this.maintenanceEvent) {
+      return "Maintenance Event";
+    }
+    return "Incident";
   }
 
   df = this.util.formatDate.bind(this.util)

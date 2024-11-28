@@ -1,14 +1,17 @@
 <div id="top">
     <a id="back-link" [routerLink]="['/']">&lt;&lt; back to the overview</a>
-    <app-edit-bar-buttons [userAuthenticated]="userAuthenticated" [edit]="edit" [allowSaving]="currentErrors.size === 0" [deleteBtnText]="'Delete Incident'"></app-edit-bar-buttons>
+    <app-edit-bar-buttons [userAuthenticated]="userAuthenticated" [edit]="edit" [allowSaving]="currentErrors.size === 0" [deleteBtnText]="'Delete ' + incidentType"></app-edit-bar-buttons>
 </div>
 <app-error-box [errors]="currentErrors"></app-error-box>
+<div class="faint" style="margin-top: 1rem;">
+    <span>{{ incidentType }} {{ incidentId }}</span>
+</div>
 <h1 *ngIf="edit.view">
     <span class="incident-status">{{ util.phaseName(incident.phase?.order) }}</span> {{ incident.displayName }}
 </h1>
 <div *ngIf="edit.editing">
-    <select>
-        <option *ngFor="let phase of data.phaseGenerations.phases" value="{{ incident.phase?.order }}">{{ phase }}</option>
+    <select [(ngModel)]="incidentPhase">
+        <option *ngFor="let phase of data.phaseGenerations.phases" value="{{ data.phaseGenerations.phases.indexOf(phase) }}">{{ phase }}</option>
     </select>
     <input type="text" [(ngModel)]="incident.displayName" (change)="runChecks()">
 </div>
@@ -20,7 +23,7 @@
     <div *ngIf="edit.editing">
         <input type="datetime-local" [(ngModel)]="startDate" (change)="runChecks()">
         <input type="datetime-local" [(ngModel)]="endDate"  [min]="startDate" (change)="runChecks()"><span></span>
-        <button class="inline-button discard" type="button" [disabled]="endDate === ''" (click)="resetEndDate()"><fa-icon [icon]="ip.discardChanges"></fa-icon><span>Remove End Date</span></button>
+        <button class="inline-button discard" type="button" [disabled]="endDate === ''" (click)="removeEndDate()"><fa-icon [icon]="ip.discardChanges"></fa-icon><span>Remove End Date</span></button>
     </div>
 </div>
 <div id="description">
@@ -63,9 +66,9 @@
         </li>
     </ul>
 </div>
-<div id="updates" *ngIf="incidentUpdates.length > 0">
+<div id="updates">
     <h2 style="display:inline-block">Updates</h2>
-    <button *ngIf="edit.editing" class="inline-button"><fa-icon [icon]="ip.newElement"></fa-icon></button>
+    <button *ngIf="!maintenanceEvent && edit.editing" class="inline-button"><fa-icon [icon]="ip.newElement"></fa-icon></button>
     <div *ngFor="let update of incidentUpdates.concat(updatesToAdd) | reverse">
         <h3 [class.struck]="updatesToDelete.has(update.order)">{{ update.displayName }}</h3><span class="faint"> - {{ dfl(update.createdAt) }}</span>
         <span *ngIf="edit.editing">
@@ -84,7 +87,10 @@
             {{ update.description }}
         </p>
     </div>
-</div>
-<div *ngIf="incidentUpdates.length === 0">
-    <p>Incident updates are empty?</p>
+    <div *ngIf="maintenanceEvent">
+        Maintenance events do not feature updates.
+    </div>
+    <div *ngIf="!maintenanceEvent && incidentUpdates.length === 0">
+        No updates yet.
+    </div>
 </div>

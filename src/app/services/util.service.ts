@@ -3,7 +3,7 @@ import { AppConfigService } from './app-config.service';
 import dayjs from 'dayjs';
 import { DailyStatus } from '../model/daily-status';
 import { UserSettingsService } from './user-settings.service';
-import { Incident, IncidentUpdate } from '../../external/lib/status-page-api/angular-client';
+import { Impact, Incident, IncidentUpdate } from '../../external/lib/status-page-api/angular-client';
 import { DataService } from './data.service';
 import { ComponentId, IncidentId, Severity, ShortDayString } from '../model/base';
 
@@ -140,5 +140,14 @@ export class UtilService {
       return "component not found";
     }
     return "unknown component";
+  }
+
+  isMaintenanceIncident(affects: Impact[]): boolean {
+    for (let impact of affects) {
+      if (impact.severity === 0) {
+        return true;
+      }
+    }
+    return false;
   }
 }

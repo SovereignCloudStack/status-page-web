@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
-import { IncidentService } from '../../../external/lib/status-page-api/angular-client';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { IconProviderService } from '../../services/icon-provider.service';
-import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-main-page-buttons',
@@ -20,7 +18,6 @@ export class MainPageButtonsComponent implements OnInit {
 
   constructor(
     private security: OidcSecurityService,
-    private incidentService: IncidentService,
     private router: Router,
     public ip: IconProviderService
   ) {}

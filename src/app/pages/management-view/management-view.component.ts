@@ -8,11 +8,11 @@ import { Incident, IncidentService, IncidentUpdate, IncidentUpdateResponseData }
 import dayjs from 'dayjs';
 import { IncidentId } from '../../model/base';
 import { SpinnerComponent } from '../../components/spinner/spinner.component';
-import { OidcSecurityService, UserDataResult } from 'angular-auth-oidc-client';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { firstValueFrom, Observable } from 'rxjs';
-import { AppConfigService } from '../../services/app-config.service';
 import { IconProviderService } from '../../services/icon-provider.service';
 import { formatQueryDate } from '../../util/util';
+import { ToastrService } from 'ngx-toastr';
 
 const DT_FORMAT = "YYYY-MM-DDTHH:mm";
 
@@ -85,16 +85,14 @@ export class ManagementViewComponent implements OnInit{
   @ViewChild("waitSpinnerDialog")
   private waitSpinnerDialog!: ElementRef<HTMLDialogElement>;
 
-  private userData!: Signal<UserDataResult>;
-
   constructor(
     public data: DataService,
     public util: UtilService,
     public ip: IconProviderService,
-    private config: AppConfigService,
     private security: OidcSecurityService,
     private router: Router,
-    private incidentService: IncidentService
+    private incidentService: IncidentService,
+    private toastr: ToastrService
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -103,7 +101,6 @@ export class ManagementViewComponent implements OnInit{
         console.log(`Unauthenticated, potential error: ${response.errorMessage}`);
         this.router.navigate([""]);
       }
-      this.userData = this.security.userData;
       const token = await firstValueFrom(this.security.getAccessToken());
       this.incidentService.configuration.withCredentials = true;
       this.incidentService.defaultHeaders = this.incidentService.defaultHeaders.set("Authorization", `Bearer ${token}`);
@@ -261,6 +258,7 @@ export class ManagementViewComponent implements OnInit{
             error: err => {
               console.error(`Request to delete update ${order} of incident ${this.editingIncidentId} error'ed out:`);
               console.error(err);
+              this.toastr.error("Removal failed", "An error occured while processing your request");
             }
           }
         );
@@ -279,6 +277,7 @@ export class ManagementViewComponent implements OnInit{
               // TODO How to best deal with these errors?
               console.error(`Request to add update ${update.displayName} for incident ${this.editingIncidentId} error'ed out`);
               console.error(err);
+              this.toastr.error("Creation failed", "An error occured while processing your request");
             }
           }
         );
@@ -359,6 +358,7 @@ export class ManagementViewComponent implements OnInit{
       error: (err) => {
         console.error("API request error'ed out:");
         console.error(err);
+        this.toastr.error("API error", "An error occured while processing your request");
         this.waitSpinnerDialog.nativeElement.close();
       },
       complete: () => {

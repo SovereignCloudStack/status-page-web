@@ -21,6 +21,7 @@ import dayjs from 'dayjs';
 import { EditImpactDialogComponent } from '../../dialogs/edit-impact-dialog/edit-impact-dialog.component';
 import { EditUpdateDialogComponent } from '../../dialogs/edit-update-dialog/edit-update-dialog.component';
 import { SpinnerDialogComponent } from '../../dialogs/spinner-dialog/spinner-dialog.component';
+import { ToastrService } from 'ngx-toastr';
 
 const WS_NONE = "";
 const WS_NEW_INCIDENT = "Creating incident...";
@@ -96,7 +97,8 @@ export class IncidentDetailsViewComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private security: OidcSecurityService,
-    private incidentService: IncidentService
+    private incidentService: IncidentService,
+    private toastr: ToastrService
   ) {
     this.edit = new EditMode();
     this.edit.leaveEditFunction = this.dispatchEditLeave.bind(this);
@@ -273,7 +275,7 @@ export class IncidentDetailsViewComponent implements OnInit {
     // We start by making sure everything is in order, just to be sure.
     const editedIncident = this.runChecks();
     if (this.currentErrors.size > 0) {
-      // TODO Add some kind of notification.
+      this.toastr.warning("Cannot save", "Fix the errors listed to save.");
       return;
     }
     this.waitState = WS_PROCESSING_INCIDENT;
@@ -286,6 +288,7 @@ export class IncidentDetailsViewComponent implements OnInit {
         error: (err) => {
           console.error("Error occured while creating new incident");
           console.error(err);
+          this.toastr.error("Creation failed", "An error occured while processing your request");
         }
       })
     } else {
@@ -298,7 +301,7 @@ export class IncidentDetailsViewComponent implements OnInit {
           // Failure
           console.error(`Request to update incident ${this.incidentId} error'ed out`);
           console.error(err);
-          // TODO What to do here?
+          this.toastr.error("Update failed", "An error occured while processing your request");
         }
       });
     }
@@ -318,7 +321,7 @@ export class IncidentDetailsViewComponent implements OnInit {
         error: (err) => {
           console.error("Request to add or delete incident update error'ed out.")
           console.error(err);
-          // TODO What to do here?
+          this.toastr.error("Update failed", "An error occured while processing your request");
         },
         complete: () => {
           this.finishSave();

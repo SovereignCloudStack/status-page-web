@@ -26,6 +26,7 @@
     "angular-auth-oidc-client": "18.0.1",
     "dayjs": "^1.11.10",
     "ngx-cookie-service": "^17.0.1",
+    "ngx-toastr": "^19.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.2"

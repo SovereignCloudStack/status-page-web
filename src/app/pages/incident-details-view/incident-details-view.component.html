@@ -4,7 +4,8 @@
 </div>
 <app-error-box [errors]="currentErrors"></app-error-box>
 <div class="faint" style="margin-top: 1rem;">
-    <span>{{ incidentType }} {{ incidentId }}</span>
+    <span *ngIf="!newIncident">{{ incidentType }} {{ incidentId }}</span>
+    <span *ngIf="newIncident">New incident</span>
 </div>
 <h1 *ngIf="edit.view">
     <span class="incident-status">{{ util.phaseName(incident.phase?.order) }}</span> {{ incident.displayName }}
@@ -42,7 +43,7 @@
         (change)="runChecks()">
     </textarea>
 </div>
-<div id="affects" *ngIf="(incident.affects?.length ?? 0) > 0">
+<div id="affects">
     <h2 style="display:inline-block">Affected components</h2>
     <button *ngIf="edit.editing" class="inline-button" (click)="editImpactDialog.openDialog()"><fa-icon [icon]="ip.newElement"></fa-icon></button>
     <ul>
@@ -51,9 +52,9 @@
             <span class="faint"> | Severity: {{ impactSeverity(impact) }}</span>
             <span class="faint"> | Category: {{ impactType(impact) }}</span>
             <span *ngIf="edit.editing">
-                <button class="inline-button" type="button">
+                <!--<button class="inline-button" type="button">
                     <fa-icon [icon]="ip.edit"></fa-icon>
-                </button>
+                </button>-->
                 <button class="inline-button dangerous" type="button" (click)="markImpactForDeletion(impact.reference)" *ngIf="!impactsToDelete.has(impact.reference ?? '')" title="Delete this impact">
                     <fa-icon [icon]="ip.delete"></fa-icon>
                 </button>
@@ -72,9 +73,9 @@
     <div *ngFor="let update of incidentUpdates.concat(updatesToAdd) | reverse">
         <h3 [class.struck]="updatesToDelete.has(update.order)">{{ update.displayName }}</h3><span class="faint"> - {{ dfl(update.createdAt) }}</span>
         <span *ngIf="edit.editing">
-            <button class="inline-button" type="button">
+            <!--<button class="inline-button" type="button">
                 <fa-icon [icon]="ip.edit"></fa-icon>
-            </button>
+            </button>-->
             <button class="inline-button dangerous" type="button" (click)="markUpdateForDeletion(update.order)" *ngIf="!updatesToDelete.has(update.order)" title="Delete this update">
                 <fa-icon [icon]="ip.delete"></fa-icon>
             </button>
@@ -87,10 +88,10 @@
             {{ update.description }}
         </p>
     </div>
-    <div *ngIf="maintenanceEvent">
+    <div *ngIf="maintenanceEvent" style="margin-top: .5rem;">
         Maintenance events do not feature updates.
     </div>
-    <div *ngIf="!maintenanceEvent && incidentUpdates.length === 0">
+    <div *ngIf="!maintenanceEvent && incidentUpdates.length === 0" style="margin-top: .5rem;">
         No updates yet.
     </div>
 </div>

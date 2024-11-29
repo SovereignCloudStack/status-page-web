@@ -56,9 +56,12 @@ export class IncidentDetailsViewComponent implements OnInit {
   pendingImpacts: Set<ComponentId> = new Set();
   pendingUpdates: Set<number> = new Set();
 
+  // New entities to add to this incident. Accompanying ID data
+  // is stored in pendingImpacts and pendingUpdates, respectively.
   impactsToAdd: Impact[] = [];
   updatesToAdd: IncidentUpdateResponseData[] = [];
 
+  // Impacts and updates we wish to delete.
   impactsToDelete: Set<ComponentId> = new Set();
   updatesToDelete: Set<number> = new Set();
 
@@ -115,6 +118,8 @@ export class IncidentDetailsViewComponent implements OnInit {
           this.incident = createIncident(began);
           this.incidentCopy = createIncident(began);
           this.incidentUpdates = [];
+          // Run checks to make sure the save button is disabled
+          this.runChecks();
         } else {
           if (this.data.incidents.has(id)) {
             this.incidentId = id;
@@ -265,35 +270,29 @@ export class IncidentDetailsViewComponent implements OnInit {
   private saveChanges(): void {
     // We start by making sure everything is in order, just to be sure.
     const editedIncident = this.runChecks();
+    if (this.currentErrors.size > 0) {
+      // TODO Add some kind of notification.
+      return;
+    }
+    this.waitState = WS_PROCESSING_INCIDENT;
     if (this.newIncident) {
-      // TODO
+      this.data.createIncident(this.incident).subscribe({
+        next: (id) => {
+          console.log(`Created incident with new ID ${id.id}`);
+          console.log("Creating updates, if necessary");
+          this.incidentId = id.id;
+          this.handleSavingUpdates();
+        },
+        error: (err) => {
+          console.error("Error occured while creating new incident");
+          console.error(err);
+        }
+      })
     } else {
-      this.waitState = WS_PROCESSING_INCIDENT;
       this.data.updateIncident(this.incidentId, editedIncident).subscribe({
         next: () => {
           // Now, send or remove incident updates as needed.
-          if (this.pendingUpdates.size > 0 || this.updatesToDelete.size > 0) {
-            this.waitState = WS_PROCESSING_UPDATES;
-            let requests: Observable<any>[] = [];
-            for (let updateOrder of this.updatesToDelete) {
-              requests.push(this.data.deleteIncidentUpdate(this.incidentId, updateOrder));
-            }
-            for (let update of this.updatesToAdd) {
-              requests.push(this.data.createIncidentUpdate(this.incidentId, update));
-            }
-            forkJoin(requests).subscribe({
-              error: (err) => {
-                console.error("Request to add or delete incident update error'ed out.")
-                console.error(err);
-                // TODO What to do here?
-              },
-              complete: () => {
-                this.finishSave();
-              }
-            });
-          } else {
-            this.finishSave();
-          }  
+          this.handleSavingUpdates();
         },
         error: (err) => {
           // Failure
@@ -301,7 +300,32 @@ export class IncidentDetailsViewComponent implements OnInit {
           console.error(err);
           // TODO What to do here?
         }
-      })
+      });
+    }
+  }
+
+  private handleSavingUpdates(): void {
+    if (this.pendingUpdates.size > 0 || this.updatesToDelete.size > 0) {
+      this.waitState = WS_PROCESSING_UPDATES;
+      let requests: Observable<any>[] = [];
+      for (let updateOrder of this.updatesToDelete) {
+        requests.push(this.data.deleteIncidentUpdate(this.incidentId, updateOrder));
+      }
+      for (let update of this.updatesToAdd) {
+        requests.push(this.data.createIncidentUpdate(this.incidentId, update));
+      }
+      forkJoin(requests).subscribe({
+        error: (err) => {
+          console.error("Request to add or delete incident update error'ed out.")
+          console.error(err);
+          // TODO What to do here?
+        },
+        complete: () => {
+          this.finishSave();
+        }
+      });
+    } else {
+      this.finishSave(); 
     }
   }
   
@@ -313,6 +337,9 @@ export class IncidentDetailsViewComponent implements OnInit {
         // We are done reloading the data
         this.clearPending();
         this.waitState = WS_NONE;
+        if (this.newIncident) {
+          this.router.navigateByUrl(`/incident/${this.incidentId}`);
+        }
       }
     });
   }
@@ -371,6 +398,7 @@ export class IncidentDetailsViewComponent implements OnInit {
     }
     this.pendingImpacts.add(impact.reference);
     this.impactsToAdd.push(impact);
+    this.runChecks();
   }
 
   addNewUpdate(update: IncidentUpdateResponseData): void {

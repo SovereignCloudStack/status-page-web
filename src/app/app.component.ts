@@ -42,7 +42,6 @@ export class AppComponent implements OnInit {
     // settings sections into the outlet and just show it on the correct routes.
     router.events.forEach((e) => {
       if (e instanceof NavigationEnd) {
-        console.log(e.url);
         if (e.url !== "/" && !e.url.startsWith("/#")) {
           this.userSettings.showUserSettings = false;
           this._showAboutSection = false;

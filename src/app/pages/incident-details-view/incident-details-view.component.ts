@@ -280,8 +280,6 @@ export class IncidentDetailsViewComponent implements OnInit {
     if (this.newIncident) {
       this.data.createIncident(this.incident).subscribe({
         next: (id) => {
-          console.log(`Created incident with new ID ${id.id}`);
-          console.log("Creating updates, if necessary");
           this.incidentId = id.id;
           this.handleSavingUpdates();
         },

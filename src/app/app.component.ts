@@ -10,6 +10,8 @@ import { AppConfigService } from './services/app-config.service';
 import { IconProviderService } from './services/icon-provider.service';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { firstValueFrom } from 'rxjs';
+import { IncidentService } from '../external/lib/status-page-api/angular-client';
 
 @Component({
   selector: 'app-root',
@@ -35,6 +37,7 @@ export class AppComponent implements OnInit {
     private router: Router,
     private data: DataService,
     private security: OidcSecurityService,
+    private incidentService: IncidentService,
     public appConfig: AppConfigService,
     public userSettings: UserSettingsService,
     public ip: IconProviderService,
@@ -75,6 +78,11 @@ export class AppComponent implements OnInit {
     // Check if the user is authenticated
     this.security.checkAuth().subscribe(async response => {
       this.userAuthenticated = response.isAuthenticated;
+      if (this.userAuthenticated) {
+        const token = await firstValueFrom(this.security.getAccessToken());
+        this.incidentService.configuration.withCredentials = true;
+        this.incidentService.defaultHeaders = this.incidentService.defaultHeaders.set("Authorization", `Bearer ${token}`);
+      }
     });
   }
 

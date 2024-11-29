@@ -104,13 +104,24 @@ export class IncidentDetailsViewComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
+    // Check if the user is authenticated
+    this.security.checkAuth().subscribe(async response => {
+      this.userAuthenticated = response.isAuthenticated;
+      if (this.userAuthenticated) {
+        const token = await firstValueFrom(this.security.getAccessToken());
+        this.incidentService.configuration.withCredentials = true;
+        this.incidentService.defaultHeaders = this.incidentService.defaultHeaders.set("Authorization", `Bearer ${token}`);
+      }
+      this.route.paramMap.subscribe(params => {
         if (!params.has("id")) {
           this.router.navigate(["notfound"]);
           return;
         }
         const id = params.get("id")!;
         if (id === "new") {
+          if (!this.userAuthenticated) {
+            this.router.navigate(["unauthorized"]);
+          }
           this.incidentId = "";
           this.newIncident = true;
           this.edit.switchMode();
@@ -160,16 +171,7 @@ export class IncidentDetailsViewComponent implements OnInit {
         }
         this.resetStartDate();
         this.resetEndDate();
-      }
-    );
-    // Check if the user is authenticated
-    this.security.checkAuth().subscribe(async response => {
-      this.userAuthenticated = response.isAuthenticated;
-      if (this.userAuthenticated) {
-        const token = await firstValueFrom(this.security.getAccessToken());
-        this.incidentService.configuration.withCredentials = true;
-        this.incidentService.defaultHeaders = this.incidentService.defaultHeaders.set("Authorization", `Bearer ${token}`);
-      }
+      });
     });
   }
 

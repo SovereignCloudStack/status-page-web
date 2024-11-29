@@ -22,17 +22,19 @@ import { EditImpactDialogComponent } from '../../dialogs/edit-impact-dialog/edit
 import { EditUpdateDialogComponent } from '../../dialogs/edit-update-dialog/edit-update-dialog.component';
 import { SpinnerDialogComponent } from '../../dialogs/spinner-dialog/spinner-dialog.component';
 import { ToastrService } from 'ngx-toastr';
+import { ConfirmDeleteDialogComponent } from '../../dialogs/confirm-delete-dialog/confirm-delete-dialog.component';
 
 const WS_NONE = "";
 const WS_NEW_INCIDENT = "Creating incident...";
 const WS_PROCESSING_INCIDENT = "Updating incident...";
 const WS_PROCESSING_UPDATES = "Sending updates...";
 const WS_RELOADING = "Reloading data...";
+const WS_DELETE_INCIDENT = "Deleting incident...";
 
 @Component({
   selector: 'app-incident-view',
   standalone: true,
-  imports: [CommonModule, RouterModule, ReversePipe, FontAwesomeModule, FormsModule, ErrorBoxComponent, EditBarButtonsComponent, EditImpactDialogComponent, EditUpdateDialogComponent, SpinnerDialogComponent],
+  imports: [CommonModule, RouterModule, ReversePipe, FontAwesomeModule, FormsModule, ErrorBoxComponent, EditBarButtonsComponent, EditImpactDialogComponent, EditUpdateDialogComponent, SpinnerDialogComponent, ConfirmDeleteDialogComponent],
   templateUrl: './incident-details-view.component.html',
   styleUrl: './incident-details-view.component.css'
 })
@@ -87,8 +89,12 @@ export class IncidentDetailsViewComponent implements OnInit {
   private editImpactDialog!: ElementRef<EditImpactDialogComponent>;
   @ViewChild("waitSpinnerDialog", {static: false})
   private waitSpinnerDialog!: SpinnerDialogComponent;
+  @ViewChild("confirmDeleteDialog", {static: false})
+  private confirmDeleteDialog!: ConfirmDeleteDialogComponent;
 
   _waitState: string = "";
+
+  ready: boolean = false;
 
   constructor(
     public data: DataService,
@@ -173,6 +179,7 @@ export class IncidentDetailsViewComponent implements OnInit {
         }
         this.resetStartDate();
         this.resetEndDate();
+        this.ready = true;
       });
     });
   }
@@ -262,7 +269,7 @@ export class IncidentDetailsViewComponent implements OnInit {
         break;
       }
       case "delete": {
-        this.deleteIncident();
+        this.confirmDeleteIncident();
         break;
       }
       default: {
@@ -275,12 +282,12 @@ export class IncidentDetailsViewComponent implements OnInit {
     // We start by making sure everything is in order, just to be sure.
     const editedIncident = this.runChecks();
     if (this.currentErrors.size > 0) {
-      this.toastr.warning("Cannot save", "Fix the errors listed to save.");
+      this.toastr.warning("Fix the errors listed to save.", "Cannot save");
       return;
     }
-    this.waitState = WS_PROCESSING_INCIDENT;
     if (this.newIncident) {
-      this.data.createIncident(this.incident).subscribe({
+      this.waitState = WS_NEW_INCIDENT;
+      this.data.createIncident(editedIncident).subscribe({
         next: (id) => {
           this.incidentId = id.id;
           this.handleSavingUpdates();
@@ -288,10 +295,11 @@ export class IncidentDetailsViewComponent implements OnInit {
         error: (err) => {
           console.error("Error occured while creating new incident");
           console.error(err);
-          this.toastr.error("Creation failed", "An error occured while processing your request");
+          this.toastr.error("An error occured while processing your request", "Creation failed");
         }
       })
     } else {
+      this.waitState = WS_PROCESSING_INCIDENT;
       this.data.updateIncident(this.incidentId, editedIncident).subscribe({
         next: () => {
           // Now, send or remove incident updates as needed.
@@ -301,7 +309,7 @@ export class IncidentDetailsViewComponent implements OnInit {
           // Failure
           console.error(`Request to update incident ${this.incidentId} error'ed out`);
           console.error(err);
-          this.toastr.error("Update failed", "An error occured while processing your request");
+          this.toastr.error("An error occured while processing your request", "Update failed");
         }
       });
     }
@@ -321,7 +329,7 @@ export class IncidentDetailsViewComponent implements OnInit {
         error: (err) => {
           console.error("Request to add or delete incident update error'ed out.")
           console.error(err);
-          this.toastr.error("Update failed", "An error occured while processing your request");
+          this.toastr.error("An error occured while processing your request", "Update failed");
         },
         complete: () => {
           this.finishSave();
@@ -359,8 +367,27 @@ export class IncidentDetailsViewComponent implements OnInit {
     this.currentErrors.clear();
   }
 
-  private deleteIncident(): void {
-    // TODO
+  private confirmDeleteIncident(): void {
+    this.confirmDeleteDialog.openDialog();
+  }
+
+  deleteIncident(): void {
+    this.waitState = WS_DELETE_INCIDENT;
+    this.data.deleteIncident(this.incidentId).subscribe({
+      next: () => {
+        this.waitState = WS_RELOADING;
+        // Start reload process
+        this.data.reload();
+        // Leave, we can finish on the main page
+        this.router.navigate([""]);
+      },
+      error: (err) => {
+        console.error(`An error occured when deleting incident ${this.incidentId}`);
+        console.error(err);
+        this.toastr.error("An error occured while processing your request.", "API Error");
+        this.waitState = WS_NONE;
+      }
+    });
   }
 
   private clearPending(): void {

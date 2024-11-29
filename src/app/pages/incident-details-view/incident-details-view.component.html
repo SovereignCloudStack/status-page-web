@@ -2,100 +2,105 @@
     <a id="back-link" [routerLink]="['/']">&lt;&lt; back to the overview</a>
     <app-edit-bar-buttons [userAuthenticated]="userAuthenticated" [edit]="edit" [allowSaving]="currentErrors.size === 0" [deleteBtnText]="'Delete ' + incidentType"></app-edit-bar-buttons>
 </div>
-<app-error-box [errors]="currentErrors"></app-error-box>
-<div class="faint" style="margin-top: 1rem;">
-    <span *ngIf="!newIncident">{{ incidentType }} {{ incidentId }}</span>
-    <span *ngIf="newIncident">New incident</span>
-</div>
-<h1 *ngIf="edit.view">
-    <span class="incident-status">{{ util.phaseName(incident.phase?.order) }}</span> {{ incident.displayName }}
-</h1>
-<div *ngIf="edit.editing">
-    <select [(ngModel)]="incidentPhase">
-        <option *ngFor="let phase of data.phaseGenerations.phases" value="{{ data.phaseGenerations.phases.indexOf(phase) }}">{{ phase }}</option>
-    </select>
-    <input type="text" [(ngModel)]="incident.displayName" (change)="runChecks()">
-</div>
-<div id="incident-dates">
-    <div *ngIf="edit.view">
-        <span class="faint">{{ df(incident.beganAt) }}</span>
-        <span class="faint" *ngIf="incident.endedAt"> → {{ df(incident.endedAt) }}</span>
+
+<div *ngIf="ready">
+    <app-error-box [errors]="currentErrors"></app-error-box>
+    <div class="faint" style="margin-top: 1rem;">
+        <span *ngIf="!newIncident">{{ incidentType }} {{ incidentId }}</span>
+        <span *ngIf="newIncident">New incident</span>
     </div>
+    <h1 *ngIf="edit.view">
+        <span class="incident-status">{{ util.phaseName(incident.phase?.order) }}</span> {{ incident.displayName }}
+    </h1>
     <div *ngIf="edit.editing">
-        <input type="datetime-local" [(ngModel)]="startDate" (change)="runChecks()">
-        <input type="datetime-local" [(ngModel)]="endDate"  [min]="startDate" (change)="runChecks()"><span></span>
-        <button class="inline-button discard" type="button" [disabled]="endDate === ''" (click)="removeEndDate()"><fa-icon [icon]="ip.discardChanges"></fa-icon><span>Remove End Date</span></button>
+        <select [(ngModel)]="incidentPhase">
+            <option *ngFor="let phase of data.phaseGenerations.phases" value="{{ data.phaseGenerations.phases.indexOf(phase) }}">{{ phase }}</option>
+        </select>
+        <input type="text" [(ngModel)]="incident.displayName" (change)="runChecks()">
     </div>
-</div>
-<div id="description">
-    <h2>Description</h2>
-    <p *ngIf="edit.view">
-        {{ incident.description }}
-    </p>
-    <textarea 
-        *ngIf="edit.editing"
-        rows="6" 
-        #incidentDescription 
-        id="incidentDescription" 
-        name="incidentDescription"
-        (keydown.enter)="$event.stopPropagation()"
-        [(ngModel)]="incident.description"
-        (change)="runChecks()">
-    </textarea>
-</div>
-<div id="affects">
-    <h2 style="display:inline-block">Affected components</h2>
-    <button *ngIf="edit.editing" class="inline-button" (click)="editImpactDialog.openDialog()"><fa-icon [icon]="ip.newElement"></fa-icon></button>
-    <ul>
-        <li *ngFor="let impact of incident.affects!.concat(impactsToAdd)">
-            <span [class.struck]="impactsToDelete.has(impact.reference ?? '')">{{ componentName(impact) }}</span>
-            <span class="faint"> | Severity: {{ impactSeverity(impact) }}</span>
-            <span class="faint"> | Category: {{ impactType(impact) }}</span>
+    <div id="incident-dates">
+        <div *ngIf="edit.view">
+            <span class="faint">{{ df(incident.beganAt) }}</span>
+            <span class="faint" *ngIf="incident.endedAt"> → {{ df(incident.endedAt) }}</span>
+        </div>
+        <div *ngIf="edit.editing">
+            <input type="datetime-local" [(ngModel)]="startDate" (change)="runChecks()">
+            <input type="datetime-local" [(ngModel)]="endDate"  [min]="startDate" (change)="runChecks()"><span></span>
+            <button class="inline-button discard" type="button" [disabled]="endDate === ''" (click)="removeEndDate()"><fa-icon [icon]="ip.discardChanges"></fa-icon><span>Remove End Date</span></button>
+        </div>
+    </div>
+    <div id="description">
+        <h2>Description</h2>
+        <p *ngIf="edit.view">
+            {{ incident.description }}
+        </p>
+        <textarea 
+            *ngIf="edit.editing"
+            rows="6" 
+            #incidentDescription 
+            id="incidentDescription" 
+            name="incidentDescription"
+            (keydown.enter)="$event.stopPropagation()"
+            [(ngModel)]="incident.description"
+            (change)="runChecks()">
+        </textarea>
+    </div>
+    <div id="affects">
+        <h2 style="display:inline-block">Affected components</h2>
+        <button *ngIf="edit.editing" class="inline-button" (click)="editImpactDialog.openDialog()"><fa-icon [icon]="ip.newElement"></fa-icon></button>
+        <ul>
+            <li *ngFor="let impact of incident.affects!.concat(impactsToAdd)">
+                <span [class.struck]="impactsToDelete.has(impact.reference ?? '')">{{ componentName(impact) }}</span>
+                <span class="faint"> | Severity: {{ impactSeverity(impact) }}</span>
+                <span class="faint"> | Category: {{ impactType(impact) }}</span>
+                <span *ngIf="edit.editing">
+                    <!--<button class="inline-button" type="button">
+                        <fa-icon [icon]="ip.edit"></fa-icon>
+                    </button>-->
+                    <button class="inline-button dangerous" type="button" (click)="markImpactForDeletion(impact.reference)" *ngIf="!impactsToDelete.has(impact.reference ?? '')" title="Delete this impact">
+                        <fa-icon [icon]="ip.delete"></fa-icon>
+                    </button>
+                    <button class="inline-button discard" type="button" (click)="unmarkImpactForDeletion(impact.reference)" *ngIf="impactsToDelete.has(impact.reference ?? '')" title="Cancel pending deletion">
+                        <fa-icon [icon]="ip.discardChanges"></fa-icon>
+                    </button>
+                    <span *ngIf="impactsToDelete.has(impact.reference ?? '')">Pending Deletion</span>
+                    <span *ngIf="pendingImpacts.has(impact.reference ?? '')">Pending Save</span>
+                </span>
+            </li>
+        </ul>
+    </div>
+    <div id="updates">
+        <h2 style="display:inline-block">Updates</h2>
+        <button *ngIf="!maintenanceEvent && edit.editing" class="inline-button" (click)="editUpdateDialog.openDialog()"><fa-icon [icon]="ip.newElement"></fa-icon></button>
+        <div *ngFor="let update of incidentUpdates.concat(updatesToAdd) | reverse">
+            <h3 [class.struck]="updatesToDelete.has(update.order)">{{ update.displayName }}</h3><span class="faint"> - {{ dfl(update.createdAt) }}</span>
             <span *ngIf="edit.editing">
                 <!--<button class="inline-button" type="button">
                     <fa-icon [icon]="ip.edit"></fa-icon>
                 </button>-->
-                <button class="inline-button dangerous" type="button" (click)="markImpactForDeletion(impact.reference)" *ngIf="!impactsToDelete.has(impact.reference ?? '')" title="Delete this impact">
+                <button class="inline-button dangerous" type="button" (click)="markUpdateForDeletion(update.order)" *ngIf="!updatesToDelete.has(update.order)" title="Delete this update">
                     <fa-icon [icon]="ip.delete"></fa-icon>
                 </button>
-                <button class="inline-button discard" type="button" (click)="unmarkImpactForDeletion(impact.reference)" *ngIf="impactsToDelete.has(impact.reference ?? '')" title="Cancel pending deletion">
+                <button class="inline-button discard" type="button" (click)="unmarkUpdateForDeletion(update.order)" *ngIf="updatesToDelete.has(update.order)" title="Cancel pending deletion">
                     <fa-icon [icon]="ip.discardChanges"></fa-icon>
                 </button>
-                <span *ngIf="impactsToDelete.has(impact.reference ?? '')">Pending Deletion</span>
-                <span *ngIf="pendingImpacts.has(impact.reference ?? '')">Pending Save</span>
+                <span *ngIf="updatesToDelete.has(update.order)">Pending Deletion</span>
             </span>
-        </li>
-    </ul>
-</div>
-<div id="updates">
-    <h2 style="display:inline-block">Updates</h2>
-    <button *ngIf="!maintenanceEvent && edit.editing" class="inline-button" (click)="editUpdateDialog.openDialog()"><fa-icon [icon]="ip.newElement"></fa-icon></button>
-    <div *ngFor="let update of incidentUpdates.concat(updatesToAdd) | reverse">
-        <h3 [class.struck]="updatesToDelete.has(update.order)">{{ update.displayName }}</h3><span class="faint"> - {{ dfl(update.createdAt) }}</span>
-        <span *ngIf="edit.editing">
-            <!--<button class="inline-button" type="button">
-                <fa-icon [icon]="ip.edit"></fa-icon>
-            </button>-->
-            <button class="inline-button dangerous" type="button" (click)="markUpdateForDeletion(update.order)" *ngIf="!updatesToDelete.has(update.order)" title="Delete this update">
-                <fa-icon [icon]="ip.delete"></fa-icon>
-            </button>
-            <button class="inline-button discard" type="button" (click)="unmarkUpdateForDeletion(update.order)" *ngIf="updatesToDelete.has(update.order)" title="Cancel pending deletion">
-                <fa-icon [icon]="ip.discardChanges"></fa-icon>
-            </button>
-            <span *ngIf="updatesToDelete.has(update.order)">Pending Deletion</span>
-        </span>
-        <p>
-            {{ update.description }}
-        </p>
+            <p>
+                {{ update.description }}
+            </p>
+        </div>
+        <div *ngIf="maintenanceEvent" style="margin-top: .5rem;">
+            Maintenance events do not feature updates.
+        </div>
+        <div *ngIf="!maintenanceEvent && incidentUpdates.length === 0" style="margin-top: .5rem;">
+            No updates yet.
+        </div>
     </div>
-    <div *ngIf="maintenanceEvent" style="margin-top: .5rem;">
-        Maintenance events do not feature updates.
-    </div>
-    <div *ngIf="!maintenanceEvent && incidentUpdates.length === 0" style="margin-top: .5rem;">
-        No updates yet.
-    </div>
-</div>
 
-<app-edit-impact-dialog #editImpactDialog [existingImpacts]="impactsToAdd.concat(incident.affects ?? [])" (finish)="addNewImpact($event)"></app-edit-impact-dialog>
-<app-edit-update-dialog #editUpdateDialog [order]="latestUpdateOrder" (finish)="addNewUpdate($event)"></app-edit-update-dialog>
-<app-spinner-dialog #waitSpinnerDialog [message]="waitState"></app-spinner-dialog>
+
+    <app-edit-impact-dialog #editImpactDialog [existingImpacts]="impactsToAdd.concat(incident.affects ?? [])" (finish)="addNewImpact($event)"></app-edit-impact-dialog>
+    <app-edit-update-dialog #editUpdateDialog [order]="latestUpdateOrder" (finish)="addNewUpdate($event)"></app-edit-update-dialog>
+    <app-confirm-delete-dialog #confirmDeleteDialog [incident]="incident" [maintenanceEvent]="maintenanceEvent" (confirm)="deleteIncident()" (cancel)="edit.switchMode()"></app-confirm-delete-dialog>
+    <app-spinner-dialog #waitSpinnerDialog [message]="waitState"></app-spinner-dialog>
+</div>

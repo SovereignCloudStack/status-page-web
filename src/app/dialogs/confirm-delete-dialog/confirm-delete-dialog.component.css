@@ -1,0 +1,22 @@
+#confirm-delete-dialog {
+    min-width: 25%;
+}
+
+.dialog-header {
+    margin:-1rem -1rem 1rem -1rem;
+    height: 1rem;
+    display: block;
+}
+
+.hazard-background {
+    height: 1rempx;
+    color: white;
+    padding: .1rem;
+    background-image: repeating-linear-gradient(
+        -55deg,
+        var(--hazard-bg-color-dark),
+        var(--hazard-bg-color-dark) 1rem,
+        var(--hazard-bg-color-light) 1rem,
+        var(--hazard-bg-color-light) 2rem
+    );
+}

@@ -85,6 +85,10 @@ export class DataService {
     return this.incs.updateIncident(id, incident);
   }
 
+  deleteIncident(id: IncidentId): Observable<void> {
+    return this.incs.deleteIncident(id);
+  }
+
   createIncidentUpdate(id: IncidentId, update: IncidentUpdate): Observable<Order> {
     return this.incs.createIncidentUpdate(id, update);
   }

@@ -294,6 +294,19 @@ a {
     text-decoration: none;
 }
 
+dialog {
+    border: 2px solid var(--line-color);
+    border-radius: var(--bar-border-radius);
+}
+
+dialog h1 {
+    margin-top: .25rem;
+}
+
+dialog .dialog-controls {
+    float:right;
+}
+
 .struck {
     text-decoration: line-through;
 }

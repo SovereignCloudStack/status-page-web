@@ -3,8 +3,3 @@
     text-align: center;
     padding: 1rem;
 }
-
-#button-bar {
-    display: flex;
-    flex-direction: row-reverse;
-}

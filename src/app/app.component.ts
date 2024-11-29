@@ -8,10 +8,8 @@ import { DataService } from './services/data.service';
 import { SpinnerComponent } from './components/spinner/spinner.component';
 import { AppConfigService } from './services/app-config.service';
 import { IconProviderService } from './services/icon-provider.service';
-import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { firstValueFrom } from 'rxjs';
-import { IncidentService } from '../external/lib/status-page-api/angular-client';
+import { MainPageButtonsComponent } from './components/main-page-buttons/main-page-buttons.component';
 
 @Component({
   selector: 'app-root',
@@ -29,15 +27,10 @@ export class AppComponent implements OnInit {
 
   loaded: boolean = false;
   _showAboutSection: boolean = true;
-  _showNewIncidentButton: boolean = false;
-
-  userAuthenticated: boolean = false;
 
   constructor(
     private router: Router,
     private data: DataService,
-    private security: OidcSecurityService,
-    private incidentService: IncidentService,
     public appConfig: AppConfigService,
     public userSettings: UserSettingsService,
     public ip: IconProviderService,
@@ -53,11 +46,9 @@ export class AppComponent implements OnInit {
         if (e.url !== "/" && !e.url.startsWith("/#")) {
           this.userSettings.showUserSettings = false;
           this._showAboutSection = false;
-          this._showNewIncidentButton = false;
         } else {
           this.userSettings.showUserSettings = true;
           this._showAboutSection = true;
-          this._showNewIncidentButton = true;
         }
       }
     });
@@ -67,26 +58,9 @@ export class AppComponent implements OnInit {
     return this._showAboutSection && this.appConfig.aboutText.length > 0;
   }
 
-  get showButtonBar(): boolean {
-    return this.userAuthenticated && this._showNewIncidentButton;
-  }
-
   ngOnInit(): void {
     this.data.loadingFinished.subscribe(loadStatus => {
       this.loaded = loadStatus;
     });
-    // Check if the user is authenticated
-    this.security.checkAuth().subscribe(async response => {
-      this.userAuthenticated = response.isAuthenticated;
-      if (this.userAuthenticated) {
-        const token = await firstValueFrom(this.security.getAccessToken());
-        this.incidentService.configuration.withCredentials = true;
-        this.incidentService.defaultHeaders = this.incidentService.defaultHeaders.set("Authorization", `Bearer ${token}`);
-      }
-    });
-  }
-
-  startNewIncident(): void {
-    this.router.navigateByUrl("/incident/new");
   }
 }

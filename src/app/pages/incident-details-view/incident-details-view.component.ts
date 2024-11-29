@@ -4,7 +4,7 @@ import { DataService } from '../../services/data.service';
 import { CommonModule, NgComponentOutlet } from '@angular/common';
 import { UtilService } from '../../services/util.service';
 import { ReversePipe } from '../../pipes/reverse.pipe';
-import { Incident, Impact, IncidentService, IncidentUpdateResponseData, IncidentUpdate } from '../../../external/lib/status-page-api/angular-client';
+import { Incident, Impact, IncidentService, IncidentUpdateResponseData } from '../../../external/lib/status-page-api/angular-client';
 import { ComponentId, IncidentId } from '../../model/base';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { firstValueFrom } from 'rxjs';
@@ -12,7 +12,7 @@ import { IconProviderService } from '../../services/icon-provider.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SpinnerComponent } from '../../components/spinner/spinner.component';
 import { EditMode } from '../../util/editmode'
-import { incidentBeganAt, incidentDescription, incidentEndedAt, incidentName } from '../../util/checks';
+import { incidentAffects, incidentBeganAt, incidentDescription, incidentEndedAt, incidentName } from '../../util/checks';
 import { FormsModule } from '@angular/forms';
 import { Result, ResultId } from '../../util/result';
 import { ErrorBoxComponent } from "../../components/error-box/error-box.component";
@@ -25,7 +25,7 @@ import { EditUpdateDialogComponent } from '../../dialogs/edit-update-dialog/edit
 @Component({
   selector: 'app-incident-view',
   standalone: true,
-  imports: [CommonModule, RouterModule, ReversePipe, FontAwesomeModule, NgComponentOutlet, SpinnerComponent, FormsModule, ErrorBoxComponent, EditBarButtonsComponent, EditImpactDialogComponent],
+  imports: [CommonModule, RouterModule, ReversePipe, FontAwesomeModule, FormsModule, ErrorBoxComponent, EditBarButtonsComponent, EditImpactDialogComponent],
   templateUrl: './incident-details-view.component.html',
   styleUrl: './incident-details-view.component.css'
 })
@@ -118,6 +118,11 @@ export class IncidentDetailsViewComponent implements OnInit {
           if (this.data.incidents.has(id)) {
             this.incidentId = id;
             this.incident = this.data.incidents.get(id)!;
+            // Make sure we definitely have an array in this field so that we can make
+            // use of the non-null assertion operator (!) in good conscience.
+            if (this.incident.affects === undefined) {
+              this.incident.affects = [];
+            }
             // Updates only supported for normal incidents
             this.incidentUpdates = this.data.incidentUpdates.get(this.incidentId) ?? [];
           } else if (this.data.hasMaintenanceEvent(id)) {
@@ -188,21 +193,36 @@ export class IncidentDetailsViewComponent implements OnInit {
     return `${this.util.severityName(impact.severity)} (${impact.severity})`;
   }
 
-  runChecks() {
-    this.checkError(incidentName);
-    this.checkError(incidentDescription);
-    const originalStart = this.incident.beganAt;
-    const originalEnd = this.incident.endedAt;
-    this.incident.beganAt = uiToIncidentDate(this.startDate);
-    this.incident.endedAt = uiToIncidentDate(this.endDate);
-    this.checkError(incidentBeganAt);
-    this.checkError(incidentEndedAt);
-    this.incident.beganAt = originalStart;
-    this.incident.endedAt = originalEnd;
+  private applyChanges(): Incident {
+    return {
+      displayName: this.incident.displayName,
+      description: this.incident.description,
+      beganAt: uiToIncidentDate(this.startDate),
+      endedAt: uiToIncidentDate(this.endDate),
+      affects: this.incident.affects!
+                .filter((impact) => !this.impactsToDelete.has(impact.reference!))
+                .concat(this.impactsToAdd),
+      phase: this.incident.phase
+    }
   }
 
-  checkError(checkFunction: (incident: Incident) => Result) {
-    const result = checkFunction(this.incident);
+  runChecks() {
+    const changedIncident = this.applyChanges();
+    this.checkError(incidentName, changedIncident);
+    this.checkError(incidentDescription, changedIncident);
+    this.checkError(incidentBeganAt, changedIncident);
+    this.checkError(incidentEndedAt, changedIncident);
+    this.checkError(incidentAffects, changedIncident);
+  }
+
+  private checkError(checkFunction: (incident: Incident) => Result, incident?: Incident) {
+    if (!incident) {
+      incident = this.applyChanges();
+    }
+    this.handleResult(checkFunction(incident));
+  }
+
+  private handleResult(result: Result): void {
     if (result.ok) {
       this.currentErrors.delete(result.id);
     } else {
@@ -244,16 +264,19 @@ export class IncidentDetailsViewComponent implements OnInit {
     } else {
       this.incident.endedAt = null;
     }
-    this.incident.affects = [...this.incident.affects ?? [], ...this.impactsToAdd];
+    console.log(this.incident.affects);
+    // Remove impacts and updates we are meant to remove
+    this.incident.affects = (this.incident.affects!).filter((impact) => {
+      return !this.impactsToDelete.has(impact.reference!);
+    });
+    console.log(this.incident.affects);
+    this.incident.affects = [...this.incident.affects!, ...this.impactsToAdd];
+    this.clearPending();
     // TODO Call API to save changes.
   }
 
   private discardChanges(): void {
-    this.pendingImpacts.clear();
-    this.pendingUpdates.clear();
-    // TODO Clear out the actual pending objects
-    this.impactsToDelete.clear();
-    this.updatesToDelete.clear();
+    this.clearPending();
     this.incident.displayName = this.incidentCopy.displayName;
     this.incident.description = this.incidentCopy.description;
     this.incident.beganAt = this.incidentCopy.beganAt;
@@ -266,6 +289,15 @@ export class IncidentDetailsViewComponent implements OnInit {
 
   private deleteIncident(): void {
     // TODO
+  }
+
+  private clearPending(): void {
+    this.pendingImpacts.clear();
+    this.pendingUpdates.clear();
+    this.impactsToAdd = [];
+    this.updatesToAdd = [];
+    this.impactsToDelete.clear();
+    this.updatesToDelete.clear();
   }
 
   resetStartDate(): void {
@@ -325,6 +357,7 @@ export class IncidentDetailsViewComponent implements OnInit {
     } else {
       this.impactsToDelete.add(id);
     }
+    this.checkError(incidentAffects);
   }
 
   unmarkImpactForDeletion(id?: ComponentId): void {
@@ -333,6 +366,7 @@ export class IncidentDetailsViewComponent implements OnInit {
       return;
     }
     this.impactsToDelete.delete(id);
+    this.checkError(incidentAffects);
   }
 
   markUpdateForDeletion(order: number): void {

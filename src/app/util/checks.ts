@@ -6,6 +6,7 @@ const ID_INCIDENT_NAME: ResultId = "Display Name";
 const ID_INCIDENT_DESCR: ResultId = "Description";
 const ID_INCIDENT_BEGAN: ResultId = "Began At";
 const ID_INCIDENT_ENDED: ResultId = "Ended At";
+const ID_INCIDENT_AFFECTS: ResultId = "Affects";
 
 const ID_IMPACT_REFERENCE: ResultId = "Reference";
 const ID_IMPACT_TYPE: ResultId = "Impact Type";
@@ -43,9 +44,16 @@ export function incidentEndedAt(incident: Incident): Result {
     return new Result(ID_INCIDENT_ENDED);
 }
 
+export function incidentAffects(incident: Incident): Result {
+    if (!incident.affects || incident.affects.length === 0) {
+        return new Result(ID_INCIDENT_AFFECTS, "An incident must affect atleast one component.");
+    }
+    return new Result(ID_INCIDENT_AFFECTS);
+}
+
 export function impactReference(impact: Impact, existing: Impact[]): Result {
     if (!impact.reference) {
-        return new Result(ID_IMPACT_REFERENCE, "An impact needs to reference a component.")
+        return new Result(ID_IMPACT_REFERENCE, "An impact needs to reference a component.");
     }
     for (let i of existing) {
         if (i.reference === impact.reference) {

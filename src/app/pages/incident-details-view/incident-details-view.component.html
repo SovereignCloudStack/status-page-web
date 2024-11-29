@@ -46,7 +46,7 @@
     <h2 style="display:inline-block">Affected components</h2>
     <button *ngIf="edit.editing" class="inline-button" (click)="editImpactDialog.openDialog()"><fa-icon [icon]="ip.newElement"></fa-icon></button>
     <ul>
-        <li *ngFor="let impact of incident.affects?.concat(impactsToAdd)">
+        <li *ngFor="let impact of incident.affects!.concat(impactsToAdd)">
             <span [class.struck]="impactsToDelete.has(impact.reference ?? '')">{{ componentName(impact) }}</span>
             <span class="faint"> | Severity: {{ impactSeverity(impact) }}</span>
             <span class="faint"> | Category: {{ impactType(impact) }}</span>

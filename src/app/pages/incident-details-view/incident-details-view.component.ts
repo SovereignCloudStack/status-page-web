@@ -21,11 +21,12 @@ import { createIncident, incidentDateToUi, uiToIncidentDate } from '../../util/u
 import dayjs from 'dayjs';
 import { EditImpactDialogComponent } from '../../dialogs/edit-impact-dialog/edit-impact-dialog.component';
 import { EditUpdateDialogComponent } from '../../dialogs/edit-update-dialog/edit-update-dialog.component';
+import { SpinnerDialogComponent } from '../../dialogs/spinner-dialog/spinner-dialog.component';
 
 @Component({
   selector: 'app-incident-view',
   standalone: true,
-  imports: [CommonModule, RouterModule, ReversePipe, FontAwesomeModule, FormsModule, ErrorBoxComponent, EditBarButtonsComponent, EditImpactDialogComponent],
+  imports: [CommonModule, RouterModule, ReversePipe, FontAwesomeModule, FormsModule, ErrorBoxComponent, EditBarButtonsComponent, EditImpactDialogComponent, SpinnerDialogComponent],
   templateUrl: './incident-details-view.component.html',
   styleUrl: './incident-details-view.component.css'
 })
@@ -70,6 +71,10 @@ export class IncidentDetailsViewComponent implements OnInit {
 
   @ViewChild("editImpactDialog", {static: true})
   private editImpactDialog!: ElementRef<EditImpactDialogComponent>;
+  @ViewChild("waitSpinnerDialog")
+  private waitSpinnerDialog!: ElementRef<SpinnerDialogComponent>;
+
+  _waitState: string = "";
 
   constructor(
     public data: DataService,
@@ -206,13 +211,15 @@ export class IncidentDetailsViewComponent implements OnInit {
     }
   }
 
-  runChecks() {
+  runChecks(): Incident {
     const changedIncident = this.applyChanges();
+    console.log(changedIncident);
     this.checkError(incidentName, changedIncident);
     this.checkError(incidentDescription, changedIncident);
     this.checkError(incidentBeganAt, changedIncident);
     this.checkError(incidentEndedAt, changedIncident);
     this.checkError(incidentAffects, changedIncident);
+    return changedIncident;
   }
 
   private checkError(checkFunction: (incident: Incident) => Result, incident?: Incident) {
@@ -256,7 +263,7 @@ export class IncidentDetailsViewComponent implements OnInit {
 
   private saveChanges(): void {
     // We start by making sure everything is in order, just to be sure.
-    this.runChecks();
+    const editedIncident = this.runChecks();
     // Format dates accordingly before sending to API
     this.incident.beganAt = uiToIncidentDate(this.startDate);
     if (this.endDate !== "") {
@@ -301,11 +308,12 @@ export class IncidentDetailsViewComponent implements OnInit {
   }
 
   resetStartDate(): void {
-    this.startDate = incidentDateToUi(this.incident.beganAt);
+    this.startDate = incidentDateToUi(this.incidentCopy.beganAt);
   }
 
   resetEndDate(): void {
-    this.endDate = incidentDateToUi(this.incident.endedAt);
+    console.log(incidentDateToUi(this.incidentCopy.endedAt));
+    this.endDate = incidentDateToUi(this.incidentCopy.endedAt);
   }
 
   // Differs from resetEndDate by also calling runChecks. This is meant to be
@@ -314,7 +322,7 @@ export class IncidentDetailsViewComponent implements OnInit {
   // date are being cleared and we might not be in a state to properly do this when
   // calling resetEndDate in the init method, henceforth this additional method.
   removeEndDate(): void {
-    this.resetStartDate();
+    this.resetEndDate();
     this.runChecks();
   }
 
@@ -411,6 +419,19 @@ export class IncidentDetailsViewComponent implements OnInit {
       return "Maintenance Event";
     }
     return "Incident";
+  }
+
+  get waitState(): string {
+    return this._waitState;
+  }
+
+  set waitState(state: string) {
+    this._waitState = state;
+    if (this._waitState === "" && this.waitSpinnerDialog.nativeElement.isOpen()) {
+      this.waitSpinnerDialog.nativeElement.closeDialog();
+    } else if (!this.waitSpinnerDialog.nativeElement.isOpen()) {
+      this.waitSpinnerDialog.nativeElement.openDialog();
+    }
   }
 
   df = this.util.formatDate.bind(this.util)

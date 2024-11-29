@@ -22,9 +22,9 @@ export function uiToDayjs(dt: string): Dayjs {
     return dayjs(dt);
 }
 
-export function uiToIncidentDate(dt: string): string {
+export function uiToIncidentDate(dt: string): string | null {
     if (dt === "") {
-        return dt;
+        return null;
     }
     return formatQueryDate(uiToDayjs(dt));
 }

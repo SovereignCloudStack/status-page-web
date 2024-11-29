@@ -95,3 +95,4 @@
     </div>
 </div>
 <app-edit-impact-dialog #editImpactDialog [existingImpacts]="impactsToAdd.concat(incident.affects ?? [])" (finish)="addNewImpact($event)"></app-edit-impact-dialog>
+<app-spinner-dialog #waitSpinnerDialog [message]="waitState"></app-spinner-dialog>

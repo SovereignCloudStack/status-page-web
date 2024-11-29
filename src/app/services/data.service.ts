@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { AppConfigService } from './app-config.service';
 import { BehaviorSubject, Observable, combineLatestWith } from 'rxjs';
 import { DailyStatus } from '../model/daily-status';
-import { Component, ComponentService, IdField, ImpactService, ImpactType, Incident, IncidentResponseData, IncidentService, IncidentUpdateResponseData, PhaseList, PhaseService, Severity } from '../../external/lib/status-page-api/angular-client';
+import { Component, ComponentService, IdField, ImpactService, ImpactType, Incident, IncidentResponseData, IncidentService, IncidentUpdate, IncidentUpdateResponseData, Order, PhaseList, PhaseService, Severity } from '../../external/lib/status-page-api/angular-client';
 import { ComponentId, ImpactTypeId, IncidentId, SHORT_DAY_FORMAT, ShortDayString } from '../model/base';
 import { formatQueryDate } from '../util/util';
 
@@ -83,6 +83,14 @@ export class DataService {
 
   updateIncident(id: IncidentId, incident: Incident): Observable<void> {
     return this.incs.updateIncident(id, incident);
+  }
+
+  createIncidentUpdate(id: IncidentId, update: IncidentUpdate): Observable<Order> {
+    return this.incs.createIncidentUpdate(id, update);
+  }
+
+  deleteIncidentUpdate(id: IncidentId, order: number): Observable<void> {
+    return this.incs.deleteIncidentUpdate(id, order);
   }
 
   hasMaintenanceEvent(id: IncidentId): boolean {

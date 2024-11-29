@@ -26,7 +26,7 @@ export function uiToIncidentDate(dt: string): string | null {
     if (dt === "") {
         return null;
     }
-    return formatQueryDate(uiToDayjs(dt));
+    return formatQueryDate(uiToDayjs(dt).utc());
 }
 
 export function formatQueryDate(date: Dayjs): string {

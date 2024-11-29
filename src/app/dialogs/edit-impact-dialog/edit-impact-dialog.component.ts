@@ -79,7 +79,6 @@ export class EditImpactDialogComponent implements OnInit {
         this.allowSave = true;
       }
     }
-    console.log(`Set allowSave to ${this.allowSave}`);
   }
 
   checkError(checkFunction: (impact: Impact, existing: Impact[]) => Result) {

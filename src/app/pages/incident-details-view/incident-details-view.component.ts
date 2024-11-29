@@ -1,32 +1,37 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { DataService } from '../../services/data.service';
-import { CommonModule, NgComponentOutlet } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { UtilService } from '../../services/util.service';
 import { ReversePipe } from '../../pipes/reverse.pipe';
 import { Incident, Impact, IncidentService, IncidentUpdateResponseData } from '../../../external/lib/status-page-api/angular-client';
 import { ComponentId, IncidentId } from '../../model/base';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
-import { firstValueFrom } from 'rxjs';
+import { combineLatestWith, firstValueFrom, forkJoin, Observable } from 'rxjs';
 import { IconProviderService } from '../../services/icon-provider.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { SpinnerComponent } from '../../components/spinner/spinner.component';
 import { EditMode } from '../../util/editmode'
 import { incidentAffects, incidentBeganAt, incidentDescription, incidentEndedAt, incidentName } from '../../util/checks';
 import { FormsModule } from '@angular/forms';
 import { Result, ResultId } from '../../util/result';
 import { ErrorBoxComponent } from "../../components/error-box/error-box.component";
 import { EditBarButtonsComponent } from "../../components/edit-bar-buttons/edit-bar-buttons.component";
-import { createIncident, incidentDateToUi, uiToIncidentDate } from '../../util/util';
+import { createIncident, incidentDateToUi, uiToDayjs, uiToIncidentDate } from '../../util/util';
 import dayjs from 'dayjs';
 import { EditImpactDialogComponent } from '../../dialogs/edit-impact-dialog/edit-impact-dialog.component';
 import { EditUpdateDialogComponent } from '../../dialogs/edit-update-dialog/edit-update-dialog.component';
 import { SpinnerDialogComponent } from '../../dialogs/spinner-dialog/spinner-dialog.component';
 
+const WS_NONE = "";
+const WS_NEW_INCIDENT = "Creating incident...";
+const WS_PROCESSING_INCIDENT = "Updating incident...";
+const WS_PROCESSING_UPDATES = "Sending updates...";
+const WS_RELOADING = "Reloading data...";
+
 @Component({
   selector: 'app-incident-view',
   standalone: true,
-  imports: [CommonModule, RouterModule, ReversePipe, FontAwesomeModule, FormsModule, ErrorBoxComponent, EditBarButtonsComponent, EditImpactDialogComponent, SpinnerDialogComponent],
+  imports: [CommonModule, RouterModule, ReversePipe, FontAwesomeModule, FormsModule, ErrorBoxComponent, EditBarButtonsComponent, EditImpactDialogComponent, EditUpdateDialogComponent, SpinnerDialogComponent],
   templateUrl: './incident-details-view.component.html',
   styleUrl: './incident-details-view.component.css'
 })
@@ -66,13 +71,18 @@ export class IncidentDetailsViewComponent implements OnInit {
   startDate: string = "";
   endDate: string = "";
 
+  // We track the highest order number so far to make sure we have a key
+  // we can use to differentiate IncidentUpdates from one another, even
+  // those that have not yet been send to the API server.
+  latestUpdateOrder: number = 0;
+
   newIncident: boolean = false;
   maintenanceEvent: boolean = false;
 
   @ViewChild("editImpactDialog", {static: true})
   private editImpactDialog!: ElementRef<EditImpactDialogComponent>;
-  @ViewChild("waitSpinnerDialog")
-  private waitSpinnerDialog!: ElementRef<SpinnerDialogComponent>;
+  @ViewChild("waitSpinnerDialog", {static: false})
+  private waitSpinnerDialog!: SpinnerDialogComponent;
 
   _waitState: string = "";
 
@@ -88,21 +98,6 @@ export class IncidentDetailsViewComponent implements OnInit {
     this.edit = new EditMode();
     this.edit.leaveEditFunction = this.dispatchEditLeave.bind(this);
     this.currentErrors = new Map();
-
-    // TODO Remove test data
-    this.impactsToAdd.push({
-      reference: "a27ff65b-2485-46a1-b63c-e8727c5cc81e",
-      severity: 99,
-      type: "7a556d8e-23e8-4d1b-8831-11cb82ba4a7f"
-    });
-    this.pendingImpacts.add("a27ff65b-2485-46a1-b63c-e8727c5cc81e");
-
-    this.impactsToAdd.push({
-      reference: "2d8972db-3b25-4837-a1dc-e54006b3ac9d",
-      severity: 0,
-      type: "07e2213d-d518-4900-aa7b-f874ec20c575"
-    });
-    this.pendingImpacts.add("2d8972db-3b25-4837-a1dc-e54006b3ac9d");
   }
 
   ngOnInit(): void {
@@ -115,6 +110,7 @@ export class IncidentDetailsViewComponent implements OnInit {
         if (id === "new") {
           this.incidentId = "";
           this.newIncident = true;
+          this.edit.switchMode();
           const began = dayjs().utc();
           this.incident = createIncident(began);
           this.incidentCopy = createIncident(began);
@@ -130,6 +126,12 @@ export class IncidentDetailsViewComponent implements OnInit {
             }
             // Updates only supported for normal incidents
             this.incidentUpdates = this.data.incidentUpdates.get(this.incidentId) ?? [];
+            if (this.incidentUpdates.length > 0) {
+              // Get the order number of the latest update and add one to get a new "key"
+              // for our new updates. This order will be replaced with a 0 when send to the
+              // API server, who'll assign its own order number.
+              this.latestUpdateOrder = Math.max(...this.incident.updates!) + 1;
+            }
           } else if (this.data.hasMaintenanceEvent(id)) {
             this.incidentId = id;
             this.incident = this.data.getMaintenanceEvent(id)!;
@@ -213,7 +215,6 @@ export class IncidentDetailsViewComponent implements OnInit {
 
   runChecks(): Incident {
     const changedIncident = this.applyChanges();
-    console.log(changedIncident);
     this.checkError(incidentName, changedIncident);
     this.checkError(incidentDescription, changedIncident);
     this.checkError(incidentBeganAt, changedIncident);
@@ -264,22 +265,56 @@ export class IncidentDetailsViewComponent implements OnInit {
   private saveChanges(): void {
     // We start by making sure everything is in order, just to be sure.
     const editedIncident = this.runChecks();
-    // Format dates accordingly before sending to API
-    this.incident.beganAt = uiToIncidentDate(this.startDate);
-    if (this.endDate !== "") {
-      this.incident.endedAt = uiToIncidentDate(this.endDate);
+    if (this.newIncident) {
+      // TODO
     } else {
-      this.incident.endedAt = null;
+      this.waitState = WS_PROCESSING_INCIDENT;
+      this.data.updateIncident(this.incidentId, editedIncident).subscribe({
+        next: () => {
+          // Now, send or remove incident updates as needed.
+          if (this.pendingUpdates.size > 0 || this.updatesToDelete.size > 0) {
+            this.waitState = WS_PROCESSING_UPDATES;
+            let requests: Observable<any>[] = [];
+            for (let updateOrder of this.updatesToDelete) {
+              requests.push(this.data.deleteIncidentUpdate(this.incidentId, updateOrder));
+            }
+            for (let update of this.updatesToAdd) {
+              requests.push(this.data.createIncidentUpdate(this.incidentId, update));
+            }
+            forkJoin(requests).subscribe({
+              error: (err) => {
+                console.error("Request to add or delete incident update error'ed out.")
+                console.error(err);
+                // TODO What to do here?
+              },
+              complete: () => {
+                this.finishSave();
+              }
+            });
+          } else {
+            this.finishSave();
+          }  
+        },
+        error: (err) => {
+          // Failure
+          console.error(`Request to update incident ${this.incidentId} error'ed out`);
+          console.error(err);
+          // TODO What to do here?
+        }
+      })
     }
-    console.log(this.incident.affects);
-    // Remove impacts and updates we are meant to remove
-    this.incident.affects = (this.incident.affects!).filter((impact) => {
-      return !this.impactsToDelete.has(impact.reference!);
+  }
+  
+  private finishSave(): void {
+    this.waitState = WS_RELOADING;
+    this.data.reload();
+    this.data.loadingFinished.subscribe(loaded => {
+      if (loaded) {
+        // We are done reloading the data
+        this.clearPending();
+        this.waitState = WS_NONE;
+      }
     });
-    console.log(this.incident.affects);
-    this.incident.affects = [...this.incident.affects!, ...this.impactsToAdd];
-    this.clearPending();
-    // TODO Call API to save changes.
   }
 
   private discardChanges(): void {
@@ -312,7 +347,6 @@ export class IncidentDetailsViewComponent implements OnInit {
   }
 
   resetEndDate(): void {
-    console.log(incidentDateToUi(this.incidentCopy.endedAt));
     this.endDate = incidentDateToUi(this.incidentCopy.endedAt);
   }
 
@@ -346,6 +380,7 @@ export class IncidentDetailsViewComponent implements OnInit {
     }
     this.pendingUpdates.add(update.order);
     this.updatesToAdd.push(update);
+    this.latestUpdateOrder++;
   }
 
   markImpactForDeletion(id?: ComponentId): void {
@@ -427,10 +462,10 @@ export class IncidentDetailsViewComponent implements OnInit {
 
   set waitState(state: string) {
     this._waitState = state;
-    if (this._waitState === "" && this.waitSpinnerDialog.nativeElement.isOpen()) {
-      this.waitSpinnerDialog.nativeElement.closeDialog();
-    } else if (!this.waitSpinnerDialog.nativeElement.isOpen()) {
-      this.waitSpinnerDialog.nativeElement.openDialog();
+    if (this._waitState === "" && this.waitSpinnerDialog.isOpen()) {
+      this.waitSpinnerDialog.closeDialog();
+    } else if (!this.waitSpinnerDialog.isOpen()) {
+      this.waitSpinnerDialog.openDialog();
     }
   }
 

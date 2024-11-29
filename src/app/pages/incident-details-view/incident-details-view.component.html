@@ -68,7 +68,7 @@
 </div>
 <div id="updates">
     <h2 style="display:inline-block">Updates</h2>
-    <button *ngIf="!maintenanceEvent && edit.editing" class="inline-button"><fa-icon [icon]="ip.newElement"></fa-icon></button>
+    <button *ngIf="!maintenanceEvent && edit.editing" class="inline-button" (click)="editUpdateDialog.openDialog()"><fa-icon [icon]="ip.newElement"></fa-icon></button>
     <div *ngFor="let update of incidentUpdates.concat(updatesToAdd) | reverse">
         <h3 [class.struck]="updatesToDelete.has(update.order)">{{ update.displayName }}</h3><span class="faint"> - {{ dfl(update.createdAt) }}</span>
         <span *ngIf="edit.editing">
@@ -94,5 +94,7 @@
         No updates yet.
     </div>
 </div>
+
 <app-edit-impact-dialog #editImpactDialog [existingImpacts]="impactsToAdd.concat(incident.affects ?? [])" (finish)="addNewImpact($event)"></app-edit-impact-dialog>
+<app-edit-update-dialog #editUpdateDialog [order]="latestUpdateOrder" (finish)="addNewUpdate($event)"></app-edit-update-dialog>
 <app-spinner-dialog #waitSpinnerDialog [message]="waitState"></app-spinner-dialog>

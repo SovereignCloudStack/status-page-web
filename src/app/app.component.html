@@ -6,6 +6,12 @@
     <h1>About</h1>
     <p>{{ appConfig.aboutText }}</p>
   </section>
+  <div id="button-bar" *ngIf="showButtonBar" style="margin-bottom: 1rem;">
+    <button type="button" (click)="startNewIncident()">
+      <fa-icon [icon]="ip.newElement"></fa-icon>
+      <span>New Incident</span>
+  </button>
+  </div>
   <section class="spinner-container" *ngIf="!loaded">
     <app-spinner>Loading Data...</app-spinner>
     <p>Loading Data</p>

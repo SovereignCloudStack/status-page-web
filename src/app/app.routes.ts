@@ -6,7 +6,6 @@ import { IncidentDetailsViewComponent } from './pages/incident-details-view/inci
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 import { ManagementViewComponent } from './pages/management-view/management-view.component';
 import { autoLoginPartialRoutesGuard } from 'angular-auth-oidc-client';
-import { ForbiddenComponent } from './pages/forbidden/forbidden.component';
 import { UnauthorizedComponent } from './pages/unauthorized/unauthorized.component';
 import { LoginComponent } from './pages/login/login.component';
 
@@ -16,7 +15,10 @@ export const routes: Routes = [
         path: "login",
         component: LoginComponent
     },
-    {path: "incident/:id", component: IncidentDetailsViewComponent},
+    {
+        path: "incident/:id",
+        component: IncidentDetailsViewComponent
+    },
     {
         path: "manage", 
         component: ManagementViewComponent,
@@ -25,11 +27,6 @@ export const routes: Routes = [
     {path: "imprint", component: ImprintComponent},
     {path: "cookies", component: CookiesComponent},
     {path: "notfound", component: PageNotFoundComponent},
-    {
-        path: "forbidden",
-        component: ForbiddenComponent,
-        canActivate: [autoLoginPartialRoutesGuard]
-    },
     {
         path: "unauthorized",
         component: UnauthorizedComponent

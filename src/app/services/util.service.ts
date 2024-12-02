@@ -143,7 +143,7 @@ export class UtilService {
   }
 
   isMaintenanceIncident(affects: Impact[]): boolean {
-    for (let impact of affects) {
+    for (const impact of affects) {
       if (impact.severity === 0) {
         return true;
       }

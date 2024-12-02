@@ -4,19 +4,19 @@ import { DataService } from '../../services/data.service';
 import { CommonModule } from '@angular/common';
 import { UtilService } from '../../services/util.service';
 import { ReversePipe } from '../../pipes/reverse.pipe';
-import { Incident, Impact, IncidentService, IncidentUpdateResponseData } from '../../../external/lib/status-page-api/angular-client';
+import { Incident, Impact, IncidentUpdateResponseData } from '../../../external/lib/status-page-api/angular-client';
 import { ComponentId, IncidentId } from '../../model/base';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
-import { combineLatestWith, firstValueFrom, forkJoin, Observable } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { IconProviderService } from '../../services/icon-provider.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { EditMode } from '../../util/editmode'
-import { incidentAffects, incidentBeganAt, incidentDescription, incidentEndedAt, incidentName } from '../../util/checks';
+import { incidentAffects, incidentBeganAt, incidentEndedAt, incidentName } from '../../util/checks';
 import { FormsModule } from '@angular/forms';
 import { Result, ResultId } from '../../util/result';
 import { ErrorBoxComponent } from "../../components/error-box/error-box.component";
 import { EditBarButtonsComponent } from "../../components/edit-bar-buttons/edit-bar-buttons.component";
-import { createIncident, incidentDateToUi, uiToDayjs, uiToIncidentDate } from '../../util/util';
+import { createIncident, incidentDateToUi, uiToIncidentDate } from '../../util/util';
 import dayjs from 'dayjs';
 import { EditImpactDialogComponent } from '../../dialogs/edit-impact-dialog/edit-impact-dialog.component';
 import { EditUpdateDialogComponent } from '../../dialogs/edit-update-dialog/edit-update-dialog.component';
@@ -99,11 +99,10 @@ export class IncidentDetailsViewComponent implements OnInit {
   constructor(
     public data: DataService,
     public util: UtilService,
-    public ip: IconProviderService,
+    public icons: IconProviderService,
     private route: ActivatedRoute,
     private router: Router,
     private security: OidcSecurityService,
-    private incidentService: IncidentService,
     private toastr: ToastrService
   ) {
     this.edit = new EditMode();
@@ -115,11 +114,6 @@ export class IncidentDetailsViewComponent implements OnInit {
     // Check if the user is authenticated
     this.security.checkAuth().subscribe(async response => {
       this.userAuthenticated = response.isAuthenticated;
-      if (this.userAuthenticated) {
-        const token = await firstValueFrom(this.security.getAccessToken());
-        this.incidentService.configuration.withCredentials = true;
-        this.incidentService.defaultHeaders = this.incidentService.defaultHeaders.set("Authorization", `Bearer ${token}`);
-      }
       this.route.paramMap.subscribe(params => {
         if (!params.has("id")) {
           this.router.navigate(["notfound"]);
@@ -232,7 +226,6 @@ export class IncidentDetailsViewComponent implements OnInit {
   runChecks(): Incident {
     const changedIncident = this.applyChanges();
     this.checkError(incidentName, changedIncident);
-    this.checkError(incidentDescription, changedIncident);
     this.checkError(incidentBeganAt, changedIncident);
     this.checkError(incidentEndedAt, changedIncident);
     this.checkError(incidentAffects, changedIncident);
@@ -318,11 +311,11 @@ export class IncidentDetailsViewComponent implements OnInit {
   private handleSavingUpdates(): void {
     if (this.pendingUpdates.size > 0 || this.updatesToDelete.size > 0) {
       this.waitState = WS_PROCESSING_UPDATES;
-      let requests: Observable<any>[] = [];
-      for (let updateOrder of this.updatesToDelete) {
+      const requests: Observable<unknown>[] = [];
+      for (const updateOrder of this.updatesToDelete) {
         requests.push(this.data.deleteIncidentUpdate(this.incidentId, updateOrder));
       }
-      for (let update of this.updatesToAdd) {
+      for (const update of this.updatesToAdd) {
         requests.push(this.data.createIncidentUpdate(this.incidentId, update));
       }
       forkJoin(requests).subscribe({
@@ -471,7 +464,8 @@ export class IncidentDetailsViewComponent implements OnInit {
   }
 
   markUpdateForDeletion(order: number): void {
-    // TODO What about updating the order property of all remaining pending updates?
+    // We don't need to update the order, as long as it is increasing with each
+    // update. The API server will order them appropriately.
     if (this.pendingUpdates.has(order)) {
       this.pendingUpdates.delete(order);
       let index: number = 0;

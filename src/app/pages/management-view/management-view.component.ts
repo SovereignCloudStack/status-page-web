@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, OnInit, Signal, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { DataService } from '../../services/data.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -9,7 +9,7 @@ import dayjs from 'dayjs';
 import { IncidentId } from '../../model/base';
 import { SpinnerComponent } from '../../components/spinner/spinner.component';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
-import { firstValueFrom, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { IconProviderService } from '../../services/icon-provider.service';
 import { formatQueryDate } from '../../util/util';
 import { ToastrService } from 'ngx-toastr';
@@ -88,7 +88,7 @@ export class ManagementViewComponent implements OnInit{
   constructor(
     public data: DataService,
     public util: UtilService,
-    public ip: IconProviderService,
+    public icons: IconProviderService,
     private security: OidcSecurityService,
     private router: Router,
     private incidentService: IncidentService,
@@ -101,9 +101,6 @@ export class ManagementViewComponent implements OnInit{
         console.log(`Unauthenticated, potential error: ${response.errorMessage}`);
         this.router.navigate([""]);
       }
-      const token = await firstValueFrom(this.security.getAccessToken());
-      this.incidentService.configuration.withCredentials = true;
-      this.incidentService.defaultHeaders = this.incidentService.defaultHeaders.set("Authorization", `Bearer ${token}`);
     });
   }
 
@@ -274,7 +271,6 @@ export class ManagementViewComponent implements OnInit{
               update.order = value["order"];
             },
             error: err => {
-              // TODO How to best deal with these errors?
               console.error(`Request to add update ${update.displayName} for incident ${this.editingIncidentId} error'ed out`);
               console.error(err);
               this.toastr.error("An error occured while processing your request", "Creation failed");

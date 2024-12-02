@@ -19,17 +19,12 @@ export class MainPageButtonsComponent implements OnInit {
   constructor(
     private security: OidcSecurityService,
     private router: Router,
-    public ip: IconProviderService
+    public icons: IconProviderService
   ) {}
 
   ngOnInit(): void {
     this.security.checkAuth().subscribe(async response => {
       this.userAuthenticated = response.isAuthenticated;
-      // if (this.userAuthenticated) {
-      //   const token = await firstValueFrom(this.security.getAccessToken());
-      //   this.incidentService.configuration.withCredentials = true;
-      //   this.incidentService.defaultHeaders = this.incidentService.defaultHeaders.set("Authorization", `Bearer ${token}`);
-      // }
     });
   }
 

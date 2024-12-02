@@ -98,7 +98,7 @@ export class DataService {
   }
 
   hasMaintenanceEvent(id: IncidentId): boolean {
-    for (let event of this.maintenanceEvents) {
+    for (const event of this.maintenanceEvents) {
       if (event.id === id) {
         return true;
       }
@@ -107,7 +107,7 @@ export class DataService {
   }
 
   getMaintenanceEvent(id: IncidentId): Incident | null {
-    for (let event of this.maintenanceEvents) {
+    for (const event of this.maintenanceEvents) {
       if (event.id === id) {
         return event;
       }
@@ -176,7 +176,7 @@ export class DataService {
     // waiting on the list of IncidentUpdates. We use this to make sure 
     // we only mark the data as completely loaded once all of those have
     // been processed.
-    let incidentsWaitingForUpdates = new Set<IncidentId>();
+    const incidentsWaitingForUpdates = new Set<IncidentId>();
     // We must check if both, components and incident updates, are done loading.
     // These two booleans are used to track this.
     let updatesDone: boolean = false;
@@ -272,8 +272,7 @@ export class DataService {
   private calculateAvailability(component: ComponentId): void {
     const statusList = this.componentStatusByDay.get(component);
     if (!statusList) {
-      // TODO Error properly
-      console.warn("Found a component with missing daily status list?");
+      console.error("Found a component with missing daily status list?");
       return;
     }
     let daysWithIncidents = 0;

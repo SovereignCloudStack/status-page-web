@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { Impact, Incident } from '../../../external/lib/status-page-api/angular-client';
+import { Impact } from '../../../external/lib/status-page-api/angular-client';
 import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { IconProviderService } from '../../services/icon-provider.service';
@@ -37,7 +37,7 @@ export class EditImpactDialogComponent implements OnInit {
   cancel = new EventEmitter();
 
   constructor(
-    public ip: IconProviderService,
+    public icons: IconProviderService,
     public data: DataService,
     public util: UtilService
   ) {}

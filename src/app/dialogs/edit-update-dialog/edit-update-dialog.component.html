@@ -23,14 +23,14 @@
             (click)="finishDialog()"
             [disabled]="!allowSave"
         >
-            <fa-icon [icon]="ip.saveChanges"></fa-icon><span>Add Update</span>
+            <fa-icon [icon]="icons.saveChanges"></fa-icon><span>Add Update</span>
         </button>
         <button
             type="button"
             (click)="cancelDialog()"
             class="discard"
         >
-            <fa-icon [icon]="ip.discardChanges"></fa-icon><span>Cancel</span>
+            <fa-icon [icon]="icons.discardChanges"></fa-icon><span>Cancel</span>
         </button>
     </div>
 </dialog>

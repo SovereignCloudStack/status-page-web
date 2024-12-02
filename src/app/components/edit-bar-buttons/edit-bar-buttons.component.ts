@@ -35,7 +35,7 @@ export class EditBarButtonsComponent {
   deleteBtnText: string = "Delete";
 
   constructor(
-    public ip: IconProviderService
+    public icons: IconProviderService
   ) {}
 
 }

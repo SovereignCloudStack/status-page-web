@@ -1,5 +1,3 @@
-import { Dayjs } from "dayjs";
-
 export type ComponentId = string;
 export type IncidentId = string;
 export type ImpactTypeId = string;

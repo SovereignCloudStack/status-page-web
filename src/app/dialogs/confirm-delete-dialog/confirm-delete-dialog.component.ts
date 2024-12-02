@@ -28,7 +28,7 @@ export class ConfirmDeleteDialogComponent {
   private dialog!: ElementRef<HTMLDialogElement>
 
   constructor(
-    public ip: IconProviderService
+    public icons: IconProviderService
   ) {}
 
   userConfirms(): void {

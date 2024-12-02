@@ -6,7 +6,7 @@ import { Result, ResultId } from '../../util/result';
 import { IconProviderService } from '../../services/icon-provider.service';
 import { DataService } from '../../services/data.service';
 import { UtilService } from '../../services/util.service';
-import { updateDisplayName } from '../../util/checks';
+import { updateCreatedAt, updateDisplayName } from '../../util/checks';
 import { ErrorBoxComponent } from '../../components/error-box/error-box.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { dayjsToUi, uiToIncidentDate } from '../../util/util';
@@ -39,7 +39,7 @@ export class EditUpdateDialogComponent implements OnInit {
   private dialogElement!: ElementRef<HTMLDialogElement>;
 
   constructor(
-    public ip: IconProviderService,
+    public icons: IconProviderService,
     public data: DataService,
     public util: UtilService
   ) {
@@ -81,6 +81,7 @@ export class EditUpdateDialogComponent implements OnInit {
 
   runChecks(): void {
     this.checkError(updateDisplayName);
+    this.checkError(updateCreatedAt);
     if (this.currentErrors.size > 0) {
       this.allowSave = false;
     } else {

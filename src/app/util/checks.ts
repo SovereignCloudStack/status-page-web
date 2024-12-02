@@ -3,7 +3,6 @@ import { Impact, Incident, IncidentUpdate } from "../../external/lib/status-page
 import { Result, ResultId } from "./result";
 
 const ID_INCIDENT_NAME: ResultId = "Display Name";
-const ID_INCIDENT_DESCR: ResultId = "Description";
 const ID_INCIDENT_BEGAN: ResultId = "Began At";
 const ID_INCIDENT_ENDED: ResultId = "Ended At";
 const ID_INCIDENT_AFFECTS: ResultId = "Affects";
@@ -12,7 +11,6 @@ const ID_IMPACT_REFERENCE: ResultId = "Reference";
 const ID_IMPACT_TYPE: ResultId = "Impact Type";
 
 const ID_UPDATE_NAME: ResultId = "Display Name";
-const ID_UPDATE_DESCR: ResultId = "Description";
 const ID_UPDATE_CREATED_AT: ResultId = "Created At";
 
 export function incidentName(incident: Incident): Result {
@@ -22,15 +20,10 @@ export function incidentName(incident: Incident): Result {
     return new Result(ID_INCIDENT_NAME, "Display name must not be empty.");
 }
 
-export function incidentDescription(incident: Incident): Result {
-    return new Result(ID_INCIDENT_DESCR);
-}
-
 export function incidentBeganAt(incident: Incident): Result {
     if (!incident.beganAt) {
         return new Result(ID_INCIDENT_BEGAN, "An incident must have a start date.");
     }
-    // TODO More?
     return new Result(ID_INCIDENT_BEGAN);
 }
 
@@ -59,7 +52,7 @@ export function impactReference(impact: Impact, existing: Impact[]): Result {
     if (!impact.reference) {
         return new Result(ID_IMPACT_REFERENCE, "An impact needs to reference a component.");
     }
-    for (let i of existing) {
+    for (const i of existing) {
         if (i.reference === impact.reference) {
             return new Result(ID_IMPACT_REFERENCE, "This component is already affected by this incident.");
         }
@@ -79,4 +72,11 @@ export function updateDisplayName(update: IncidentUpdate): Result {
         return new Result(ID_UPDATE_NAME, "An incident update needs a title.");
     }
     return new Result(ID_UPDATE_NAME);
+}
+
+export function updateCreatedAt(update: IncidentUpdate): Result {
+    if (update.createdAt === undefined || update.createdAt === null || update.createdAt === "") {
+        return new Result(ID_UPDATE_CREATED_AT, "The creation timestamp must not be empty.");
+    }
+    return new Result(ID_UPDATE_CREATED_AT);
 }

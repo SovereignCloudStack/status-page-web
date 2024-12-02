@@ -26,7 +26,7 @@
         <div *ngIf="edit.editing">
             <input type="datetime-local" [(ngModel)]="startDate" (change)="runChecks()">
             <input type="datetime-local" [(ngModel)]="endDate"  [min]="startDate" (change)="runChecks()"><span></span>
-            <button class="inline-button discard" type="button" [disabled]="endDate === ''" (click)="removeEndDate()"><fa-icon [icon]="ip.discardChanges"></fa-icon><span>Remove End Date</span></button>
+            <button class="inline-button discard" type="button" [disabled]="endDate === ''" (click)="removeEndDate()"><fa-icon [icon]="icons.discardChanges"></fa-icon><span>Remove End Date</span></button>
         </div>
     </div>
     <div id="description">
@@ -47,7 +47,7 @@
     </div>
     <div id="affects">
         <h2 style="display:inline-block">Affected components</h2>
-        <button *ngIf="edit.editing" class="inline-button" (click)="editImpactDialog.openDialog()"><fa-icon [icon]="ip.newElement"></fa-icon></button>
+        <button *ngIf="edit.editing" class="inline-button" (click)="editImpactDialog.openDialog()"><fa-icon [icon]="icons.newElement"></fa-icon></button>
         <ul>
             <li *ngFor="let impact of incident.affects!.concat(impactsToAdd)">
                 <span [class.struck]="impactsToDelete.has(impact.reference ?? '')">{{ componentName(impact) }}</span>
@@ -55,13 +55,13 @@
                 <span class="faint"> | Category: {{ impactType(impact) }}</span>
                 <span *ngIf="edit.editing">
                     <!--<button class="inline-button" type="button">
-                        <fa-icon [icon]="ip.edit"></fa-icon>
+                        <fa-icon [icon]="icons.edit"></fa-icon>
                     </button>-->
                     <button class="inline-button dangerous" type="button" (click)="markImpactForDeletion(impact.reference)" *ngIf="!impactsToDelete.has(impact.reference ?? '')" title="Delete this impact">
-                        <fa-icon [icon]="ip.delete"></fa-icon>
+                        <fa-icon [icon]="icons.delete"></fa-icon>
                     </button>
                     <button class="inline-button discard" type="button" (click)="unmarkImpactForDeletion(impact.reference)" *ngIf="impactsToDelete.has(impact.reference ?? '')" title="Cancel pending deletion">
-                        <fa-icon [icon]="ip.discardChanges"></fa-icon>
+                        <fa-icon [icon]="icons.discardChanges"></fa-icon>
                     </button>
                     <span *ngIf="impactsToDelete.has(impact.reference ?? '')">Pending Deletion</span>
                     <span *ngIf="pendingImpacts.has(impact.reference ?? '')">Pending Save</span>
@@ -71,18 +71,18 @@
     </div>
     <div id="updates">
         <h2 style="display:inline-block">Updates</h2>
-        <button *ngIf="!maintenanceEvent && edit.editing" class="inline-button" (click)="editUpdateDialog.openDialog()"><fa-icon [icon]="ip.newElement"></fa-icon></button>
+        <button *ngIf="!maintenanceEvent && edit.editing" class="inline-button" (click)="editUpdateDialog.openDialog()"><fa-icon [icon]="icons.newElement"></fa-icon></button>
         <div *ngFor="let update of incidentUpdates.concat(updatesToAdd) | reverse">
             <h3 [class.struck]="updatesToDelete.has(update.order)">{{ update.displayName }}</h3><span class="faint"> - {{ dfl(update.createdAt) }}</span>
             <span *ngIf="edit.editing">
                 <!--<button class="inline-button" type="button">
-                    <fa-icon [icon]="ip.edit"></fa-icon>
+                    <fa-icon [icon]="icons.edit"></fa-icon>
                 </button>-->
                 <button class="inline-button dangerous" type="button" (click)="markUpdateForDeletion(update.order)" *ngIf="!updatesToDelete.has(update.order)" title="Delete this update">
-                    <fa-icon [icon]="ip.delete"></fa-icon>
+                    <fa-icon [icon]="icons.delete"></fa-icon>
                 </button>
                 <button class="inline-button discard" type="button" (click)="unmarkUpdateForDeletion(update.order)" *ngIf="updatesToDelete.has(update.order)" title="Cancel pending deletion">
-                    <fa-icon [icon]="ip.discardChanges"></fa-icon>
+                    <fa-icon [icon]="icons.discardChanges"></fa-icon>
                 </button>
                 <span *ngIf="updatesToDelete.has(update.order)">Pending Deletion</span>
             </span>

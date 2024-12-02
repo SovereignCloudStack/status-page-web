@@ -7,9 +7,7 @@ import { UserSettingsService } from './services/user-settings.service';
 import { DataService } from './services/data.service';
 import { SpinnerComponent } from './components/spinner/spinner.component';
 import { AppConfigService } from './services/app-config.service';
-import { IconProviderService } from './services/icon-provider.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { MainPageButtonsComponent } from './components/main-page-buttons/main-page-buttons.component';
 
 @Component({
   selector: 'app-root',
@@ -32,8 +30,7 @@ export class AppComponent implements OnInit {
     private router: Router,
     private data: DataService,
     public appConfig: AppConfigService,
-    public userSettings: UserSettingsService,
-    public ip: IconProviderService,
+    public userSettings: UserSettingsService
   ) {
     // Only enable about section as well as accessibility and view options when we 
     // show the default view, aka the actual status data. We don't really need them 

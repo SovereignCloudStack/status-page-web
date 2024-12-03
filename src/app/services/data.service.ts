@@ -173,7 +173,7 @@ export class DataService {
     );
 
     // This set contains the IDs of all incidents for which we are still
-    // waiting on the list of IncidentUpdates. We use this to make sure 
+    // waiting on the list of IncidentUpdates. We use this to make sure
     // we only mark the data as completely loaded once all of those have
     // been processed.
     const incidentsWaitingForUpdates = new Set<IncidentId>();
@@ -195,41 +195,48 @@ export class DataService {
         this.components.set(comp.id, comp);
         this.componentAvailability.set(comp.id, -1);
       });
-      incidents.data.forEach(incident => {
-        this.incidents.set(incident.id, incident);
-        // Use string.split to remove the time component, as we only care
-        // about the day's date.
-        const incidentDate = dayjs(incident.beganAt?.split("T")[0]);
-        const incidentDateStr = incidentDate.format(SHORT_DAY_FORMAT);
-        // Add incident to all days it was active for. If it is still ongoing,
-        // add it to all days until today.
-        const finalDate = incident.endedAt ? dayjs(incident.endedAt.split("T")[0]) : currentDate;
-        const incidentActiveDays = finalDate.diff(incidentDate, "days");
-        for (let i = 0; i <= incidentActiveDays; i++) {
-          const activeDate = incidentDate.add(i, "days").format(SHORT_DAY_FORMAT);
-          this.incidentsByDay.get(activeDate)?.push([incident.id, incident]);
-        }
-        // Is this incident complete or is it still ongoing?
-        if (incident.endedAt) {
-          this.addToMapList(this.completedIncidents, [incident.id, incident], incidentDateStr);
-        } else {
-          this.addToMapList(this.ongoingIncidents, [incident.id, incident], incidentDateStr);
-        }
-        // Query the updates for this incident, too.
-        incidentsWaitingForUpdates.add(incident.id);
-        const updates$ = this.incs.getIncidentUpdates(incident.id);
-        updates$.subscribe(answer => {
-          const list = this.incidentUpdates.get(incident.id) ?? [];
-          this.incidentUpdates.set(incident.id, list.concat(answer.data));
-          incidentsWaitingForUpdates.delete(incident.id);
-          if (incidentsWaitingForUpdates.size === 0) {
-            updatesDone = true;
-            if (updatesDone && componentsDone) {
-              this._loadingFinished.next(true);
-            }
+      // Make sure we have incidents that may have data to query. If we do not check this,
+      // updatesDone will always remain false and we will never finish loading.
+      if (incidents.data.length > 0) {
+        incidents.data.forEach(incident => {
+          this.incidents.set(incident.id, incident);
+          // Use string.split to remove the time component, as we only care
+          // about the day's date.
+          const incidentDate = dayjs(incident.beganAt?.split("T")[0]);
+          const incidentDateStr = incidentDate.format(SHORT_DAY_FORMAT);
+          // Add incident to all days it was active for. If it is still ongoing,
+          // add it to all days until today.
+          const finalDate = incident.endedAt ? dayjs(incident.endedAt.split("T")[0]) : currentDate;
+          const incidentActiveDays = finalDate.diff(incidentDate, "days");
+          for (let i = 0; i <= incidentActiveDays; i++) {
+            const activeDate = incidentDate.add(i, "days").format(SHORT_DAY_FORMAT);
+            this.incidentsByDay.get(activeDate)?.push([incident.id, incident]);
           }
+          // Is this incident complete or is it still ongoing?
+          if (incident.endedAt) {
+            this.addToMapList(this.completedIncidents, [incident.id, incident], incidentDateStr);
+          } else {
+            this.addToMapList(this.ongoingIncidents, [incident.id, incident], incidentDateStr);
+          }
+          // Query the updates for this incident, too.
+          incidentsWaitingForUpdates.add(incident.id);
+          const updates$ = this.incs.getIncidentUpdates(incident.id);
+          updates$.subscribe(answer => {
+            const list = this.incidentUpdates.get(incident.id) ?? [];
+            this.incidentUpdates.set(incident.id, list.concat(answer.data));
+            incidentsWaitingForUpdates.delete(incident.id);
+            if (incidentsWaitingForUpdates.size === 0) {
+              updatesDone = true;
+              if (updatesDone && componentsDone) {
+                this._loadingFinished.next(true);
+              }
+            }
+          });
         });
-      });
+      } else {
+        updatesDone = true;
+      }
+
       // Assign list of maintenance events
       this.maintenanceEvents = maintenanceEvents.data.filter((mEvent) => {
         mEvent.affects = mEvent.affects?.filter((affects) => {

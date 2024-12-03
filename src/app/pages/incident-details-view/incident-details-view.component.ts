@@ -54,7 +54,7 @@ export class IncidentDetailsViewComponent implements OnInit {
   // Why? Because we can now quickly check if in the UI if
   // an impact or update is pending by calling the Set.has
   // method on the appropriate set. Furthermore, we can create
-  // an overall array for iteration in the UI by using the 
+  // an overall array for iteration in the UI by using the
   // spread operator.
   pendingImpacts: Set<ComponentId> = new Set();
   pendingUpdates: Set<number> = new Set();
@@ -159,7 +159,7 @@ export class IncidentDetailsViewComponent implements OnInit {
             this.router.navigate(["notfound"]);
             return;
           }
-          
+
           this.incidentCopy = {
             displayName: this.incident.displayName,
             description: this.incident.description,
@@ -289,6 +289,7 @@ export class IncidentDetailsViewComponent implements OnInit {
           console.error("Error occured while creating new incident");
           console.error(err);
           this.toastr.error("An error occured while processing your request", "Creation failed");
+          this.abortSave();
         }
       })
     } else {
@@ -303,6 +304,7 @@ export class IncidentDetailsViewComponent implements OnInit {
           console.error(`Request to update incident ${this.incidentId} error'ed out`);
           console.error(err);
           this.toastr.error("An error occured while processing your request", "Update failed");
+          this.abortSave();
         }
       });
     }
@@ -323,16 +325,17 @@ export class IncidentDetailsViewComponent implements OnInit {
           console.error("Request to add or delete incident update error'ed out.")
           console.error(err);
           this.toastr.error("An error occured while processing your request", "Update failed");
+          this.abortSave();
         },
         complete: () => {
           this.finishSave();
         }
       });
     } else {
-      this.finishSave(); 
+      this.finishSave();
     }
   }
-  
+
   private finishSave(): void {
     this.waitState = WS_RELOADING;
     this.data.reload();
@@ -346,6 +349,10 @@ export class IncidentDetailsViewComponent implements OnInit {
         }
       }
     });
+  }
+
+  private abortSave(): void {
+    this.waitState = WS_NONE;
   }
 
   private discardChanges(): void {

@@ -53,6 +53,10 @@ export class UtilService {
     return this.config.unknownColor;
   }
 
+  severityColorStyle(severity: Severity): string {
+    return `color: ${this.severityColor(severity)}`;
+  }
+
   currentDaySeverity(componentId: ComponentId): Severity {
     return this.severityForDay(componentId, this.dataService.currentDay);
   }

@@ -19,6 +19,7 @@ class Config {
   unknownColor: string = "lightsteelblue";
   aboutText: string = "";
   maintenancePreviewDays: number = 30;
+  hideManagementPage: boolean = true;
 
   constructor() {
     this.severities.set("maintenance", {
@@ -104,6 +105,10 @@ export class AppConfigService {
 
   get maintenancePreviewDays(): number {
     return this.config.maintenancePreviewDays;
+  }
+
+  get hideManagementPage(): boolean {
+    return this.config.hideManagementPage;
   }
 }
 

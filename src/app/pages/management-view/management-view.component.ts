@@ -13,6 +13,7 @@ import { Observable } from 'rxjs';
 import { IconProviderService } from '../../services/icon-provider.service';
 import { formatQueryDate } from '../../util/util';
 import { ToastrService } from 'ngx-toastr';
+import { AppConfigService } from '../../services/app-config.service';
 
 const DT_FORMAT = "YYYY-MM-DDTHH:mm";
 
@@ -92,10 +93,18 @@ export class ManagementViewComponent implements OnInit{
     private security: OidcSecurityService,
     private router: Router,
     private incidentService: IncidentService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private config: AppConfigService
   ) {}
 
   async ngOnInit(): Promise<void> {
+    if (this.config.hideManagementPage) {
+      // Make management page inaccessible even when accessed using the URL directly.
+      // It would be better if we could remove the route entirely from the router, but
+      // my attempts to do so during service initialization have been unfruitful. It only
+      // results parts of the Router instance being undefined when needed.
+      this.router.navigate([""]);
+    }
     this.security.checkAuth().subscribe(async response => {
       if (!response.isAuthenticated) {
         console.log(`Unauthenticated, potential error: ${response.errorMessage}`);

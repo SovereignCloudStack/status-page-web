@@ -9,7 +9,7 @@ export class DailyStatus {
     private _topLevelIncident?: [IncidentId, Incident] = undefined;
     private _topLevelImpact?: Impact = undefined;
 
-    private _severity: number = 0;
+    private _severity: number = 1;
 
     constructor(day: ShortDayString | Dayjs) {
         if (day instanceof dayjs) {

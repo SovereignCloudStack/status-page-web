@@ -1,0 +1,12 @@
+#button-bar {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+#button-bar button {
+    margin-right: 1rem;
+}
+
+#button-bar button:first-of-type {
+    margin-right: 0;
+}

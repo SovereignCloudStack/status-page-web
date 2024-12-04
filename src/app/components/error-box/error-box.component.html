@@ -1,0 +1,5 @@
+<div id="error-box" [class.hidden]="!errors.size">
+    <ul>
+        <li *ngFor="let err of errors | keyvalue">{{ err.key }}: {{ err.value.message }}</li>
+    </ul>
+</div>

@@ -1,0 +1,21 @@
+<section *ngIf="data.maintenanceEvents.length > 0" class="maintenance-overview">
+  <h2>Planned Maintenance</h2>
+
+  <article *ngFor="let event of data.maintenanceEvents" class="maintenance-entry">
+    <div class="maintenance-header">
+      <h3><a [routerLink]="['/incident', event.id]">{{event.displayName}}</a></h3>
+      <p >From <em>{{event.beganAt | date: "YYYY-MM-DD\THH:mm:ss\Z": config.dateFormat}}</em> to {{event.endedAt | date: "YYYY-MM-DD\THH:mm:ss\Z": config.dateFormat}}</p>
+    </div>
+
+    <p>{{event.description}}</p>
+
+    <p>Affected components:</p>
+    <ul *ngIf="event.affects">
+      <ng-container *ngFor="let impact of event.affects">
+        <li *ngIf="impact.reference">
+          {{data.components.get(impact.reference)?.displayName}}
+        </li>
+      </ng-container>
+    </ul>
+  </article>
+</section>

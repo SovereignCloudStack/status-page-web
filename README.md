@@ -75,7 +75,9 @@ You will find a configuration file named `config.json` in the `src/assets` direc
     // Number of days to look into the future for maintenance events
     "maintenancePreviewDays": 30,
     // Hide the outdated management page
-    "hideManagementPage": true
+    "hideManagementPage": true,
+    // Severity value used for days without incidents
+    "dayDefaultSeverity": 1
 }
 ```
 

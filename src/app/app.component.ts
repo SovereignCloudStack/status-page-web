@@ -1,18 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
-import { FooterComponent } from './footer/footer.component';
-import { HeaderComponent } from './header/header.component';
-import { UserSettingsService } from './user-settings.service';
-import { DataService } from './data.service';
-import { SpinnerComponent } from './spinner/spinner.component';
-import { ApiModule } from '../external/lib/status-page-api/angular-client';
-import { AppConfigService } from './app-config.service';
+import { FooterComponent } from './components/footer/footer.component';
+import { HeaderComponent } from './components/header/header.component';
+import { UserSettingsService } from './services/user-settings.service';
+import { DataService } from './services/data.service';
+import { SpinnerComponent } from './components/spinner/spinner.component';
+import { AppConfigService } from './services/app-config.service';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, FooterComponent, HeaderComponent, SpinnerComponent, ApiModule],
+  imports: [CommonModule, RouterOutlet, FooterComponent, HeaderComponent, SpinnerComponent, FontAwesomeModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -28,10 +28,9 @@ export class AppComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private api: ApiModule,
     private data: DataService,
     public appConfig: AppConfigService,
-    public userSettings: UserSettingsService,
+    public userSettings: UserSettingsService
   ) {
     // Only enable about section as well as accessibility and view options when we 
     // show the default view, aka the actual status data. We don't really need them 
@@ -40,7 +39,7 @@ export class AppComponent implements OnInit {
     // settings sections into the outlet and just show it on the correct routes.
     router.events.forEach((e) => {
       if (e instanceof NavigationEnd) {
-        if (e.url != "/" && !e.url.startsWith("/#")) {
+        if (e.url !== "/" && !e.url.startsWith("/#")) {
           this.userSettings.showUserSettings = false;
           this._showAboutSection = false;
         } else {

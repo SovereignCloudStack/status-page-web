@@ -1,0 +1,310 @@
+<a [routerLink]="['/']">&lt;&lt; back to the overview</a>
+<h1>Manage Incidents</h1>
+<div id="controls">
+    <button type="button" (click)="editNewIncident()"><fa-icon [icon]="icons.newElement"></fa-icon><span>New
+            Incident</span></button>
+    <button type="button" (click)="editNewMaintenanceEvent()"><fa-icon
+            [icon]="icons.newElement"></fa-icon><span>New Maintenance Event</span></button>
+</div>
+<div id="incident-list">
+    <table>
+        <thead>
+            <tr>
+                <th>Display Name</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>ID</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ngClass="clickable-row" *ngFor="let incident of data.incidents | keyvalue">
+                <td>{{ incident.value.displayName }}</td>
+                <td class="date-column">{{ util.formatDate(incident.value.beganAt) }}</td>
+                <td class="date-column">{{ util.formatDate(incident.value.endedAt) ?? "Ongoing"}}</td>
+                <td class="id-column" title="{{ incident.key }}">{{ incident.key.split("-")[0] }}</td>
+                <td class="control-column">
+                    <button
+                        type="button"
+                        title="Edit this incident"
+                        (click)="editExistingIncident(incident.key, incident.value)"
+                    >
+                        <fa-icon [icon]="icons.edit"></fa-icon>
+                    </button>
+                    <button
+                        ngClass="dangerous"
+                        type="button"
+                        title="Delete this incident"
+                        (click)="prepareDeleteIncident(incident.key, incident.value)"
+                    >
+                        <fa-icon [icon]="icons.delete"></fa-icon>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<h2>Maintenance Events</h2>
+<div id="maintenance-list">
+    <table>
+        <thead>
+            <tr>
+                <th>Display Name</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>ID</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ngClass="clickable-row" *ngFor="let event of data.maintenanceEvents">
+                <td>{{ event.displayName }}</td>
+                <td class="date-column">{{ util.formatDate(event.beganAt) }}</td>
+                <td class="date-column">{{ util.formatDate(event.endedAt) }}</td>
+                <td class="id-column" title="{{ event.id }}">{{ event.id.split("-")[0] }}</td>
+                <td class="control-column">
+                    <button
+                        type="button"
+                        title="Edit this maintenance event"
+                        (click)="editExistingMaintenanceEvent(event.id, event)"
+                    >
+                        <fa-icon [icon]="icons.edit"></fa-icon>
+                    </button>
+                    <button
+                        ngClass="dangerous"
+                        type="button"
+                        title="Delete this maintenance event"
+                        (click)="prepareDeleteIncident(event.id, event, true)"
+                    >
+                        <fa-icon [icon]="icons.delete"></fa-icon>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<dialog #incidentDialog id="incident-dialog">
+    <span id="edited-incident-id" *ngIf="!isNewIncident()">{{ editingIncidentId }}</span>
+    <h1 *ngIf="!isNewIncident()">Editing <em>{{ this.editingIncident.displayName }}</em></h1>
+    <h1 *ngIf="isNewIncident()">Creating new Incident</h1>
+    <form (keydown.enter)="$event.preventDefault()" (keydown.shift.enter)="$event.preventDefault()">
+        <label for="inputIncidentName">Display Name</label>
+        <input type="text" #inputIncidentName id="inputIncidentName" name="inputIncidentName"
+            [value]="editingIncident.displayName" (change)="checkValidIncidentName($event)">
+        <label for="inputIncidentDescription">Description</label>
+        <textarea rows="4" #inputIncidentDescription id="inputIncidentDescription" name="inputIncidentDescription"
+            (keydown.enter)="$event.stopPropagation()"
+            [value]="editingIncident.description"></textarea>
+        <label for="inputIncidentStartDate">Start Date</label>
+        <input type="datetime-local"
+            #inputIncidentStartDate
+            id="inputIncidentStartDate"
+            name="inputIncidentStartDate"
+            value="{{ formatDateTime(editingIncident.beganAt) }}"
+            (change)="checkValidDate('start date', isMaintenanceEvent(), $event)"
+        >
+        <label for="inputIncidentEndDate">End Date</label>
+        <input type="datetime-local"
+            #inputIncidentEndDate
+            id="inputIncidentEndDate"
+            name="inputIncidentEndDate"
+            value="{{ formatDateTime(editingIncident.endedAt) }}"
+            (change)="checkValidDate('end date', isMaintenanceEvent(), $event)"
+        >
+        <label for="inputIncidentPhase">Phase</label>
+        <select #inputIncidentPhase id="inputIncidentPhase" name="inputIncidentPhase">
+            <option *ngFor="let phase of data.phaseGenerations.phases" value="{{ data.phaseGenerations.phases.indexOf(phase) }}">{{ phase }}</option>
+        </select>
+        <label for="inputIncidentImpact">Impacted Components</label>
+        <div class="subform">
+            <select
+                #inputIncidentImpact
+                id="inputIncidentImpact"
+                name="inputIncidentImpact"
+                class="stretch"
+            >
+                <option
+                    *ngFor="let impact of editingIncident.affects"
+                    value="{{ impact.reference }}"
+                >
+                    {{ util.componentName(impact.reference) }} (Sev. {{ impact.severity }})
+                </option>
+            </select>
+            <button type="button" (click)="openAddAffectedComponentDialog()"><fa-icon
+                    [icon]="icons.newElement"></fa-icon></button>
+            <button type="button" (click)="deleteImpact()" class="dangerous"><fa-icon [icon]="icons.delete"></fa-icon></button>
+        </div>
+        <label for="inputIncidentUpdate" *ngIf="!isMaintenanceEvent()">Updates</label>
+        <div class="subform" *ngIf="!isMaintenanceEvent()">
+            <select
+                #inputIncidentUpdate
+                id="inputIncidentUpdate"
+                name="inputIncidentUpdate"
+                class="stretch"
+            >
+                <option
+                    *ngFor="let update of data.incidentUpdates.get(editingIncidentId)"
+                    value="{{ update.order }}"
+                >
+                    {{ update.displayName }}{{ updateDeletionsToProcess.includes(update.order) ? '†' : '' }}
+                </option>
+                <option
+                    *ngFor="let update of newUpdatesToProcess"
+                    value="{{ -(newUpdatesToProcess.indexOf(update) + 1) }}"
+                >
+                    {{ update.displayName }}*
+                </option>
+            </select>
+            <button type="button" (click)="editNewUpdate()"><fa-icon [icon]="icons.newElement"></fa-icon></button>
+            <button type="button" (click)="enqueueDeleteUpdate()" class="dangerous"><fa-icon [icon]="icons.delete"></fa-icon></button>
+        </div>
+    </form>
+    <div [class]="inputIsFine ? 'hidden-border' : 'danger-border'">
+        <p class="error-message">{{ errorMessage }}</p>
+    </div>
+    <div class="dialog-controls">
+        <button
+            type="button"
+            (click)="saveChanges()"
+            *ngIf="!isNewIncident()"
+            [disabled]="!inputIsFine"
+        >
+            <fa-icon [icon]="icons.saveChanges"></fa-icon><span>Save Changes</span>
+        </button>
+        <button
+            type="button"
+            (click)="createNewIncident()"
+            *ngIf="isNewIncident() && !isMaintenanceEvent()"
+            [disabled]="!inputIsFine"
+        >
+            <fa-icon [icon]="icons.newElement"></fa-icon><span>Create Incident</span>
+        </button>
+        <button
+            type="button"
+            (click)="createNewMaintenanceEvent()"
+            *ngIf="isNewIncident() && isMaintenanceEvent()"
+            [disabled]="!inputIsFine"
+        >
+            <fa-icon [icon]="icons.newElement"></fa-icon><span>Create Maintenance Event</span>
+        </button>
+        <button
+            type="button"
+            (click)="cancelEditing()"
+            class="dangerous"
+            id="cancel-incident"
+            *ngIf="!isNewIncident()"
+        >
+            <fa-icon [icon]="icons.discardChanges"></fa-icon><span>Discard Changes</span>
+        </button>
+        <button
+            type="button"
+            (click)="cancelEditing()"
+            class="dangerous"
+            id="cancel-incident"
+            *ngIf="isNewIncident()"
+        >
+            <fa-icon [icon]="icons.discardChanges"></fa-icon><span>Cancel</span>
+        </button>
+    </div>
+</dialog>
+<dialog #addAffectedComponentDialog id="add-affected-component-dialog">
+    <h1>Add Affected Component</h1>
+    <form (keydown.enter)="$event.preventDefault()" (keydown.shift.enter)="$event.preventDefault()">
+        <label for="inputAddComponentSelect">Component</label>
+        <select #inputAddComponentSelect id="inputAddComponentSelect" name="inputAddComponentSelect"
+            (change)="checkValidReference($event)" (focus)="checkValidReference($event)">
+            <option *ngFor="let component of data.components | keyvalue" value="{{ component.key }}">{{
+                component.value.displayName }} - {{ component.key }}</option>
+        </select>
+        <label for="inputAddComponentType">Impact Type</label>
+        <select #inputAddComponentType id="inputAddComponentType" name="inputAddComponentType">
+            <option *ngFor="let impactType of data.impactTypes | keyvalue" value="{{ impactType.key }}">{{
+                impactType.value.displayName}}</option>
+        </select>
+        <label for="inputAddComponentSeverity" *ngIf="!isMaintenanceEvent()">Severity</label>
+        <input #inputAddComponentSeverity *ngIf="!isMaintenanceEvent()" type="number" id="inputAddComponentSeverity"
+            name="inputAddComponentSeverity" min="0" max="100" [defaultValue]="50"
+            (change)="checkValidSeverity($event)">
+        <p class="stretch" *ngIf="isMaintenanceEvent()">Impacts of maintenance events are locked to severity 0.</p>
+    </form>
+    <div [class]="inputIsFine ? 'hidden-border' : 'danger-border'">
+        <p class="error-message">{{ errorMessage }}</p>
+    </div>
+    <div class="dialog-controls">
+        <button
+            type="button"
+            (click)="addAffectedComponent()"
+            [disabled]="!inputIsFine"
+        >
+            <fa-icon [icon]="icons.saveChanges"></fa-icon><span>Add Impact</span>
+        </button>
+        <button
+            type="button"
+            (click)="cancelAddComponent()"
+            class="dangerous"
+            id="cancel-component"
+        >
+            <fa-icon [icon]="icons.discardChanges"></fa-icon><span>Cancel</span>
+        </button>
+    </div>
+</dialog>
+<dialog #createUpdateDialog id="create-update-dialog">
+    <h1>Add Incident Update</h1>
+    <form (keydown.enter)="$event.preventDefault()" (keydown.shift.enter)="$event.preventDefault()">
+        <label for="inputUpdateName">Display Name</label>
+        <input type="text" #inputUpdateName id="inputUpdateName" name="inputUpdateName"
+            [value]="editingUpdate.displayName" (change)="checkValidIncidentName($event)">
+        <label for="inputUpdateDescription">Description</label>
+        <textarea rows="4" #inputUpdateDescription id="inputUpdateDescription" name="inputUpdateDescription"
+            (keydown.enter)="$event.stopPropagation()"
+            [value]="editingUpdate.description"></textarea>
+    </form>
+    <p>Updates will only be saved upon saving their incident.</p>
+    <div [class]="inputIsFine ? 'hidden-border' : 'danger-border'">
+        <p class="error-message">{{ errorMessage }}</p>
+    </div>
+    <div class="dialog-controls">
+        <button
+            type="button"
+            (click)="enqueueNewUpdate()"
+            [disabled]="!inputIsFine"
+        >
+            <fa-icon [icon]="icons.saveChanges"></fa-icon><span>Add Update</span>
+        </button>
+        <button
+            type="button"
+            (click)="cancelNewUpdate()"
+            class="dangerous"
+            id="cancel-component"
+        >
+            <fa-icon [icon]="icons.saveChanges"></fa-icon><span>Cancel</span>
+        </button>
+    </div>
+</dialog>
+<dialog #confirmDeletionDialog id="confirm-deletion-dialog">
+    <div class="dialog-header hazard-background"></div>
+    <p>Are you sure you want to delete this {{ isMaintenanceEvent() ? "maintenance event" : "incident" }}:</p>
+    <p><em>{{ editingIncident.displayName }}</em></p>
+    <p>This operation cannot be undone.</p>
+    <div class="dialog-controls">
+        <button
+            type="button"
+            (click)="confirmDeleteIncident()"
+            class="dangerous"
+            [disabled]="!inputIsFine"
+        >
+            <fa-icon [icon]="icons.delete"></fa-icon><span>Delete</span>
+        </button>
+        <button
+            type="button"
+            (click)="cancelDeleteIncident()"
+            id="cancel-component"
+        >
+            <fa-icon [icon]="icons.delete"></fa-icon><span>Cancel</span>
+        </button>
+    </div>
+</dialog>
+<dialog #waitSpinnerDialog id="wait-spinner-dialog">
+    <app-spinner></app-spinner>
+    <p>{{ waitState }}</p>
+</dialog>

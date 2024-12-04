@@ -1,0 +1,19 @@
+<header>
+    <div>
+        <a href="/"><img alt="" title="SCS Project" src="assets/scs-logo.svg"></a>
+    </div>
+    <div>
+        <span id="accessibility-options">
+            <input *ngIf="userSettings.showUserSettings" id="colorBlindMode" type="checkbox" [(ngModel)]="userSettings.useColorblindColors" />
+            <label *ngIf="userSettings.showUserSettings" for="colorBlindMode">Colors for colorblind</label>
+        </span>
+        <span *ngIf="userSettings.showUserSettings">
+            <input id="tableMode" type="checkbox" [(ngModel)]="userSettings.useTableDisplay"/>
+            <label for="tableMode">Use table display</label>
+            <input id="tableHideFineDays" type="checkbox" [(ngModel)]="userSettings.hideBoringDays" [disabled]="!userSettings.useTableDisplay" />
+            <label id="tableHideFineDaysLabel" [ngClass]="hideDaysClass()" for="tableHideFineDays">
+                Hide operational days (table display only)
+            </label>
+        </span>
+    </div>
+</header>

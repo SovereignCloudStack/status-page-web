@@ -1,11 +1,14 @@
 import { ApplicationConfig } from '@angular/core';
 import { provideRouter, withEnabledBlockingInitialNavigation } from '@angular/router';
 
+import { provideAnimations } from '@angular/platform-browser/animations'
+
 import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { Configuration } from '../external/lib/status-page-api/angular-client';
-import { AppConfigService, CONFIG_JSON } from './app-config.service';
+import { AppConfigService, CONFIG_JSON } from './services/app-config.service';
 import { authInterceptor, LogLevel, provideAuth, StsConfigLoader, StsConfigStaticLoader } from 'angular-auth-oidc-client';
+import { provideToastr } from 'ngx-toastr';
 
 export function buildAppConfig(jsonConfig: any): ApplicationConfig { // eslint-disable-line @typescript-eslint/no-explicit-any
   return {
@@ -51,6 +54,10 @@ export function buildAppConfig(jsonConfig: any): ApplicationConfig { // eslint-d
         multi: false
       },
       provideRouter(routes, withEnabledBlockingInitialNavigation()),
+      provideAnimations(),
+      provideToastr({
+        progressBar: true
+      })
     ]
   };
 }

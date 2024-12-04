@@ -1,0 +1,91 @@
+h2 {
+    font-size: 1.25rem;
+    margin: 1.5rem 0rem .25rem 0rem;
+}
+
+h3 {
+    font-size: 1rem;
+    margin: 1rem 0rem .25rem 0rem;
+    display: inline-block;
+}
+
+input {
+    margin-top: 1rem;
+    margin-left: .5rem;
+    border: 2px var(--line-color) solid;
+    border-radius: var(--btn-border-radius);
+    padding: .15rem;
+}
+
+input:first-of-type {
+    margin-left: 0;
+}
+
+#top {
+    vertical-align: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+a#back-link {
+    margin: auto 1rem auto 0;
+}
+
+input:invalid + span::after {
+    content: "Time missing";
+    padding-left: 5px;
+  }
+
+select {
+    border: 2px var(--btn-color) solid;
+    border-radius: var(--btn-border-radius);
+    padding: .5em .75em;
+    color: var(--btn-color);
+    font-weight: bold;
+    font-size: 1.0rem;
+    background-color: var(--main-bg-color);
+    margin-right: 1rem;
+}
+
+select:hover {
+    color: var(--main-bg-color);
+    background-color: var(--btn-color);
+    cursor: pointer;
+}
+
+textarea#incidentDescription {
+    min-width: 50%;
+    display: block;
+}
+
+#affects ul {
+    margin: .25rem 0rem;
+    list-style-type: square;
+}
+
+#affects ul li::marker {
+    color: var(--btn-color);
+}
+
+#updates div {
+    margin: 0 .75rem;
+}
+
+#updates div p {
+    margin: 0.25rem 0;
+}
+
+.incident-status {
+    background-color: var(--btn-color);
+    color: var(--main-bg-color);
+    margin: 1rem .5rem 1rem 0rem;
+    padding: .25rem .5rem;
+    border-radius: var(--bar-border-radius);
+    font-weight: bold;
+}
+
+.faint {
+    color: var(--faint-text-color);
+}
+

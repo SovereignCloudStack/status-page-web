@@ -34,5 +34,7 @@
     },
     "unknownColor": "lightsteelblue",
     "aboutText": "${STATUS_PAGE_WEB_ABOUT_TEXT}",
-    "maintenancePreviewDays": ${STATUS_PAGE_WEB_MAINTENANCE_PREVIEW_DAYS}
+    "maintenancePreviewDays": ${STATUS_PAGE_WEB_MAINTENANCE_PREVIEW_DAYS},
+    "hideManagementPage": true,
+    "dayDefaultSeverity": 1
 }

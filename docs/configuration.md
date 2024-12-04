@@ -6,19 +6,21 @@ The SPA expects a configuration file called `config.json` to be present in the `
 
 The following table explains all settings available in the configuration file. Explanations for non-basic field types can be found below the table.
 
-| Configuration Key      | Description                                                   | Type   | Default                          |
-| ---------------------- | ------------------------------------------------------------- | ------ | -------------------------------- |
-| apiServerUrl           | The URL of the API server supplying data.                     | String | empty                            |
-| redirectUrl            | URL you are being redirected to after Dex.                    | String | empty                            |
-| dexUrl                 | The URL of your Dex server.                                   | String | empty                            |
-| dexId                  | ID your application uses for Dex.                             | String | empty                            |
-| noOfDays               | Number of days to display incidents for.                      | Number | 90                               |
-| dateFormat             | The format to use for dates displayed.                        | Format | "YYYY-MM-DD HH:mm:ss z"          |
-| longDateFormat         | Long format for dates, including day names.                   | Format | "dddd, Do MMMM YYYY, HH:mm:ss z" |
-| severities             | Maps severities to colors to use.                             | Object | see below                        |
-| unknownColor           | Color to use for unknown severity values.                     | Color  | "lightsteelblue"                 |
-| aboutText              | Short text that appears in the "About" section.               | String | empty                            |
-| maintenancePreviewDays | Number of days in the future to check for maintenance events. | number | 30                               |
+| Configuration Key      | Description                                                   | Type    | Default                          |
+| ---------------------- | ------------------------------------------------------------- | ------- | -------------------------------- |
+| apiServerUrl           | The URL of the API server supplying data.                     | String  | empty                            |
+| redirectUrl            | URL you are being redirected to after Dex.                    | String  | empty                            |
+| dexUrl                 | The URL of your Dex server.                                   | String  | empty                            |
+| dexId                  | ID your application uses for Dex.                             | String  | empty                            |
+| noOfDays               | Number of days to display incidents for.                      | Number  | 90                               |
+| dateFormat             | The format to use for dates displayed.                        | Format  | "YYYY-MM-DD HH:mm:ss z"          |
+| longDateFormat         | Long format for dates, including day names.                   | Format  | "dddd, Do MMMM YYYY, HH:mm:ss z" |
+| severities             | Maps severities to colors to use.                             | Object  | see below                        |
+| unknownColor           | Color to use for unknown severity values.                     | Color   | "lightsteelblue"                 |
+| aboutText              | Short text that appears in the "About" section.               | String  | empty                            |
+| maintenancePreviewDays | Number of days in the future to check for maintenance events. | number  | 30                               |
+| hideManagementPage     | Makes the old management page inaccessible.                   | Boolean | true                             |
+| dayDefaultSeverity     | Severity value used for days where no incidents occured       | Number  | 1                                |
 
 The `severities` map contains one entry for each severity level specified in the API server. The default configuration included in the template file looks like this:
 

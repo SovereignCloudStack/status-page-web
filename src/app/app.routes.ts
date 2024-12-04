@@ -20,7 +20,7 @@ export const routes: Routes = [
         component: IncidentDetailsViewComponent
     },
     {
-        path: "manage", 
+        path: "manage",
         component: ManagementViewComponent,
         canActivate: [autoLoginPartialRoutesGuard]
     },

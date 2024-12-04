@@ -6,6 +6,6 @@
     <div id="admin-section">
         <a class="auth-link" tabindex="0" (click)="login()" (keypress)="handleKeyPress($event)" *ngIf="!authenticated().isAuthenticated">Login</a>
         <span id="user-info" *ngIf="authenticated().isAuthenticated">Logged in as {{ userData().userData ? userData().userData.name : "unknown" }}</span>
-        <a [routerLink]="['manage']" *ngIf="authenticated().isAuthenticated">Manage Incidents</a>
+        <a [routerLink]="['manage']" *ngIf="!config.hideManagementPage && authenticated().isAuthenticated">Manage Incidents</a>
     </div>
 </footer>

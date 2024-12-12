@@ -1,6 +1,6 @@
 import dayjs, { Dayjs } from "dayjs";
 import { Impact, Incident } from "../../external/lib/status-page-api/angular-client";
-import { IncidentId, SHORT_DAY_FORMAT, ShortDayString } from "./base";
+import { IncidentId, SeverityValue, SHORT_DAY_FORMAT, ShortDayString } from "./base";
 
 export class DailyStatus {
 
@@ -9,13 +9,16 @@ export class DailyStatus {
     private _topLevelIncident?: [IncidentId, Incident] = undefined;
     private _topLevelImpact?: Impact = undefined;
 
-    private _severity: number = 1;
+    private _severity: SeverityValue = 1;
 
-    constructor(day: ShortDayString | Dayjs) {
+    constructor(day: ShortDayString | Dayjs, defaultSeverity?: SeverityValue) {
         if (day instanceof dayjs) {
             this.day = day.format(SHORT_DAY_FORMAT);
         } else {
             this.day = <ShortDayString> day;
+        }
+        if (defaultSeverity) {
+            this._severity = defaultSeverity;
         }
     }
 
@@ -33,7 +36,7 @@ export class DailyStatus {
         }
     }
 
-    get overallSeverity(): number {
+    get overallSeverity(): SeverityValue {
         return this._severity;
     }
 

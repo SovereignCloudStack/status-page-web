@@ -253,7 +253,7 @@ export class DataService {
       this.components.forEach((component, componentId) => {
         // Create daily data for each component
         for (const [day, incidents] of this.incidentsByDay) {
-          const dailyData = new DailyStatus(day);
+          const dailyData = new DailyStatus(day, this.config.dayDefaultSeverity);
           for (const incident of incidents) {
             // Check if the incident affects this component
             const affectingImpacts = incident[1].affects?.filter(c => c.reference === componentId) ?? [];

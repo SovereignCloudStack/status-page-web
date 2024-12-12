@@ -1,8 +1,9 @@
 import { Inject, Injectable, InjectionToken } from '@angular/core';
+import { SeverityValue } from '../model/base';
 
 interface Severity {
-  start: number;
-  end: number;
+  start: SeverityValue;
+  end: SeverityValue;
   color: string;
   colorblind: string;
 }
@@ -19,6 +20,8 @@ class Config {
   unknownColor: string = "lightsteelblue";
   aboutText: string = "";
   maintenancePreviewDays: number = 30;
+  hideManagementPage: boolean = true;
+  dayDefaultSeverity: SeverityValue = 1;
 
   constructor() {
     this.severities.set("maintenance", {
@@ -104,6 +107,14 @@ export class AppConfigService {
 
   get maintenancePreviewDays(): number {
     return this.config.maintenancePreviewDays;
+  }
+
+  get hideManagementPage(): boolean {
+    return this.config.hideManagementPage;
+  }
+
+  get dayDefaultSeverity(): SeverityValue {
+    return this.config.dayDefaultSeverity;
   }
 }
 

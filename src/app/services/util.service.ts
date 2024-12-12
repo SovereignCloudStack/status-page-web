@@ -5,7 +5,7 @@ import { DailyStatus } from '../model/daily-status';
 import { UserSettingsService } from './user-settings.service';
 import { Impact, Incident, IncidentUpdate } from '../../external/lib/status-page-api/angular-client';
 import { DataService } from './data.service';
-import { ComponentId, IncidentId, Severity, ShortDayString } from '../model/base';
+import { ComponentId, IncidentId, SeverityValue, ShortDayString } from '../model/base';
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +32,7 @@ export class UtilService {
     return dayjs(dt).format(this.config.longDateFormat);
   }
 
-  severityName(severity: Severity): string {
+  severityName(severity: SeverityValue): string {
     for (const s of this.config.severities.entries()) {
       if (severity >= s[1].start && severity <= s[1].end) {
         return s[0];
@@ -41,7 +41,7 @@ export class UtilService {
     return "unknown";
   }
 
-  severityColor(severity: Severity): string {
+  severityColor(severity: SeverityValue): string {
     for (const s of this.config.severities.values()) {
       if (severity >= s.start && severity <= s.end) {
         if (this.userSettings.useColorblindColors) {
@@ -53,15 +53,15 @@ export class UtilService {
     return this.config.unknownColor;
   }
 
-  severityColorStyle(severity: Severity): string {
+  severityColorStyle(severity: SeverityValue): string {
     return `color: ${this.severityColor(severity)}`;
   }
 
-  currentDaySeverity(componentId: ComponentId): Severity {
+  currentDaySeverity(componentId: ComponentId): SeverityValue {
     return this.severityForDay(componentId, this.dataService.currentDay);
   }
 
-  severityForDay(componentId: ComponentId, date: ShortDayString): Severity {
+  severityForDay(componentId: ComponentId, date: ShortDayString): SeverityValue {
     const currentDayStatus = this.dayState(componentId, date);
     if (!currentDayStatus) {
       console.error(`Missing DailyStatus object for day ${date}`);

@@ -36,3 +36,7 @@ a.auth-link {
 span#user-info {
     margin-right: 1.5rem;
 }
+
+span#user-info:last-child {
+    margin-right: 0;
+}
